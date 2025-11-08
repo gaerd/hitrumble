@@ -2,7 +2,7 @@ import type { Song } from '../shared/types';
 
 export class ElevenLabsService {
   private apiKey: string;
-  private voiceId = 'pNInz6obpgDQGcFmaJgB'; // Adam - energetic voice
+  private voiceId = '38yEkwjgqOwvn7qykcx3'; // Custom voice
 
   constructor() {
     this.apiKey = process.env.ELEVENLABS_API_KEY || '';
