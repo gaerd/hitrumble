@@ -1,0 +1,24 @@
+import CardPlacement from '../CardPlacement'
+
+export default function CardPlacementExample() {
+  const mockSong = {
+    id: '1',
+    title: 'Purple Rain',
+    artist: 'Prince',
+    year: 1984,
+    albumCover: 'https://picsum.photos/seed/prince/400/400'
+  };
+
+  return (
+    <div className="min-h-screen bg-background relative">
+      <div className="p-6 text-center">
+        <p className="text-muted-foreground">Scroll down to see the card placement panel</p>
+      </div>
+      <CardPlacement
+        song={mockSong}
+        selectedPosition={2}
+        onConfirm={() => console.log('Confirmed placement')}
+      />
+    </div>
+  )
+}
