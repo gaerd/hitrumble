@@ -65,9 +65,16 @@ Preferred communication style: Simple, everyday language.
   - Searches for AI-suggested songs by title and artist
   - **Year Matching**: Filters results to ±2 years of AI-suggested year to avoid remasters
   - Example: AI suggests "Stairway to Heaven (1971)" → Spotify returns 1971 original, not 2014 remaster
-  - Most tracks lack preview URLs; stores Spotify track IDs for future playback implementation
-- **Spotify Web Playback SDK**: Actual audio playback on master device (not yet implemented)
-- Note: Preview URLs rarely available via Client Credentials API
+  - Most tracks lack preview URLs; stores Spotify track IDs for playback
+- **Spotify Web Playback SDK**: Full-track audio playback on master device (November 2025)
+  - OAuth 2.0 Authorization Code flow with PKCE for user authentication
+  - Browser-based playback using Spotify Web Playback SDK
+  - Requires Spotify Premium subscription
+  - Scopes: streaming, user-read-email, user-read-private, user-modify-playback-state, user-read-playback-state
+  - Session-based token storage with automatic refresh (1-hour token lifetime)
+  - CSRF protection using crypto.randomBytes(32) state tokens
+  - Graceful fallback to 30-second preview URLs when Spotify not connected
+  - Visual indicators: spinning disc icon + "Premium" badge for Spotify, speaker icon for previews
 
 **AI Services**:
 - **OpenRouter API**: LLM (Claude Sonnet 4.5) for generating song suggestions from user chat preferences
@@ -110,7 +117,27 @@ Preferred communication style: Simple, everyday language.
 4. System validates ≥10 songs found before proceeding to lobby
 5. Songs stored with Spotify track IDs for future Web Playback SDK integration
 
+**Spotify Playback Strategy** (November 2025):
+- **Primary**: Spotify Web Playback SDK when user connects Spotify Premium account
+  - Full-track playback (unlimited duration)
+  - High-quality audio streaming
+  - Browser-based player with device management
+  - Automatic token refresh on expiry
+- **Fallback**: HTML5 Audio with 30-second preview URLs
+  - Used when Spotify not connected or premium not available
+  - Limited to 30 seconds maximum
+  - Many tracks lack preview URLs
+  - Graceful degradation for non-premium users
+
+**OAuth Security Implementation** (November 2025):
+- CSRF protection with cryptographically secure state tokens (crypto.randomBytes)
+- State validation on OAuth callback prevents session fixation attacks
+- SESSION_SECRET required via environment variable (no hard-coded fallback)
+- Automatic token refresh when access tokens expire after 1 hour
+- 401/403 error handling with retry logic in playback functions
+
 **Known Limitations**:
 - Most Spotify tracks lack 30-second preview URLs via Client Credentials API
-- Audio playback requires future Spotify Web Playback SDK implementation
+- Spotify Web Playback SDK requires active Spotify Premium subscription
 - Year matching tolerance is ±2 years to handle slight date variations in Spotify metadata
+- OAuth flow requires browser-based user interaction for initial authentication
