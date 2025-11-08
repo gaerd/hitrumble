@@ -1,3 +1,5 @@
+import OpenAI from 'openai';
+
 interface SongSuggestion {
   title: string;
   artist: string;
@@ -9,14 +11,22 @@ interface AIResponse {
 }
 
 export class AIService {
-  private apiKey: string;
-  private baseUrl = 'https://openrouter.ai/api/v1';
+  private client: OpenAI;
 
   constructor() {
-    this.apiKey = process.env.OPENROUTER_API_KEY || '';
-    if (!this.apiKey) {
+    const apiKey = process.env.OPENROUTER_API_KEY || '';
+    if (!apiKey) {
       throw new Error('OPENROUTER_API_KEY is not set');
     }
+
+    this.client = new OpenAI({
+      baseURL: 'https://openrouter.ai/api/v1',
+      apiKey: apiKey,
+      defaultHeaders: {
+        'HTTP-Referer': 'https://hitster-ai.replit.app',
+        'X-Title': 'HITSTER AI'
+      }
+    });
   }
 
   async generateSongSuggestions(userPreference: string): Promise<SongSuggestion[]> {
@@ -41,43 +51,24 @@ Return JSON in this exact format:
 }`;
 
     try {
-      console.log('AI: Calling OpenRouter API...');
-      const response = await fetch(`${this.baseUrl}/chat/completions`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': 'https://hitster-ai.replit.app',
-          'X-Title': 'HITSTER AI'
-        },
-        body: JSON.stringify({
-          model: 'google/gemini-flash-1.5',
-          messages: [
-            {
-              role: 'user',
-              content: prompt
-            }
-          ],
-          temperature: 0.7,
-          max_tokens: 2000
-        })
+      console.log('AI: Calling OpenRouter API with Claude Sonnet 4.5...');
+      
+      const completion = await this.client.chat.completions.create({
+        model: 'anthropic/claude-sonnet-4.5',
+        messages: [
+          {
+            role: 'user',
+            content: prompt
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 2000
       });
 
-      console.log('AI: Response received, status:', response.status);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('OpenRouter API error:', response.status, errorText);
-        throw new Error(`OpenRouter API returned ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('AI: Parsed JSON response');
-      
-      const content = data.choices[0]?.message?.content;
+      const content = completion.choices[0]?.message?.content;
 
       if (!content) {
-        console.error('AI: No content in response, full data:', JSON.stringify(data).substring(0, 500));
+        console.error('AI: No content in response');
         throw new Error('No content in AI response');
       }
 
@@ -92,7 +83,7 @@ Return JSON in this exact format:
       const parsed: AIResponse = JSON.parse(jsonMatch[0]);
       
       if (!parsed.songs || !Array.isArray(parsed.songs)) {
-        console.error('AI: Invalid response format, parsed:', JSON.stringify(parsed).substring(0, 200));
+        console.error('AI: Invalid response format');
         throw new Error('Invalid AI response format');
       }
 
@@ -105,7 +96,6 @@ Return JSON in this exact format:
 
     } catch (error: any) {
       console.error('AI service error:', error.message || error);
-      console.error('AI error stack:', error.stack);
       throw new Error('Failed to generate song suggestions');
     }
   }
