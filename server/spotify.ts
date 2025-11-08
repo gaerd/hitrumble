@@ -48,7 +48,10 @@ class SpotifyService {
     console.log(`Spotify: Searching for "${cleanQuery}"`);
 
     try {
-      const response = await this.spotifyApi.searchTracks(cleanQuery, { limit: 50 });
+      const response = await this.spotifyApi.searchTracks(cleanQuery, { 
+        limit: 50,
+        market: 'US'
+      });
       const tracks = response.body.tracks?.items || [];
       console.log(`Spotify: Got ${tracks.length} raw tracks from API`);
 
@@ -98,11 +101,23 @@ class SpotifyService {
   async searchSpecificSong(title: string, artist: string): Promise<Song | null> {
     await this.ensureAuthenticated();
 
-    const query = `track:"${title}" artist:"${artist}"`;
+    const query = `track:${title} artist:${artist}`;
     
     try {
-      const response = await this.spotifyApi.searchTracks(query, { limit: 5 });
+      const response = await this.spotifyApi.searchTracks(query, { 
+        limit: 10,
+        market: 'US'
+      });
       const tracks = response.body.tracks?.items || [];
+
+      if (tracks.length === 0) {
+        const fallbackQuery = `${title} ${artist}`;
+        const fallbackResponse = await this.spotifyApi.searchTracks(fallbackQuery, {
+          limit: 10,
+          market: 'US'
+        });
+        tracks.push(...(fallbackResponse.body.tracks?.items || []));
+      }
 
       const validTrack = tracks.find((track: any) => {
         const releaseDate = track.album.release_date;
@@ -161,7 +176,8 @@ class SpotifyService {
       const response = await this.spotifyApi.getRecommendations({
         seed_genres: seedGenres,
         limit: 50,
-        min_popularity: 30
+        min_popularity: 30,
+        market: 'US'
       });
 
       const tracks = response.body.tracks || [];
