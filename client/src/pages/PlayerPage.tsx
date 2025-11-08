@@ -22,51 +22,46 @@ export default function PlayerPage() {
   const { toast } = useToast();
 
   useEffect(() => {
-    if (phase !== 'join') {
-      const socket = socketService.connect();
-
-      socketService.onGameStateUpdate((newState) => {
-        setGameState(newState);
-        const player = newState.players.find(p => p.id === socket?.id);
-        if (player) {
-          setMyPlayer(player);
-        }
-        
-        if (newState.phase === 'playing' && phase !== 'playing') {
-          setPhase('playing');
-        }
-      });
-
-      socketService.onGameStarted((newState) => {
-        setGameState(newState);
-        setPhase('playing');
-      });
-
-      socketService.onRoundStarted((newState) => {
-        setGameState(newState);
-        setSelectedPosition(null);
-      });
-
-      socketService.onError((message) => {
-        toast({
-          title: 'Fel',
-          description: message,
-          variant: 'destructive'
-        });
-      });
-    }
-
     return () => {
-      if (phase !== 'join') {
-        socketService.disconnect();
-      }
+      socketService.disconnect();
     };
-  }, [phase, toast]);
+  }, []);
 
   const handleJoin = () => {
     if (!playerName || !gameCode) return;
 
-    socketService.connect();
+    const socket = socketService.connect();
+
+    socketService.onGameStateUpdate((newState) => {
+      setGameState(newState);
+      const player = newState.players.find(p => p.id === socket?.id);
+      if (player) {
+        setMyPlayer(player);
+      }
+      
+      if (newState.phase === 'playing' && phase !== 'playing') {
+        setPhase('playing');
+      }
+    });
+
+    socketService.onGameStarted((newState) => {
+      setGameState(newState);
+      setPhase('playing');
+    });
+
+    socketService.onRoundStarted((newState) => {
+      setGameState(newState);
+      setSelectedPosition(null);
+    });
+
+    socketService.onError((message) => {
+      toast({
+        title: 'Fel',
+        description: message,
+        variant: 'destructive'
+      });
+    });
+
     socketService.joinGame(gameCode.toUpperCase(), playerName, (data) => {
       setMyPlayer(data.player);
       setGameState(data.gameState);
