@@ -52,8 +52,20 @@ export default function PlayerPage() {
 
     socketService.onRoundStarted((newState) => {
       setGameState(newState);
+      const player = newState.players.find(p => p.id === socket?.id);
+      if (player) {
+        setMyPlayer(player);
+      }
       setSelectedPosition(null);
       setConfirmedPlacement(false);
+    });
+
+    socketService.onResultsRevealed((data) => {
+      setGameState(data.gameState);
+      const player = data.gameState.players.find(p => p.id === socket?.id);
+      if (player) {
+        setMyPlayer(player);
+      }
     });
 
     socketService.onError((message) => {
