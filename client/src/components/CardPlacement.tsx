@@ -14,19 +14,9 @@ export default function CardPlacement({ song, selectedPosition, onConfirm }: Car
     <div className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-lg border-t p-6 shadow-2xl">
       <div className="max-w-2xl mx-auto">
         <div className="flex items-center gap-6">
-          <Card className="w-40 h-56 p-3 flex-shrink-0 shadow-xl">
-            {song.albumCover && (
-              <img
-                src={song.albumCover}
-                alt={song.title}
-                className="w-full h-24 object-cover rounded-lg mb-2"
-              />
-            )}
-            <Badge className="text-lg font-mono font-bold mb-2">
-              ?
-            </Badge>
-            <h4 className="font-semibold text-sm line-clamp-2">{song.title}</h4>
-            <p className="text-xs text-muted-foreground line-clamp-1">{song.artist}</p>
+          <Card className="w-40 h-56 p-3 flex-shrink-0 shadow-xl bg-gradient-to-br from-primary/20 to-accent/20 flex flex-col items-center justify-center">
+            <div className="text-8xl font-bold text-primary/30 mb-2">?</div>
+            <p className="text-sm text-muted-foreground text-center">Lyssna på musiken</p>
           </Card>
 
           <div className="flex-1">

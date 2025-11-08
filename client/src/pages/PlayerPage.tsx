@@ -23,10 +23,9 @@ export default function PlayerPage() {
 
   const currentSong: Song = {
     id: '4',
-    title: 'Purple Rain',
-    artist: 'Prince',
-    year: 1984,
-    albumCover: 'https://picsum.photos/seed/prince/400/400'
+    title: 'Okänd låt',
+    artist: 'Okänd artist',
+    year: 0,
   };
 
   const handleJoin = () => {

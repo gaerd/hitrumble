@@ -6,13 +6,12 @@ export default function CardPlacementExample() {
     title: 'Purple Rain',
     artist: 'Prince',
     year: 1984,
-    albumCover: 'https://picsum.photos/seed/prince/400/400'
   };
 
   return (
     <div className="min-h-screen bg-background relative">
       <div className="p-6 text-center">
-        <p className="text-muted-foreground">Scroll down to see the card placement panel</p>
+        <p className="text-muted-foreground">Spelarvy - ingen låtinformation visas</p>
       </div>
       <CardPlacement
         song={mockSong}
