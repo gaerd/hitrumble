@@ -2,9 +2,7 @@ import SpotifyWebApi from 'spotify-web-api-node';
 
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID!;
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET!;
-const REDIRECT_URI = process.env.REPLIT_DEV_DOMAIN 
-  ? `https://${process.env.REPLIT_DEV_DOMAIN}/auth/spotify/callback`
-  : 'http://localhost:5000/auth/spotify/callback';
+const REDIRECT_URI = 'https://hitster-ai.replit.app/auth/spotify/callback';
 
 const SCOPES = [
   'streaming',
