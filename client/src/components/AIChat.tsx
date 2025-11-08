@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Send, Sparkles } from "lucide-react";
+import { Send, Sparkles, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -19,6 +19,7 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
   ]);
   const [input, setInput] = useState('');
   const [lastPreference, setLastPreference] = useState('');
+  const [isConfirming, setIsConfirming] = useState(false);
 
   const handleSend = () => {
     if (!input.trim()) return;
@@ -88,11 +89,21 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
             size="lg" 
             className="w-full" 
             variant="secondary"
-            onClick={() => onPreferencesConfirmed?.(lastPreference)}
-            disabled={!lastPreference}
+            onClick={() => {
+              setIsConfirming(true);
+              onPreferencesConfirmed?.(lastPreference);
+            }}
+            disabled={!lastPreference || isConfirming}
             data-testid="button-confirm-preferences"
           >
-            Bekräfta & Fortsätt
+            {isConfirming ? (
+              <>
+                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                Söker låtar...
+              </>
+            ) : (
+              'Bekräfta & Fortsätt'
+            )}
           </Button>
         </div>
       </Card>
