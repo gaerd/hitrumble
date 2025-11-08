@@ -1,4 +1,5 @@
-import { Play, SkipForward, Trophy } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Play, SkipForward, Trophy, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -13,6 +14,54 @@ interface GameControlProps {
 }
 
 export default function GameControl({ currentSong, roundNumber, players, onNextRound, phase }: GameControlProps) {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasPreview, setHasPreview] = useState(false);
+
+  useEffect(() => {
+    if (phase === 'playing' && currentSong?.previewUrl) {
+      setHasPreview(true);
+      
+      if (!audioRef.current) {
+        audioRef.current = new Audio(currentSong.previewUrl);
+        audioRef.current.loop = true;
+        audioRef.current.volume = 0.6;
+      } else {
+        audioRef.current.src = currentSong.previewUrl;
+      }
+      
+      audioRef.current.play()
+        .then(() => setIsPlaying(true))
+        .catch((err) => {
+          console.error('Audio playback failed:', err);
+          setIsPlaying(false);
+        });
+    } else if (phase === 'playing' && currentSong && !currentSong.previewUrl) {
+      setHasPreview(false);
+      setIsPlaying(false);
+    }
+
+    return () => {
+      if (audioRef.current && phase === 'reveal') {
+        audioRef.current.pause();
+        setIsPlaying(false);
+      }
+    };
+  }, [currentSong, phase]);
+
+  const togglePlayback = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        audioRef.current.play()
+          .then(() => setIsPlaying(true))
+          .catch(err => console.error('Playback failed:', err));
+      }
+    }
+  };
+
   return (
     <div className="space-y-6">
       <Card className="p-6">
@@ -31,7 +80,27 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
             {phase === 'playing' ? (
               <div className="flex flex-col items-center justify-center py-12">
                 <div className="text-9xl font-bold text-primary/30 mb-4">?</div>
-                <p className="text-2xl font-semibold text-muted-foreground">Lyssna på musiken</p>
+                <div className="flex items-center gap-3 mb-2">
+                  {hasPreview ? (
+                    <Volume2 className={`w-6 h-6 ${isPlaying ? 'text-primary animate-pulse' : 'text-muted-foreground'}`} />
+                  ) : (
+                    <VolumeX className="w-6 h-6 text-muted-foreground" />
+                  )}
+                  <p className="text-2xl font-semibold text-muted-foreground">
+                    {hasPreview ? 'Lyssna på musiken' : 'Ingen förhandsvisning tillgänglig'}
+                  </p>
+                </div>
+                {hasPreview && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={togglePlayback}
+                    className="mb-3"
+                    data-testid="button-toggle-audio"
+                  >
+                    {isPlaying ? 'Pausa' : 'Spela'}
+                  </Button>
+                )}
                 <p className="text-lg text-muted-foreground mt-2">Väntar på att alla placerar sina kort...</p>
               </div>
             ) : (
