@@ -41,6 +41,7 @@ Return JSON in this exact format:
 }`;
 
     try {
+      console.log('AI: Calling OpenRouter API...');
       const response = await fetch(`${this.baseUrl}/chat/completions`, {
         method: 'POST',
         headers: {
@@ -50,7 +51,7 @@ Return JSON in this exact format:
           'X-Title': 'HITSTER AI'
         },
         body: JSON.stringify({
-          model: 'meta-llama/llama-3.1-8b-instruct:free',
+          model: 'google/gemini-flash-1.5',
           messages: [
             {
               role: 'user',
@@ -62,6 +63,8 @@ Return JSON in this exact format:
         })
       });
 
+      console.log('AI: Response received, status:', response.status);
+
       if (!response.ok) {
         const errorText = await response.text();
         console.error('OpenRouter API error:', response.status, errorText);
@@ -69,22 +72,27 @@ Return JSON in this exact format:
       }
 
       const data = await response.json();
+      console.log('AI: Parsed JSON response');
+      
       const content = data.choices[0]?.message?.content;
 
       if (!content) {
+        console.error('AI: No content in response, full data:', JSON.stringify(data).substring(0, 500));
         throw new Error('No content in AI response');
       }
 
-      console.log('AI raw response:', content);
+      console.log('AI raw response (first 300 chars):', content.substring(0, 300));
 
       const jsonMatch = content.match(/\{[\s\S]*\}/);
       if (!jsonMatch) {
+        console.error('AI: Could not extract JSON from response');
         throw new Error('Could not extract JSON from AI response');
       }
 
       const parsed: AIResponse = JSON.parse(jsonMatch[0]);
       
       if (!parsed.songs || !Array.isArray(parsed.songs)) {
+        console.error('AI: Invalid response format, parsed:', JSON.stringify(parsed).substring(0, 200));
         throw new Error('Invalid AI response format');
       }
 
@@ -95,8 +103,9 @@ Return JSON in this exact format:
       console.log(`AI: Generated ${validSongs.length} song suggestions`);
       return validSongs;
 
-    } catch (error) {
-      console.error('AI service error:', error);
+    } catch (error: any) {
+      console.error('AI service error:', error.message || error);
+      console.error('AI error stack:', error.stack);
       throw new Error('Failed to generate song suggestions');
     }
   }
