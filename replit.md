@@ -4,6 +4,22 @@
 
 HITSTER AI is a real-time multiplayer music timeline game where players compete to correctly place songs on a chronological timeline. The game features AI-driven music selection and commentary, with a master device controlling gameplay and multiple player devices joining via QR code. Players listen to songs and must correctly guess where they belong on their personal timeline, racing to be first to 10 correct placements.
 
+## Recent Changes
+
+### November 8, 2025 - LLM-Powered DJ Commentary & Automatic Game Flow
+- **LLM DJ Commentary**: Replaced template-based DJ comments with Claude Sonnet 4.5 via OpenRouter
+  - Dynamic, contextual commentary about each song
+  - Message history system (stores last 10 messages per game for variety)
+  - Special winner congratulations when game ends
+  - Swedish language prompts optimized for brevity (20-30 words max)
+- **Fixed Game Ending Logic**: 
+  - Winner check now happens BEFORE DJ commentary generation
+  - Frontend uses useRef to avoid stale gameState in DJ audio callbacks
+  - Game automatically stops at 10 points (no more rounds after winner declared)
+- **Fully Automatic Flow**: Removed manual "Visa Resultat" button - game auto-reveals when all players ready
+- **Auto-Advance**: After DJ commentary, game automatically starts next round (unless finished)
+- **No Manual Clicks**: Players just place cards, everything else happens automatically
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
@@ -134,15 +150,22 @@ Preferred communication style: Simple, everyday language.
   - No preview URL fallback - Spotify Premium is mandatory for playback
   - Automatically pauses during DJ commentary and resumes after
 
-**DJ Commentary Flow** (November 2025):
+**DJ Commentary Flow** (November 2025 - Updated):
 1. All players place their cards during playing phase
-2. Master clicks "Visa Resultat" which triggers result evaluation on server
-3. Server generates DJ commentary via ElevenLabs API (MP3 audio)
-4. Audio sent to all clients as base64-encoded string via Socket.io
-5. Master device automatically pauses Spotify playback
-6. DJ commentary plays with "DJ ON AIR" visual indicator
-7. After commentary finishes, reveal screen shows song details and scores
-8. Master clicks "Nästa Runda" to continue gameplay
+2. **Automatic reveal**: When last player places card, server automatically evaluates round
+3. **Winner check FIRST**: Server checks if anyone reached 10 points BEFORE generating DJ commentary
+4. **LLM-Generated Commentary**: Claude (via OpenRouter) generates contextual Swedish DJ comments:
+   - Normal rounds: Energetic commentary about the song, artist, and year (20-30 words max)
+   - Winning round: Special congratulations message for the winner
+   - Message history: DJ remembers previous rounds for variety (last 10 messages stored per game)
+5. Server generates voice via ElevenLabs API (MP3 audio)
+6. Audio sent to all clients as base64-encoded string via Socket.io
+7. Master device automatically pauses Spotify playback
+8. DJ commentary plays with "DJ ON AIR" visual indicator
+9. After commentary finishes:
+   - If game finished (winner reached 10 points): Shows winner screen, does NOT auto-advance
+   - If game continues: Automatically starts next round after 1.5s delay
+10. **No manual "Nästa Runda" click needed** - fully automatic flow until winner declared
 
 **OAuth Security Implementation** (November 2025):
 - CSRF protection with cryptographically secure state tokens (crypto.randomBytes)
