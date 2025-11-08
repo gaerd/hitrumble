@@ -26,7 +26,7 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
       return;
     }
 
-    if (spotify.isConnected && spotify.isReady && currentSong.id) {
+    if (spotify.isConnected && spotify.isReady && currentSong.id && !spotify.isPlaying) {
       const trackUri = `spotify:track:${currentSong.id}`;
       spotify.playTrack(trackUri);
     }

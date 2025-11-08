@@ -17,6 +17,7 @@ export default function PlayerPage() {
   const [playerName, setPlayerName] = useState('');
   const [gameCode, setGameCode] = useState(params.gameCode || '');
   const [selectedPosition, setSelectedPosition] = useState<number | null>(null);
+  const [confirmedPlacement, setConfirmedPlacement] = useState(false);
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [myPlayer, setMyPlayer] = useState<Player | null>(null);
   const { toast } = useToast();
@@ -52,6 +53,7 @@ export default function PlayerPage() {
     socketService.onRoundStarted((newState) => {
       setGameState(newState);
       setSelectedPosition(null);
+      setConfirmedPlacement(false);
     });
 
     socketService.onError((message) => {
@@ -72,7 +74,12 @@ export default function PlayerPage() {
   const handleConfirmPlacement = () => {
     if (selectedPosition === null) return;
     socketService.placeCard(selectedPosition);
-    setSelectedPosition(null);
+    setConfirmedPlacement(true);
+    toast({
+      title: 'Placering bekräftad! ✓',
+      description: `Du valde position ${selectedPosition + 1}`,
+      duration: 3000
+    });
   };
 
   if (phase === 'join') {
@@ -158,15 +165,25 @@ export default function PlayerPage() {
         timeline={myPlayer.timeline}
         startYear={myPlayer.startYear}
         highlightPosition={selectedPosition ?? undefined}
-        onPlaceCard={setSelectedPosition}
+        onPlaceCard={confirmedPlacement ? undefined : setSelectedPosition}
       />
 
-      {gameState?.phase === 'playing' && (
+      {gameState?.phase === 'playing' && !confirmedPlacement && (
         <CardPlacement
           song={hiddenSong}
           selectedPosition={selectedPosition}
           onConfirm={handleConfirmPlacement}
         />
+      )}
+
+      {gameState?.phase === 'playing' && confirmedPlacement && (
+        <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-background via-background to-transparent" data-testid="placement-confirmed">
+          <div className="max-w-md mx-auto bg-green-500/20 border-2 border-green-500/50 rounded-2xl p-8 text-center">
+            <div className="text-6xl mb-4">✓</div>
+            <h3 className="text-2xl font-bold text-green-600 mb-2">Placering Bekräftad!</h3>
+            <p className="text-lg text-muted-foreground">Väntar på andra spelare...</p>
+          </div>
+        </div>
       )}
     </div>
   );
