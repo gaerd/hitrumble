@@ -84,18 +84,28 @@ export function setupSocketHandlers(io: SocketIOServer) {
           return;
         }
 
-        game.setMusicPreferences(preferences, preferences);
+        const searchQuery = preferences?.trim() || game.getState().searchQuery?.trim() || '';
+        
+        if (!searchQuery) {
+          socket.emit('error', 'Please provide music preferences');
+          return;
+        }
+
+        console.log(`Confirming preferences with query: "${searchQuery}"`);
+        game.setMusicPreferences(searchQuery, searchQuery);
         
         const { spotifyService } = await import('./spotify');
-        let songs = await spotifyService.searchSongs(preferences, 15);
+        let songs = await spotifyService.searchSongs(searchQuery, 15);
         
         if (songs.length < 10) {
-          console.log(`Not enough songs from search, trying recommendations...`);
-          songs = await spotifyService.getRecommendations(preferences, 15);
+          console.log(`Not enough songs from search (${songs.length}), trying broader search...`);
+          const words = searchQuery.split(' ');
+          const mainKeyword = words[0];
+          songs = await spotifyService.searchSongs(`${mainKeyword} music`, 15);
         }
 
         if (songs.length === 0) {
-          socket.emit('error', 'Could not find songs matching your preferences. Try different keywords.');
+          socket.emit('error', 'Could not find songs. Try different keywords like "rock", "pop", or "jazz".');
           return;
         }
 
@@ -110,7 +120,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
         console.log(`Preferences confirmed for game ${game.getId()} with ${songs.length} songs`);
       } catch (error) {
         console.error('Error confirming preferences:', error);
-        socket.emit('error', 'Failed to confirm preferences');
+        socket.emit('error', 'Failed to find songs. Please try again.');
       }
     });
 

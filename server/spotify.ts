@@ -33,8 +33,16 @@ class SpotifyService {
   async searchSongs(query: string, limit: number = 15): Promise<Song[]> {
     await this.ensureAuthenticated();
 
+    if (!query || query.trim().length === 0) {
+      console.log('Empty search query provided');
+      return [];
+    }
+
+    const cleanQuery = query.trim();
+    console.log(`Spotify: Searching for "${cleanQuery}"`);
+
     try {
-      const response = await this.spotifyApi.searchTracks(query, { limit: 50 });
+      const response = await this.spotifyApi.searchTracks(cleanQuery, { limit: 50 });
       const tracks = response.body.tracks?.items || [];
 
       const songs: Song[] = tracks

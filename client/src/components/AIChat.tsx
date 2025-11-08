@@ -18,17 +18,20 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
     { role: 'ai', content: 'Hej! Jag är din AI-spelledare. Berätta vilken typ av musik ni vill spela med idag. Till exempel "80-tals rock" eller "svensk pop från 90-talet"!' }
   ]);
   const [input, setInput] = useState('');
+  const [lastPreference, setLastPreference] = useState('');
 
   const handleSend = () => {
     if (!input.trim()) return;
     
-    const userMessage: Message = { role: 'user', content: input };
+    const preference = input.trim();
+    const userMessage: Message = { role: 'user', content: preference };
     setMessages(prev => [...prev, userMessage]);
+    setLastPreference(preference);
     
     setTimeout(() => {
       const aiMessage: Message = { 
         role: 'ai', 
-        content: `Perfekt! Jag har förberett ${input} för er. Klicka på "Bekräfta" för att börja!` 
+        content: `Perfekt! Jag har förberett ${preference} för er. Klicka på "Bekräfta" för att börja!` 
       };
       setMessages(prev => [...prev, aiMessage]);
     }, 1000);
@@ -85,8 +88,9 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
             size="lg" 
             className="w-full" 
             variant="secondary"
-            onClick={() => onPreferencesConfirmed?.(input)}
-            data-testid="button-confirm"
+            onClick={() => onPreferencesConfirmed?.(lastPreference)}
+            disabled={!lastPreference}
+            data-testid="button-confirm-preferences"
           >
             Bekräfta & Fortsätt
           </Button>
