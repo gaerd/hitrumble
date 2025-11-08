@@ -69,10 +69,9 @@ class SpotifyService {
           if (!hasValidYear) invalidYearCount++;
           if (!hasPreview) noPreviewCount++;
           
-          const keep = hasValidYear && hasPreview;
-          if (keep) filteredCount++;
+          if (hasValidYear) filteredCount++;
           
-          return keep;
+          return hasValidYear;
         })
         .slice(0, limit)
         .map((track: any) => {
@@ -98,50 +97,55 @@ class SpotifyService {
     }
   }
 
-  async searchSpecificSong(title: string, artist: string): Promise<Song | null> {
+  async searchSpecificSong(title: string, artist: string, targetYear: number): Promise<Song | null> {
     await this.ensureAuthenticated();
 
-    const query = `track:${title} artist:${artist}`;
+    const simpleQuery = `${title} ${artist}`;
+    console.log(`  Searching: "${simpleQuery}" (target year: ${targetYear})`);
     
     try {
-      const response = await this.spotifyApi.searchTracks(query, { 
-        limit: 10,
+      const response = await this.spotifyApi.searchTracks(simpleQuery, { 
+        limit: 15,
         market: 'SE'
       });
       const tracks = response.body.tracks?.items || [];
+      console.log(`  Got ${tracks.length} results`);
 
-      if (tracks.length === 0) {
-        const fallbackQuery = `${title} ${artist}`;
-        const fallbackResponse = await this.spotifyApi.searchTracks(fallbackQuery, {
-          limit: 10,
-          market: 'SE'
-        });
-        tracks.push(...(fallbackResponse.body.tracks?.items || []));
-      }
-
-      const validTrack = tracks.find((track: any) => {
+      const validTracks = tracks.filter((track: any) => {
         const releaseDate = track.album.release_date;
         const year = releaseDate ? parseInt(releaseDate.split('-')[0]) : null;
-        return year && year >= 1950 && year <= 2024 && track.preview_url;
+        return year && year >= 1950 && year <= 2024;
       });
 
-      if (!validTrack) {
+      const exactYearMatches = validTracks.filter((track: any) => {
+        const year = parseInt(track.album.release_date.split('-')[0]);
+        return Math.abs(year - targetYear) <= 2;
+      });
+
+      const tracksToConsider = exactYearMatches.length > 0 ? exactYearMatches : validTracks;
+      const tracksWithPreview = tracksToConsider.filter((t: any) => !!t.preview_url);
+      
+      console.log(`  ${exactYearMatches.length} tracks matching year ${targetYear} (±2 years)`);
+      console.log(`  ${tracksWithPreview.length} with preview URLs`);
+
+      if (tracksToConsider.length === 0) {
         return null;
       }
 
-      const releaseDate = validTrack.album.release_date;
+      const bestMatch = tracksWithPreview.length > 0 ? tracksWithPreview[0] : tracksToConsider[0];
+      const releaseDate = bestMatch.album.release_date;
       const year = parseInt(releaseDate.split('-')[0]);
 
       return {
-        id: validTrack.id,
-        title: validTrack.name,
-        artist: validTrack.artists.map((a: any) => a.name).join(', '),
+        id: bestMatch.id,
+        title: bestMatch.name,
+        artist: bestMatch.artists.map((a: any) => a.name).join(', '),
         year,
-        albumCover: validTrack.album.images[0]?.url || '',
-        previewUrl: validTrack.preview_url
+        albumCover: bestMatch.album.images[0]?.url || '',
+        previewUrl: bestMatch.preview_url || undefined
       };
-    } catch (error) {
-      console.error(`Failed to find "${title}" by ${artist}:`, error);
+    } catch (error: any) {
+      console.error(`  Error searching "${title}" by ${artist}:`, error.message);
       return null;
     }
   }
@@ -154,12 +158,12 @@ class SpotifyService {
     for (const suggestion of suggestions) {
       if (songs.length >= targetCount) break;
       
-      const song = await this.searchSpecificSong(suggestion.title, suggestion.artist);
+      const song = await this.searchSpecificSong(suggestion.title, suggestion.artist, suggestion.year);
       if (song) {
-        console.log(`  ✓ Found: "${song.title}" by ${song.artist}`);
+        console.log(`  ✓ Found: "${song.title}" by ${song.artist} (${song.year})`);
         songs.push(song);
       } else {
-        console.log(`  ✗ Not found: "${suggestion.title}" by ${suggestion.artist}`);
+        console.log(`  ✗ Not found: "${suggestion.title}" by ${suggestion.artist} (${suggestion.year})`);
       }
     }
 
@@ -186,7 +190,7 @@ class SpotifyService {
         .filter((track: any) => {
           const releaseDate = track.album.release_date;
           const year = releaseDate ? parseInt(releaseDate.split('-')[0]) : null;
-          return year && year >= 1950 && year <= 2024 && track.preview_url;
+          return year && year >= 1950 && year <= 2024;
         })
         .slice(0, limit)
         .map((track: any) => {
