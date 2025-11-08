@@ -13,12 +13,18 @@ interface GameControlProps {
   onNextRound?: () => void;
   phase: 'playing' | 'reveal' | 'finished';
   spotifyConnected?: boolean;
+  isDJPlaying?: boolean;
 }
 
-export default function GameControl({ currentSong, roundNumber, players, onNextRound, phase }: GameControlProps) {
+export default function GameControl({ currentSong, roundNumber, players, onNextRound, phase, isDJPlaying = false }: GameControlProps) {
   const spotify = useSpotifyPlayer();
 
   useEffect(() => {
+    if (isDJPlaying && spotify.isPlaying) {
+      spotify.pausePlayback();
+      return;
+    }
+
     if (phase !== 'playing' || !currentSong) {
       if (spotify.isPlaying) {
         spotify.pausePlayback();
@@ -26,11 +32,11 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
       return;
     }
 
-    if (spotify.isConnected && spotify.isReady && currentSong.id && !spotify.isPlaying) {
+    if (spotify.isConnected && spotify.isReady && currentSong.id && !spotify.isPlaying && !isDJPlaying) {
       const trackUri = `spotify:track:${currentSong.id}`;
       spotify.playTrack(trackUri);
     }
-  }, [currentSong, phase, spotify.isConnected, spotify.isReady]);
+  }, [currentSong, phase, spotify.isConnected, spotify.isReady, isDJPlaying]);
 
   const togglePlayback = () => {
     if (!spotify.isConnected || !spotify.isReady) return;

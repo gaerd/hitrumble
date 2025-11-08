@@ -107,6 +107,11 @@ class SocketService {
     this.socket.on('roundStarted', callback);
   }
 
+  onDJCommentary(callback: (audioData: string) => void) {
+    if (!this.socket) return;
+    this.socket.on('djCommentary', callback);
+  }
+
   onError(callback: (message: string) => void) {
     if (!this.socket) return;
     this.socket.on('error', callback);

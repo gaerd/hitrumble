@@ -13,6 +13,8 @@ export default function MasterPage() {
   const [results, setResults] = useState<RoundResult[]>([]);
   const [preferences, setPreferences] = useState('');
   const [spotifyConnected, setSpotifyConnected] = useState(false);
+  const [djAudio, setDjAudio] = useState<HTMLAudioElement | null>(null);
+  const [isDJPlaying, setIsDJPlaying] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -40,6 +42,37 @@ export default function MasterPage() {
       setGameState(data.gameState);
     });
 
+    socketService.onDJCommentary((base64Audio) => {
+      console.log('DJ commentary received, playing...');
+      setIsDJPlaying(true);
+      
+      const audioBlob = new Blob(
+        [Uint8Array.from(atob(base64Audio), c => c.charCodeAt(0))],
+        { type: 'audio/mpeg' }
+      );
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+      
+      audio.onended = () => {
+        console.log('DJ commentary finished');
+        setIsDJPlaying(false);
+        URL.revokeObjectURL(audioUrl);
+      };
+      
+      audio.onerror = (e) => {
+        console.error('DJ audio error:', e);
+        setIsDJPlaying(false);
+        URL.revokeObjectURL(audioUrl);
+      };
+      
+      audio.play().catch(err => {
+        console.error('Failed to play DJ audio:', err);
+        setIsDJPlaying(false);
+      });
+      
+      setDjAudio(audio);
+    });
+
     socketService.onRoundStarted((newState) => {
       setGameState(newState);
       setResults([]);
@@ -54,6 +87,10 @@ export default function MasterPage() {
     });
 
     return () => {
+      if (djAudio) {
+        djAudio.pause();
+        djAudio.src = '';
+      }
       socketService.disconnect();
     };
   }, [toast]);
@@ -138,6 +175,7 @@ export default function MasterPage() {
           phase={gameState.phase}
           onNextRound={handleNextRound}
           spotifyConnected={spotifyConnected}
+          isDJPlaying={isDJPlaying}
         />
 
         {gameState.phase === 'reveal' && gameState.currentSong && (

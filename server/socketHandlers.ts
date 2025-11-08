@@ -179,7 +179,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
       }
     });
 
-    socket.on('revealResults', () => {
+    socket.on('revealResults', async () => {
       try {
         const game = gameManager.getGameBySocket(socket.id);
         if (!game || game.getMasterSocketId() !== socket.id) {
@@ -208,6 +208,18 @@ export function setupSocketHandlers(io: SocketIOServer) {
         const winner = game.checkWinner();
         if (winner) {
           io.to(game.getId()).emit('gameStateUpdate', game.getState());
+        }
+
+        const currentSong = game.getState().currentSong;
+        if (currentSong) {
+          const { elevenLabsService } = await import('./elevenlabs');
+          const audioBuffer = await elevenLabsService.generateDJCommentary(currentSong);
+          
+          if (audioBuffer) {
+            const base64Audio = audioBuffer.toString('base64');
+            io.to(game.getId()).emit('djCommentary', base64Audio);
+            console.log(`DJ commentary generated for game ${game.getId()}`);
+          }
         }
 
         console.log(`Results revealed for game ${game.getId()}`);

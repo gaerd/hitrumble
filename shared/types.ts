@@ -69,6 +69,8 @@ export interface SocketEvents {
   revealResults: () => void;
   resultsRevealed: (data: { results: RoundResult[]; gameState: GameState }) => void;
   
+  djCommentary: (audioData: string) => void;
+  
   nextRound: () => void;
   roundStarted: (gameState: GameState) => void;
   
