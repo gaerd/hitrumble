@@ -21,11 +21,12 @@ declare module 'express-session' {
 }
 
 app.use(express.json({
+  limit: '10mb', // Increased limit for base64 photo uploads
   verify: (req, _res, buf) => {
     req.rawBody = buf;
   }
 }));
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ limit: '10mb', extended: false }));
 
 if (!process.env.SESSION_SECRET) {
   throw new Error('SESSION_SECRET environment variable is required');
