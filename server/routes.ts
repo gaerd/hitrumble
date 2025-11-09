@@ -4,6 +4,8 @@ import { Server as SocketIOServer } from "socket.io";
 import { randomBytes } from "crypto";
 import { setupSocketHandlers } from "./socketHandlers";
 import { spotifyAuthService } from "./spotifyAuth";
+import { storage } from "./storage";
+import { insertPlayerProfileSchema, updatePlayerProfileSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Spotify OAuth endpoints
@@ -202,6 +204,73 @@ VIKTIGT:
       }
     } catch (error) {
       console.error('Chat error:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  // Player Profile endpoints
+  app.get('/api/profiles/:id', async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const profile = await storage.getPlayerProfile(id);
+      
+      if (!profile) {
+        return res.status(404).json({ error: 'Profile not found' });
+      }
+      
+      res.json(profile);
+    } catch (error) {
+      console.error('Get profile error:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  app.post('/api/profiles', async (req: Request, res: Response) => {
+    try {
+      const validated = insertPlayerProfileSchema.parse(req.body);
+      const profile = await storage.createPlayerProfile(validated);
+      
+      res.status(201).json(profile);
+    } catch (error: any) {
+      console.error('Create profile error:', error);
+      
+      if (error.name === 'ZodError') {
+        return res.status(400).json({ error: 'Invalid profile data', details: error.errors });
+      }
+      
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  app.patch('/api/profiles/:id', async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const validated = updatePlayerProfileSchema.parse(req.body);
+      const profile = await storage.updatePlayerProfile(id, validated);
+      
+      if (!profile) {
+        return res.status(404).json({ error: 'Profile not found' });
+      }
+      
+      res.json(profile);
+    } catch (error: any) {
+      console.error('Update profile error:', error);
+      
+      if (error.name === 'ZodError') {
+        return res.status(400).json({ error: 'Invalid profile data', details: error.errors });
+      }
+      
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  app.post('/api/profiles/:id/mark-used', async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      await storage.updateLastUsed(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Mark profile used error:', error);
       res.status(500).json({ error: 'Internal server error' });
     }
   });
