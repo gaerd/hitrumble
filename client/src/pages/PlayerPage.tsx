@@ -17,6 +17,10 @@ interface PlayerProfile {
   id: string;
   displayName: string;
   avatarColor: string;
+  artistName?: string;
+  musicStyle?: string;
+  profileImage?: string;
+  originalPhoto?: string;
   createdAt: string;
   lastUsedAt: string;
 }

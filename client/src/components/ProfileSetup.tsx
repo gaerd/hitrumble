@@ -11,6 +11,10 @@ interface PlayerProfile {
   id: string;
   displayName: string;
   avatarColor: string;
+  artistName?: string;
+  musicStyle?: string;
+  profileImage?: string;
+  originalPhoto?: string;
   createdAt: string;
   lastUsedAt: string;
 }
@@ -34,6 +38,8 @@ const PRESET_COLORS = [
 
 export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
   const [isLoading, setIsLoading] = useState(true);
+  const [existingProfile, setExistingProfile] = useState<PlayerProfile | null>(null);
+  const [showRecreateOptions, setShowRecreateOptions] = useState(false);
   const [displayName, setDisplayName] = useState('');
   const [selectedColor, setSelectedColor] = useState(PRESET_COLORS[0]);
   const [isSaving, setIsSaving] = useState(false);
@@ -55,19 +61,21 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
   const loadExistingProfile = async () => {
     try {
       const savedProfileId = localStorage.getItem(PROFILE_ID_KEY);
-      
+
       if (savedProfileId) {
         const response = await fetch(`/api/profiles/${savedProfileId}`);
-        
+
         if (response.ok) {
           const profile = await response.json();
-          
+
           // Update lastUsedAt
           await fetch(`/api/profiles/${savedProfileId}/mark-used`, {
             method: 'POST',
           });
-          
-          onProfileReady(profile);
+
+          // Show existing profile with options instead of auto-continuing
+          setExistingProfile(profile);
+          setIsLoading(false);
           return;
         } else {
           // Profile not found, clear invalid ID
@@ -79,6 +87,24 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleContinueWithExisting = () => {
+    if (existingProfile) {
+      onProfileReady(existingProfile);
+    }
+  };
+
+  const handleRecreateProfile = () => {
+    setShowRecreateOptions(true);
+    setDisplayName(existingProfile?.displayName || '');
+    setSelectedColor(existingProfile?.avatarColor || PRESET_COLORS[0]);
+  };
+
+  const handleDeleteProfile = () => {
+    localStorage.removeItem(PROFILE_ID_KEY);
+    setExistingProfile(null);
+    setShowRecreateOptions(false);
   };
 
   const handleCreateProfile = async () => {
@@ -110,19 +136,33 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
         profileData.originalPhoto = uploadedPhoto.split(',')[1]; // Remove data:image prefix
       }
 
-      const response = await apiRequest('POST', '/api/profiles', profileData);
+      let profile: PlayerProfile;
 
-      const profile = await response.json() as PlayerProfile;
+      // If recreating existing profile, update it instead of creating new
+      if (existingProfile && showRecreateOptions) {
+        const response = await apiRequest('PATCH', `/api/profiles/${existingProfile.id}`, profileData);
+        profile = await response.json() as PlayerProfile;
 
-      // Save profile ID to localStorage
-      localStorage.setItem(PROFILE_ID_KEY, profile.id);
+        toast({
+          title: 'Profil uppdaterad! ✨',
+          description: aiGeneratedProfile
+            ? `Din nya profil: ${aiGeneratedProfile.artistName}!`
+            : 'Profilen har uppdaterats!',
+        });
+      } else {
+        const response = await apiRequest('POST', '/api/profiles', profileData);
+        profile = await response.json() as PlayerProfile;
 
-      toast({
-        title: 'Profil skapad! ✓',
-        description: aiGeneratedProfile
-          ? `Välkommen ${aiGeneratedProfile.artistName}!`
-          : `Välkommen ${profile.displayName}!`,
-      });
+        // Save profile ID to localStorage
+        localStorage.setItem(PROFILE_ID_KEY, profile.id);
+
+        toast({
+          title: 'Profil skapad! ✓',
+          description: aiGeneratedProfile
+            ? `Välkommen ${aiGeneratedProfile.artistName}!`
+            : `Välkommen ${profile.displayName}!`,
+        });
+      }
 
       onProfileReady(profile);
     } catch (error) {
@@ -224,6 +264,71 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
     );
   }
 
+  // Show existing profile with options
+  if (existingProfile && !showRecreateOptions) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10 flex items-center justify-center p-6">
+        <Card className="w-full max-w-md p-8">
+          <div className="text-center mb-6">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-4"
+                 style={{ backgroundColor: existingProfile.avatarColor }}>
+              {existingProfile.profileImage ? (
+                <img
+                  src={`data:image/png;base64,${existingProfile.profileImage}`}
+                  alt="Profil"
+                  className="w-full h-full rounded-full object-cover"
+                />
+              ) : (
+                <User className="w-10 h-10 text-white" />
+              )}
+            </div>
+            <h1 className="text-3xl font-bold mb-2">Välkommen Tillbaka!</h1>
+            <p className="text-xl">{existingProfile.displayName}</p>
+            {existingProfile.artistName && (
+              <p className="text-muted-foreground mt-1">
+                aka "{existingProfile.artistName}"
+              </p>
+            )}
+            {existingProfile.musicStyle && (
+              <p className="text-sm text-muted-foreground mt-2">
+                Musikstil: {existingProfile.musicStyle}
+              </p>
+            )}
+          </div>
+
+          <div className="space-y-3">
+            <Button
+              size="lg"
+              className="w-full"
+              onClick={handleContinueWithExisting}
+            >
+              Fortsätt med Denna Profil
+            </Button>
+
+            <Button
+              size="lg"
+              variant="outline"
+              className="w-full"
+              onClick={handleRecreateProfile}
+            >
+              <Sparkles className="w-4 h-4 mr-2" />
+              Uppdatera med AI & Pixar-Avatar
+            </Button>
+
+            <Button
+              size="sm"
+              variant="ghost"
+              className="w-full text-muted-foreground"
+              onClick={handleDeleteProfile}
+            >
+              Radera Profil & Skapa Ny
+            </Button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10 flex items-center justify-center p-6">
       <Card className="w-full max-w-md p-8">
@@ -231,9 +336,13 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
             <User className="w-8 h-8 text-primary" />
           </div>
-          <h1 className="text-3xl font-bold mb-2">Skapa Din Profil</h1>
+          <h1 className="text-3xl font-bold mb-2">
+            {showRecreateOptions ? 'Uppdatera Din Profil' : 'Skapa Din Profil'}
+          </h1>
           <p className="text-muted-foreground">
-            Din profil sparas på enheten för snabbare uppkoppling
+            {showRecreateOptions
+              ? 'Ladda upp ett foto för att få en AI-genererad Pixar-avatar'
+              : 'Din profil sparas på enheten för snabbare uppkoppling'}
           </p>
         </div>
 
