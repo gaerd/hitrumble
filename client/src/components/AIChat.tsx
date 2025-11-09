@@ -164,6 +164,7 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
               // Pass preference and pre-generated songs + start year range
               const dataToSend = generatedSongs.length > 0 
                 ? JSON.stringify({ 
+                    preference: lastPreference,
                     songs: generatedSongs,
                     startYearRange: startYearRange || { min: 1950, max: 2020 }
                   })

@@ -88,6 +88,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
         let suggestions: any[] = [];
         let startYearRange: { min: number; max: number } | null = null;
         let searchQuery = '';
+        let userPreference = '';
 
         try {
           const parsed = JSON.parse(preferences);
@@ -95,12 +96,14 @@ export function setupSocketHandlers(io: SocketIOServer) {
             // Pre-generated songs from AI chat
             suggestions = parsed.songs;
             startYearRange = parsed.startYearRange || { min: 1950, max: 2020 };
+            userPreference = parsed.preference || 'musikval från AI-chatten';
             searchQuery = 'AI-generated playlist';
-            console.log(`Using ${suggestions.length} pre-generated songs from AI chat`);
+            console.log(`Using ${suggestions.length} pre-generated songs from AI chat with preference: ${userPreference}`);
           }
         } catch {
           // Not JSON, treat as regular search query
           searchQuery = preferences?.trim() || game.getState().searchQuery?.trim() || '';
+          userPreference = searchQuery;
         }
 
         if (!searchQuery && suggestions.length === 0) {
@@ -108,7 +111,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
           return;
         }
 
-        game.setMusicPreferences(searchQuery, searchQuery);
+        game.setMusicPreferences(userPreference, searchQuery);
 
         // If no pre-generated songs, use AI service to generate them
         if (suggestions.length === 0) {
