@@ -97,10 +97,10 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
   return (
     <div className="flex flex-col h-full max-w-4xl mx-auto">
       <div className="mb-10 text-center">
-        <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-red-500 to-orange-500 mb-6 shadow-xl animate-pulse">
-          <Sparkles className="w-12 h-12 text-white" />
+        <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 border-4 border-white mb-6 shadow-xl animate-pulse">
+          <Sparkles className="w-12 h-12 text-black" />
         </div>
-        <h2 className="text-5xl font-black text-white drop-shadow-lg mb-3">✨ AI Spelledare</h2>
+        <h2 className="text-5xl font-black text-white drop-shadow-2xl mb-3">✨ AI Spelledare</h2>
         <p className="text-white/80 text-2xl font-bold">Berätta vilken musik ni vill ha</p>
       </div>
 
@@ -113,8 +113,8 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
             <div
               className={`max-w-[85%] p-6 rounded-3xl shadow-xl ${
                 msg.role === 'user'
-                  ? 'bg-gradient-to-br from-orange-500 to-yellow-500 text-white border-2 border-orange-400/40'
-                  : 'bg-gradient-to-br from-red-500/40 to-orange-500/40 backdrop-blur-md text-white border-2 border-red-400/30'
+                  ? 'bg-gradient-to-br from-yellow-400 to-orange-500 text-black border-4 border-white'
+                  : 'bg-black/80 backdrop-blur-md text-white border-4 border-white'
               }`}
               data-testid={`message-${msg.role}-${idx}`}
             >
@@ -124,14 +124,14 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
         ))}
         {isThinking && (
           <div className="flex justify-start">
-            <div className="max-w-[85%] p-6 rounded-3xl bg-gradient-to-br from-red-500/40 to-orange-500/40 backdrop-blur-md border-2 border-red-400/30 shadow-xl">
+            <div className="max-w-[85%] p-6 rounded-3xl bg-black/80 backdrop-blur-md border-4 border-white shadow-xl">
               <Loader2 className="w-6 h-6 animate-spin text-white" />
             </div>
           </div>
         )}
       </div>
 
-      <Card className="p-6 bg-gradient-to-br from-black/60 to-red-900/40 backdrop-blur-lg border-2 border-red-500/30 shadow-2xl">
+      <Card className="p-6 bg-black/80 backdrop-blur-md border-4 border-white shadow-2xl">
         <div className="flex gap-3">
           <Input
             value={input}
@@ -145,7 +145,7 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
             size="lg"
             onClick={handleSend}
             disabled={isThinking}
-            className="px-8 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-400 hover:to-orange-400 text-white border-2 border-red-400/40 shadow-xl"
+            className="px-8 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-300 hover:to-orange-400 text-black font-black border-4 border-white shadow-xl"
             data-testid="button-send"
           >
             {isThinking ? (
@@ -158,7 +158,7 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
         <div className="mt-5">
           <Button
             size="lg"
-            className="w-full text-xl py-7 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-400 hover:to-yellow-400 text-white font-black shadow-2xl transform hover:scale-105 transition-all border-2 border-orange-400/40"
+            className="w-full text-xl py-7 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-300 hover:to-orange-400 text-black font-black shadow-2xl transform hover:scale-105 transition-all border-4 border-white"
             onClick={() => {
               setIsConfirming(true);
               // Pass preference and pre-generated songs + start year range

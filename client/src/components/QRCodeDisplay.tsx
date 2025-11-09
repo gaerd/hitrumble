@@ -14,11 +14,15 @@ export default function QRCodeDisplay({ gameCode, playerCount, onStartGame }: QR
   const joinUrl = `${window.location.origin}/join/${gameCode}`;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-600 via-black to-red-900 flex items-center justify-center p-6 relative overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-20 left-20 w-96 h-96 bg-red-500 rounded-full mix-blend-screen filter blur-2xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-orange-500 rounded-full mix-blend-screen filter blur-2xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+    <div className="min-h-screen bg-red-600 flex items-center justify-center p-6 relative overflow-hidden">
+      {/* Diagonal black speaker element */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-transparent via-transparent to-black/80 transform rotate-12 scale-150"></div>
+      </div>
+      {/* Animated glow effects */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-20 left-20 w-96 h-96 bg-yellow-400 rounded-full filter blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-orange-400 rounded-full filter blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
 
       <div className="w-full max-w-3xl relative z-10">
@@ -27,11 +31,11 @@ export default function QRCodeDisplay({ gameCode, playerCount, onStartGame }: QR
           <p className="text-3xl text-white/90 font-bold">📱 Skanna QR-koden för att gå med</p>
         </div>
 
-        <Card className="p-16 text-center bg-gradient-to-br from-black/60 to-red-900/40 backdrop-blur-lg border-2 border-red-500/30 shadow-2xl">
+        <Card className="p-16 text-center bg-black/80 backdrop-blur-md border-4 border-white shadow-2xl">
           <div className="mb-8">
-            <div className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-red-500/40 to-orange-500/40 backdrop-blur-sm border-2 border-red-400/40 mb-8 shadow-xl">
-              <Users className="w-8 h-8 text-white animate-pulse" />
-              <span className="font-mono font-black text-3xl text-white" data-testid="text-player-count">
+            <div className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 border-4 border-white mb-8 shadow-xl">
+              <Users className="w-8 h-8 text-black animate-pulse" />
+              <span className="font-mono font-black text-3xl text-black" data-testid="text-player-count">
                 {playerCount} spelare anslutna
               </span>
             </div>
@@ -49,7 +53,7 @@ export default function QRCodeDisplay({ gameCode, playerCount, onStartGame }: QR
           <div className="space-y-6">
             <div>
               <p className="text-xl text-white/80 font-bold mb-3">Spelkod</p>
-              <Badge className="text-6xl font-mono font-black px-12 py-4 bg-gradient-to-r from-red-600 to-orange-600 text-white border-2 border-red-400/40 shadow-2xl">
+              <Badge className="text-6xl font-mono font-black px-12 py-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-black border-4 border-white shadow-2xl">
                 {gameCode}
               </Badge>
             </div>
@@ -57,7 +61,7 @@ export default function QRCodeDisplay({ gameCode, playerCount, onStartGame }: QR
             <div className="pt-6">
               <Button
                 size="lg"
-                className="w-full text-2xl py-8 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-400 hover:to-orange-400 text-white font-black shadow-2xl transform hover:scale-105 transition-all border-2 border-white/30"
+                className="w-full text-2xl py-8 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-300 hover:to-orange-400 text-black font-black shadow-2xl transform hover:scale-105 transition-all border-4 border-white"
                 onClick={onStartGame}
                 disabled={playerCount === 0}
                 data-testid="button-start-game"
