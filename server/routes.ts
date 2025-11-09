@@ -81,6 +81,78 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ success: true });
   });
 
+  // AI Chat endpoint
+  app.post('/api/chat', async (req: Request, res: Response) => {
+    try {
+      const { message, conversationHistory } = req.body;
+      
+      if (!message) {
+        return res.status(400).json({ error: 'Message is required' });
+      }
+
+      const apiKey = process.env.OPENROUTER_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ error: 'AI service not configured' });
+      }
+
+      const messages = [
+        {
+          role: 'system' as const,
+          content: `Du är en entusiastisk och hjälpsam AI-spelledare för musikspelet HITSTER. Din uppgift är att hjälpa spelarna välja musik genom en trevlig konversation.
+
+Beteende:
+- Var vänlig, kort och entusiastisk
+- Ställ följdfrågor om användaren är osäker
+- Ge konkreta förslag baserat på deras svar
+- Håll svaren korta (2-3 meningar max)
+- Tala naturlig svenska
+
+Exempel på bra interaktioner:
+- Om de säger "80-tal" → Fråga om de vill ha rock, pop, eller disco från 80-talet
+- Om de säger "svensk musik" → Fråga vilken period eller genre
+- Ge konkreta förslag: "Ska vi köra klassisk svensk pop som Kent och The Cardigans?"
+
+När de verkar nöjda med valet, uppmuntra dem att klicka på "Bekräfta & Fortsätt".`
+        },
+        ...(conversationHistory || []),
+        { role: 'user' as const, content: message }
+      ];
+
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': 'https://hitster-ai.replit.app',
+          'X-Title': 'HITSTER AI'
+        },
+        body: JSON.stringify({
+          model: 'anthropic/claude-sonnet-4.5',
+          messages,
+          max_tokens: 200,
+          temperature: 0.8
+        })
+      });
+
+      if (!response.ok) {
+        console.error('OpenRouter API error:', response.status);
+        return res.status(500).json({ error: 'AI service error' });
+      }
+
+      const data = await response.json();
+      const aiResponse = data.choices[0]?.message?.content;
+
+      if (!aiResponse) {
+        return res.status(500).json({ error: 'No response from AI' });
+      }
+
+      res.json({ response: aiResponse });
+    } catch (error) {
+      console.error('Chat error:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
   const httpServer = createServer(app);
 
   const io = new SocketIOServer(httpServer, {

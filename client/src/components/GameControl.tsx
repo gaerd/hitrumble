@@ -64,47 +64,78 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
         {currentSong && (
           <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl p-8 mb-6">
             {isDJPlaying ? (
-              <div className="flex flex-col items-center justify-center py-12">
-                <Radio className="w-24 h-24 text-primary mb-4 animate-pulse" />
-                <p className="text-3xl font-bold text-primary mb-2">DJ ON AIR</p>
-                <p className="text-xl text-muted-foreground">Din energiska radio-DJ kommenterar...</p>
+              <div className="space-y-6">
+                <div className="flex flex-col items-center justify-center py-6">
+                  <Radio className="w-16 h-16 text-primary mb-3 animate-pulse" />
+                  <p className="text-2xl font-bold text-primary mb-1">DJ ON AIR</p>
+                  <p className="text-lg text-muted-foreground">Din energiska radio-DJ kommenterar...</p>
+                </div>
+                <div className="flex items-center gap-6 bg-background/50 rounded-xl p-6">
+                  {currentSong.albumCover && (
+                    <img 
+                      src={currentSong.albumCover} 
+                      alt={currentSong.title}
+                      className="w-24 h-24 rounded-xl shadow-lg"
+                    />
+                  )}
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold mb-1">{currentSong.title}</h3>
+                    <p className="text-lg text-muted-foreground mb-2">{currentSong.artist}</p>
+                    <Badge className="text-xl font-mono font-bold px-3 py-1">
+                      {currentSong.year}
+                    </Badge>
+                  </div>
+                </div>
               </div>
             ) : phase === 'playing' ? (
-              <div className="flex flex-col items-center justify-center py-12">
-                <div className="text-9xl font-bold text-primary/30 mb-4">?</div>
-                {spotify.isConnected && spotify.isReady ? (
+              <div className="relative overflow-hidden">
+                {spotify.isPlaying && (
                   <>
-                    <div className="flex items-center gap-3 mb-2">
-                      <Disc3 className={`w-6 h-6 ${spotify.isPlaying ? 'text-primary animate-spin' : 'text-muted-foreground'}`} />
-                      <p className="text-2xl font-semibold text-muted-foreground">
-                        Spelar via Spotify
-                      </p>
-                      <Badge variant="secondary" className="ml-2">Premium</Badge>
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 animate-pulse" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-64 h-64 bg-primary/10 rounded-full animate-ping" style={{ animationDuration: '2s' }} />
                     </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={togglePlayback}
-                      className="mb-3"
-                      data-testid="button-toggle-audio"
-                    >
-                      {spotify.isPlaying ? 'Pausa' : 'Spela'}
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <div className="flex items-center gap-3 mb-4">
-                      <AlertCircle className="w-6 h-6 text-muted-foreground" />
-                      <p className="text-2xl font-semibold text-muted-foreground">
-                        Anslut Spotify för att spela musik
-                      </p>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-48 h-48 bg-accent/10 rounded-full animate-ping" style={{ animationDuration: '1.5s', animationDelay: '0.3s' }} />
                     </div>
-                    <p className="text-sm text-muted-foreground">
-                      Klicka på "Anslut Spotify Premium" längst upp för att aktivera musikuppspelning
-                    </p>
                   </>
                 )}
-                <p className="text-lg text-muted-foreground mt-4">Väntar på att alla placerar sina kort...</p>
+                <div className="relative flex flex-col items-center justify-center py-12">
+                  <div className={`text-9xl font-bold mb-4 ${spotify.isPlaying ? 'text-primary animate-pulse' : 'text-primary/30'}`}>?</div>
+                  {spotify.isConnected && spotify.isReady ? (
+                    <>
+                      <div className="flex items-center gap-3 mb-2">
+                        <Disc3 className={`w-6 h-6 ${spotify.isPlaying ? 'text-primary animate-spin' : 'text-muted-foreground'}`} />
+                        <p className="text-2xl font-semibold text-muted-foreground">
+                          Spelar via Spotify
+                        </p>
+                        <Badge variant="secondary" className="ml-2">Premium</Badge>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={togglePlayback}
+                        className="mb-3"
+                        data-testid="button-toggle-audio"
+                      >
+                        {spotify.isPlaying ? 'Pausa' : 'Spela'}
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex items-center gap-3 mb-4">
+                        <AlertCircle className="w-6 h-6 text-muted-foreground" />
+                        <p className="text-2xl font-semibold text-muted-foreground">
+                          Anslut Spotify för att spela musik
+                        </p>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        Klicka på "Anslut Spotify Premium" längst upp för att aktivera musikuppspelning
+                      </p>
+                    </>
+                  )}
+                  <p className="text-lg text-muted-foreground mt-4">Väntar på att alla placerar sina kort...</p>
+                </div>
               </div>
             ) : (
               <div className="flex items-center gap-6">

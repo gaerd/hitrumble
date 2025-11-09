@@ -20,24 +20,53 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
   const [input, setInput] = useState('');
   const [lastPreference, setLastPreference] = useState('');
   const [isConfirming, setIsConfirming] = useState(false);
+  const [isThinking, setIsThinking] = useState(false);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+  const handleSend = async () => {
+    if (!input.trim() || isThinking) return;
     
-    const preference = input.trim();
-    const userMessage: Message = { role: 'user', content: preference };
+    const userInput = input.trim();
+    const userMessage: Message = { role: 'user', content: userInput };
     setMessages(prev => [...prev, userMessage]);
-    setLastPreference(preference);
+    setLastPreference(userInput);
+    setInput('');
+    setIsThinking(true);
     
-    setTimeout(() => {
+    try {
+      const conversationHistory = messages.map(msg => ({
+        role: msg.role === 'ai' ? 'assistant' : 'user',
+        content: msg.content
+      }));
+
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: userInput,
+          conversationHistory
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Chat request failed');
+      }
+
+      const data = await response.json();
       const aiMessage: Message = { 
         role: 'ai', 
-        content: `Perfekt! Jag har förberett ${preference} för er. Klicka på "Bekräfta" för att börja!` 
+        content: data.response
       };
       setMessages(prev => [...prev, aiMessage]);
-    }, 1000);
-    
-    setInput('');
+    } catch (error) {
+      console.error('Chat error:', error);
+      const fallbackMessage: Message = { 
+        role: 'ai', 
+        content: `Perfekt! Jag har förberett ${userInput} för er. Klicka på "Bekräfta & Fortsätt" för att börja!` 
+      };
+      setMessages(prev => [...prev, fallbackMessage]);
+    } finally {
+      setIsThinking(false);
+    }
   };
 
   return (
@@ -68,6 +97,13 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
             </div>
           </div>
         ))}
+        {isThinking && (
+          <div className="flex justify-start">
+            <div className="max-w-[80%] p-4 rounded-2xl bg-gradient-to-br from-accent to-accent/70">
+              <Loader2 className="w-5 h-5 animate-spin" />
+            </div>
+          </div>
+        )}
       </div>
 
       <Card className="p-4">
@@ -80,8 +116,17 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
             className="text-lg"
             data-testid="input-music-preference"
           />
-          <Button size="lg" onClick={handleSend} data-testid="button-send">
-            <Send className="w-5 h-5" />
+          <Button 
+            size="lg" 
+            onClick={handleSend} 
+            disabled={isThinking}
+            data-testid="button-send"
+          >
+            {isThinking ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : (
+              <Send className="w-5 h-5" />
+            )}
           </Button>
         </div>
         <div className="mt-4">
