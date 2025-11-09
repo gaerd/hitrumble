@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { Music2, Users, Sparkles, Music, Loader2, CheckCircle2 } from "lucide-react";
+import { Users, Sparkles, Music, Loader2, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import logoUrl from "@assets/hitster logo_1762695517073.png";
 
 interface HomeProps {
   onSelectMaster?: () => void;
@@ -41,12 +42,14 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
     <div className="min-h-screen bg-gradient-to-br from-primary/20 via-background to-accent/20 flex items-center justify-center p-6">
       <div className="w-full max-w-4xl">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-primary/10 mb-6">
-            <Music2 className="w-12 h-12 text-primary" />
+          <div className="flex justify-center mb-6">
+            <img 
+              src={logoUrl} 
+              alt="HITSTER AI Logo" 
+              className="w-80 h-auto"
+              data-testid="img-logo"
+            />
           </div>
-          <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-            HITSTER AI
-          </h1>
           <p className="text-xl text-muted-foreground font-medium">
             Musikspelet med AI-driven musikval
           </p>
