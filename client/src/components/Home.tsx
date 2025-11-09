@@ -44,29 +44,29 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
     >
       <div className="absolute inset-0 bg-black/40"></div>
 
-      {/* BeatBrawl Logo - Upper Left - Much Larger */}
+      {/* BeatBrawl Logo - Upper Left - Extra Large */}
       <div className="absolute top-12 left-12 z-20">
         <img
           src="/beatbrawl.png"
           alt="BeatBrawl Logo"
-          className="h-32 w-auto"
+          className="h-48 w-auto"
           data-testid="img-logo"
         />
       </div>
 
-      {/* Spotify Button - Upper Right */}
-      <div className="absolute top-12 right-12 z-20">
+      {/* Spotify Button - Upper Right - Much Smaller */}
+      <div className="absolute top-8 right-8 z-20">
         {!isCheckingSpotify && !spotifyConnected && (
           <Button
             onClick={handleConnectSpotify}
             disabled={isConnectingSpotify}
-            className="gap-3 text-lg px-6 py-6 bg-black/80 hover:bg-black text-white font-bold shadow-xl border-2 border-white"
+            className="gap-2 text-xs px-3 py-2 bg-black/80 hover:bg-black text-white font-medium shadow-lg border border-white"
             data-testid="button-connect-spotify-home"
           >
             {isConnectingSpotify ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
+              <Loader2 className="w-3 h-3 animate-spin" />
             ) : (
-              <Music className="w-5 h-5 text-red-500" />
+              <Music className="w-3 h-3 text-red-500" />
             )}
             Anslut till Spotify
           </Button>
@@ -75,10 +75,10 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
         {spotifyConnected && (
           <Button
             disabled
-            className="gap-3 text-lg px-6 py-6 bg-black/80 text-white font-bold shadow-xl border-2 border-white cursor-default"
+            className="gap-2 text-xs px-3 py-2 bg-black/80 text-white font-medium shadow-lg border border-white cursor-default"
             data-testid="button-spotify-connected"
           >
-            <CheckCircle2 className="w-5 h-5 text-green-400" />
+            <CheckCircle2 className="w-3 h-3 text-green-400" />
             Ansluten till Spotify
           </Button>
         )}
@@ -86,26 +86,26 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
 
       {/* Two Buttons - Left Side in Red Area */}
       <div className="absolute left-12 top-1/2 -translate-y-1/2 z-10 flex flex-col gap-6">
-        <Button
-          size="lg"
-          className={`text-2xl py-8 px-12 bg-yellow-400 hover:bg-yellow-300 text-black font-black shadow-2xl ${
+        <button
+          className={`text-4xl py-10 px-16 bg-yellow-400 hover:bg-yellow-300 text-black font-black shadow-2xl uppercase tracking-wider ${
             spotifyConnected ? 'cursor-pointer' : 'opacity-40 cursor-not-allowed'
           }`}
+          style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}
           disabled={!spotifyConnected}
           onClick={handleSelectMaster}
           data-testid="button-start-master"
         >
           Starta Spel
-        </Button>
+        </button>
 
-        <Button
-          size="lg"
-          className="text-2xl py-8 px-12 bg-orange-500 hover:bg-orange-400 text-white font-black shadow-2xl"
+        <button
+          className="text-4xl py-10 px-16 bg-orange-500 hover:bg-orange-400 text-white font-black shadow-2xl uppercase tracking-wider"
+          style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}
           onClick={onSelectPlayer}
           data-testid="button-join-player"
         >
           Gå Med i Spel
-        </Button>
+        </button>
       </div>
     </div>
   );
