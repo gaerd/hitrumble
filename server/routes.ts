@@ -143,7 +143,7 @@ VIKTIGT: Lägg BARA till låtar och startYearRange när användaren har gett til
           'X-Title': 'HITSTER AI'
         },
         body: JSON.stringify({
-          model: 'anthropic/claude-sonnet-4.5',
+          model: 'google/gemini-2.5-pro',
           messages,
           max_tokens: 2500,
           temperature: 0.8

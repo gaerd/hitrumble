@@ -6,6 +6,18 @@ HITSTER AI is a real-time multiplayer music timeline game where players compete 
 
 ## Recent Changes
 
+### November 9, 2025 - Visual Effects & AI Model Switch
+- **Visual Effects**: Added confetti and music equalizer animations
+  - Winner confetti animation using canvas-confetti (5s duration)
+  - Animated music equalizer bars during Spotify playback on master and player devices
+  - Equalizer appears under score display on player devices when music plays
+  - Equalizer integrated into master device Spotify playback section
+- **AI Model Switch**: Switched AI chat to Google Gemini 2.5 Pro
+  - Changed from Claude Sonnet 4.5 to `google/gemini-2.5-pro` for music preference chat
+  - Maintains same JSON response format (message, songs, startYearRange)
+  - DJ commentary still uses Claude Sonnet 4.5 for consistent Swedish voice generation
+  - Song suggestion service still uses Claude Sonnet 4.5
+
 ### November 9, 2025 - LLM-Powered AI Experience & Visual Enhancements
 - **LLM DJ Commentary**: Replaced template-based DJ comments with Claude Sonnet 4.5 via OpenRouter
   - Fixed model name from `claude-sonnet-4-20250514` → `claude-sonnet-4.5` (was causing 400 errors)
@@ -22,7 +34,7 @@ HITSTER AI is a real-time multiplayer music timeline game where players compete 
 - **Fully Automatic Flow**: Removed manual "Visa Resultat" button - game auto-reveals when all players ready
 - **Auto-Advance**: After DJ commentary, game automatically starts next round (unless finished)
 - **No Manual Clicks**: Players just place cards, everything else happens automatically
-- **LLM-Powered AI Chat with Pre-generation**: Initial music preference chat now uses Claude Sonnet 4.5 for natural conversation
+- **LLM-Powered AI Chat with Pre-generation**: Initial music preference chat for natural conversation
   - AI asks follow-up questions and gives suggestions based on user input
   - Conversation history maintained for context
   - **Songs generated in background**: AI generates 20 song suggestions + start year range with each chat response (hidden from user)
@@ -107,11 +119,19 @@ Preferred communication style: Simple, everyday language.
   - Visual indicators: spinning disc icon + "Premium" badge for Spotify, speaker icon for previews
 
 **AI Services**:
-- **OpenRouter API**: LLM (Claude Sonnet 4.5) for generating song suggestions from user chat preferences
-  - Takes natural language input (e.g., "80s pop", "Swedish rock")
-  - Generates 20 specific song suggestions with title, artist, and year
-  - Generates contextual year ranges for player start years based on music preferences
-  - Validates year ranges (1950-2024) to ensure timeline accuracy
+- **OpenRouter API**: LLM integration for AI-powered features
+  - **Music Preference Chat**: Uses Google Gemini 2.5 Pro (`google/gemini-2.5-pro`) for natural conversation
+    - Takes natural language input (e.g., "80s pop", "Swedish rock")
+    - AI asks follow-up questions and provides suggestions
+    - Generates 20 song suggestions + start year range in background (hidden from user)
+    - Conversation history maintained for context
+  - **Song Suggestions**: Uses Claude Sonnet 4.5 (`anthropic/claude-sonnet-4.5`) for generating song lists
+    - Generates 20 specific song suggestions with title, artist, and year
+    - Validates year ranges (1950-2024) to ensure timeline accuracy
+  - **DJ Commentary**: Uses Claude Sonnet 4.5 (`anthropic/claude-sonnet-4.5`) for contextual Swedish commentary
+    - Message history system (last 10 messages) for variety
+    - Special winner congratulations when game ends
+    - Swedish language prompts optimized for brevity (20-30 words max)
 - **ElevenLabs API**: Text-to-speech for energetic Swedish radio DJ commentary (November 2025)
   - Generates voice commentary between songs after all players have placed their cards
   - Uses "Adam" voice with multilingual model for natural Swedish pronunciation
@@ -147,11 +167,11 @@ Preferred communication style: Simple, everyday language.
 **Component-Driven UI**: Extensive component library in `/client/src/components/` with example files demonstrating usage patterns for AI-based development assistance.
 
 **AI-Powered Song Selection Pipeline** (November 2025):
-1. User chats with AI about music preferences (e.g., "80s rock", "Swedish pop from the 90s")
-2. AI service (Claude Sonnet 4.5) generates 20 specific song suggestions with accurate years
-3. Spotify service searches each suggestion using Swedish market with year-matching filters
+1. User chats with AI (Google Gemini 2.5 Pro) about music preferences (e.g., "80s rock", "Swedish pop from the 90s")
+2. AI generates 20 specific song suggestions with accurate years in background (hidden from user)
+3. When user confirms preferences, Spotify service searches each suggestion using Swedish market with year-matching filters
 4. System validates ≥10 songs found before proceeding to lobby
-5. Songs stored with Spotify track IDs for future Web Playback SDK integration
+5. Songs stored with Spotify track IDs for Web Playback SDK integration
 
 **Spotify Playback Strategy** (November 2025):
 - **Spotify Web Playback SDK Required**: All music playback requires Spotify Premium
