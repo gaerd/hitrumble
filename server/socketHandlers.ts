@@ -284,7 +284,13 @@ export function setupSocketHandlers(io: SocketIOServer) {
           return;
         }
 
-        if (game.getState().phase !== 'reveal') {
+        const currentPhase = game.getState().phase;
+        if (currentPhase === 'finished') {
+          console.log(`Game ${game.getId()} is finished - not starting next round`);
+          return;
+        }
+
+        if (currentPhase !== 'reveal') {
           socket.emit('error', 'Cannot start next round - not in reveal phase');
           return;
         }

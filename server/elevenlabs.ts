@@ -74,7 +74,7 @@ Regler:
           'X-Title': 'HITSTER AI'
         },
         body: JSON.stringify({
-          model: 'anthropic/claude-sonnet-4-20250514',
+          model: 'anthropic/claude-sonnet-4.5',
           messages: [...history, { role: 'user', content: userPrompt }],
           max_tokens: 150,
           temperature: 0.8
