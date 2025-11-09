@@ -95,73 +95,85 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
   };
 
   return (
-    <div className="flex flex-col h-full max-w-4xl mx-auto">
-      <div className="mb-8 text-center">
-        <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-yellow-400 border-4 border-white mb-5 shadow-xl">
-          <Sparkles className="w-10 h-10 text-black" />
-        </div>
-        <h2 className="text-4xl font-black text-white mb-2">AI Spelledare</h2>
-        <p className="text-white/80 text-xl font-bold">Berätta vilken musik ni vill ha</p>
+    <div
+      className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
+      style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+    >
+      <div className="absolute inset-0 bg-black/40"></div>
+
+      {/* BeatBrawl Logo - Upper Left */}
+      <div className="absolute top-12 left-12 z-20">
+        <img
+          src="/beatbrawl.png"
+          alt="BeatBrawl Logo"
+          className="h-48 w-auto"
+        />
       </div>
 
-      <div className="flex-1 overflow-auto mb-8 space-y-5">
-        {messages.map((msg, idx) => (
-          <div
-            key={idx}
-            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
+      {/* Chat Container */}
+      <div className="w-full max-w-4xl relative z-10 flex flex-col h-[80vh]">
+        {/* Messages Area */}
+        <div className="flex-1 overflow-auto mb-6 space-y-4 px-4">
+          {messages.map((msg, idx) => (
             <div
-              className={`max-w-[85%] p-5 rounded-2xl shadow-xl ${
-                msg.role === 'user'
-                  ? 'bg-yellow-400 text-black border-3 border-white'
-                  : 'bg-black text-white border-3 border-white'
-              }`}
-              data-testid={`message-${msg.role}-${idx}`}
+              key={idx}
+              className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-              <p className="text-lg font-medium">{msg.content}</p>
+              <div
+                className={`max-w-[75%] p-5 rounded-lg shadow-2xl ${
+                  msg.role === 'user'
+                    ? 'bg-yellow-400 text-black'
+                    : 'bg-black/90 text-white border-2 border-white'
+                }`}
+                data-testid={`message-${msg.role}-${idx}`}
+              >
+                <p className="text-lg font-medium">{msg.content}</p>
+              </div>
             </div>
-          </div>
-        ))}
-        {isThinking && (
-          <div className="flex justify-start">
-            <div className="max-w-[85%] p-5 rounded-2xl bg-black border-3 border-white shadow-xl">
-              <Loader2 className="w-5 h-5 animate-spin text-white" />
+          ))}
+          {isThinking && (
+            <div className="flex justify-start">
+              <div className="max-w-[75%] p-5 rounded-lg bg-black/90 border-2 border-white shadow-2xl">
+                <Loader2 className="w-5 h-5 animate-spin text-white" />
+              </div>
             </div>
-          </div>
-        )}
-      </div>
-
-      <Card className="p-5 bg-black border-4 border-white shadow-2xl">
-        <div className="flex gap-3">
-          <Input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="T.ex. '80-tals rock' eller 'svensk pop'"
-            className="text-lg py-6 bg-white border-2 border-white/50 font-medium"
-            data-testid="input-music-preference"
-          />
-          <Button
-            size="lg"
-            onClick={handleSend}
-            disabled={isThinking}
-            className="px-7 bg-yellow-400 hover:bg-yellow-300 text-black font-black border-3 border-white shadow-xl"
-            data-testid="button-send"
-          >
-            {isThinking ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
-            ) : (
-              <Send className="w-5 h-5" />
-            )}
-          </Button>
+          )}
         </div>
-        <div className="mt-4">
-          <Button
-            size="lg"
-            className="w-full text-xl py-7 bg-yellow-400 hover:bg-yellow-300 text-black font-black shadow-xl border-3 border-white"
+
+        {/* Input Area */}
+        <div className="bg-black/90 p-6 border-4 border-white shadow-2xl">
+          <div className="flex gap-3 mb-4">
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+              placeholder="T.ex. '80-tals rock' eller 'svensk pop'"
+              className="text-lg py-6 bg-white border-2 border-white/50 font-medium"
+              data-testid="input-music-preference"
+            />
+            <Button
+              size="lg"
+              onClick={handleSend}
+              disabled={isThinking}
+              className="px-7 bg-yellow-400 hover:bg-yellow-300 text-black font-black shadow-xl"
+              data-testid="button-send"
+            >
+              {isThinking ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <Send className="w-5 h-5" />
+              )}
+            </Button>
+          </div>
+          <button
+            className={`w-full text-2xl py-7 px-12 bg-yellow-400 text-black font-black shadow-2xl uppercase tracking-wider transition-all duration-200 ${
+              lastPreference && !isConfirming
+                ? 'cursor-pointer hover:scale-105 hover:shadow-[0_20px_50px_rgba(0,0,0,0.8)] hover:-translate-y-1'
+                : 'opacity-40 cursor-not-allowed'
+            }`}
+            style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}
             onClick={() => {
               setIsConfirming(true);
-              // Pass preference and pre-generated songs + start year range
               const dataToSend = generatedSongs.length > 0
                 ? JSON.stringify({
                     preference: lastPreference,
@@ -176,15 +188,15 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
           >
             {isConfirming ? (
               <>
-                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                <Loader2 className="w-5 h-5 mr-2 animate-spin inline" />
                 Söker låtar...
               </>
             ) : (
               'Bekräfta & Fortsätt'
             )}
-          </Button>
+          </button>
         </div>
-      </Card>
+      </div>
     </div>
   );
 }
