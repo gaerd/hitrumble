@@ -37,6 +37,22 @@ export function setupSocketHandlers(io: SocketIOServer) {
           return;
         }
 
+        // Check if player already exists in the game
+        const existingPlayers = game.getState().players;
+        if (profileId) {
+          const duplicateProfile = existingPlayers.find(p => p.profileId === profileId);
+          if (duplicateProfile) {
+            socket.emit('error', 'Du är redan med i detta spel');
+            return;
+          }
+        } else if (persistentId) {
+          const duplicatePersistent = existingPlayers.find(p => p.persistentId === persistentId);
+          if (duplicatePersistent) {
+            socket.emit('error', 'Du är redan med i detta spel');
+            return;
+          }
+        }
+
         // Fetch profile data if profileId is provided
         let profileData: { artistName?: string; avatarColor?: string; profileImage?: string } | undefined;
         if (profileId) {
