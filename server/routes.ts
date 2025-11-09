@@ -128,7 +128,9 @@ Du ska returnera JSON i detta exakta format:
 
 I "songs"-arrayen ska du baserat på konversationen välja 20 populära låtar som matchar vad användaren verkar vilja ha.
 I "startYearRange" ska du välja ett lämpligt årsintervall för spelarnas startår baserat på musikvalet (t.ex. om de vill ha 80-talsmusik: min: 1980, max: 1989).
-VIKTIGT: Lägg BARA till låtar och startYearRange när användaren har gett tillräckligt med kontext. Vid första svaret kan du ha en tom array och null för startYearRange om användaren inte varit specifik nog ännu.`
+VIKTIGT: 
+- Lägg BARA till låtar och startYearRange när användaren har gett tillräckligt med kontext. Vid första svaret kan du ha en tom array och null för startYearRange om användaren inte varit specifik nog ännu.
+- Alla låtar måste vara UNIKA - ingen låt får förekomma två gånger i listan. Kontrollera att varje kombination av titel och artist är unik.`
         },
         ...(conversationHistory || []),
         { role: 'user' as const, content: message }
