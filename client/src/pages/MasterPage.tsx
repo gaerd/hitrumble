@@ -149,11 +149,7 @@ export default function MasterPage() {
   }
 
   if (gameState.phase === 'setup') {
-    return (
-      <div className="min-h-screen bg-background p-6 flex items-center justify-center">
-        <AIChat onPreferencesConfirmed={handleAIChatConfirm} />
-      </div>
-    );
+    return <AIChat onPreferencesConfirmed={handleAIChatConfirm} />;
   }
 
   if (gameState.phase === 'lobby') {
