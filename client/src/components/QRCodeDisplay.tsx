@@ -78,7 +78,7 @@ export default function QRCodeDisplay({ gameCode, playerCount, players, onStartG
               <h2 className="text-3xl font-black text-white">
                 Anslutna Spelare
               </h2>
-              <Badge className="ml-auto text-2xl font-mono font-black px-6 py-2 bg-yellow-400 text-black border-3 border-white">
+              <Badge className="ml-auto text-2xl font-mono font-black px-6 py-2 bg-yellow-400 text-black border-4 border-white">
                 {playerCount}
               </Badge>
             </div>
@@ -101,16 +101,16 @@ export default function QRCodeDisplay({ gameCode, playerCount, players, onStartG
                     className="flex items-center gap-4 p-4 bg-white/10 rounded-2xl border-2 border-white/20 hover:bg-white/20 transition-colors"
                   >
                     {/* Profilbild eller avatar */}
-                    <div className="relative">
+                    <div className="relative flex-shrink-0">
                       {player.profileImage ? (
                         <img
                           src={player.profileImage}
                           alt={player.name}
-                          className="w-16 h-16 rounded-full border-3 border-white shadow-lg object-cover"
+                          className="w-16 h-16 rounded-full border-4 border-white shadow-lg object-cover"
                         />
                       ) : (
                         <div
-                          className="w-16 h-16 rounded-full border-3 border-white shadow-lg flex items-center justify-center text-2xl font-black"
+                          className="w-16 h-16 rounded-full border-4 border-white shadow-lg flex items-center justify-center text-2xl font-black text-white"
                           style={{ backgroundColor: player.avatarColor || '#FFC107' }}
                         >
                           {player.name.charAt(0).toUpperCase()}
@@ -136,7 +136,7 @@ export default function QRCodeDisplay({ gameCode, playerCount, players, onStartG
                     </div>
 
                     {/* Position badge */}
-                    <Badge className="text-lg font-mono font-black px-4 py-2 bg-yellow-400 text-black border-2 border-white">
+                    <Badge className="text-lg font-mono font-black px-4 py-2 bg-yellow-400 text-black border-4 border-white flex-shrink-0">
                       #{index + 1}
                     </Badge>
                   </div>
