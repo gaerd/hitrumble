@@ -216,23 +216,39 @@ export default function PlayerPage() {
 
   if (phase === 'reconnect') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10 flex items-center justify-center p-6">
-        <Card className="w-full max-w-md p-8">
-          <div className="text-center mb-6">
-            <div className="text-5xl mb-4">🔄</div>
-            <h1 className="text-3xl font-bold mb-2">Välkommen Tillbaka!</h1>
-            <p className="text-muted-foreground">Vi hittade ditt senaste spel</p>
+      <div
+        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
+        style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+      >
+        <div className="absolute inset-0 bg-black/40 z-0"></div>
+
+        {/* BeatBrawl Logo - Upper Left */}
+        <div className="absolute top-8 left-8 z-20">
+          <img
+            src="/beatbrawl.png"
+            alt="BeatBrawl Logo"
+            className="h-24 w-auto"
+          />
+        </div>
+
+        <Card className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30">
+          <div className="text-center mb-8">
+            <div className="text-6xl mb-4">🔄</div>
+            <h1 className="text-4xl font-black mb-3 text-white" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
+              VÄLKOMMEN TILLBAKA!
+            </h1>
+            <p className="text-white/70 text-lg">Vi hittade ditt senaste spel</p>
           </div>
           <div className="space-y-4">
-            <div className="bg-muted rounded-lg p-4">
-              <p className="text-sm text-muted-foreground mb-1">Spelare</p>
-              <p className="text-lg font-bold">{savedSession?.playerName}</p>
-              <p className="text-sm text-muted-foreground mt-2 mb-1">Spelkod</p>
-              <p className="text-xl font-mono font-bold">{savedSession?.gameCode}</p>
+            <div className="bg-white/10 rounded-2xl p-6 border-2 border-white/20">
+              <p className="text-sm text-white/60 mb-1 font-bold">Spelare</p>
+              <p className="text-xl font-bold text-white mb-3">{savedSession?.playerName}</p>
+              <p className="text-sm text-white/60 mb-1 font-bold">Spelkod</p>
+              <p className="text-2xl font-mono font-black text-white">{savedSession?.gameCode}</p>
             </div>
             <Button
               size="lg"
-              className="w-full"
+              className="w-full text-xl py-6 bg-red-500 hover:bg-red-600 text-white font-black border-4 border-white"
               onClick={handleReconnect}
               data-testid="button-reconnect"
             >
@@ -240,8 +256,7 @@ export default function PlayerPage() {
             </Button>
             <Button
               size="lg"
-              variant="outline"
-              className="w-full"
+              className="w-full text-lg py-4 bg-white/20 hover:bg-white/30 text-white font-bold border-2 border-white"
               onClick={handleStartNew}
               data-testid="button-start-new"
             >

@@ -319,10 +319,24 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
   // Show existing profile with options
   if (existingProfile && !showRecreateOptions) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10 flex items-center justify-center p-6">
-        <Card className="w-full max-w-md p-8">
-          <div className="text-center mb-6">
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-4"
+      <div
+        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
+        style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+      >
+        <div className="absolute inset-0 bg-black/40 z-0"></div>
+
+        {/* BeatBrawl Logo - Upper Left */}
+        <div className="absolute top-8 left-8 z-20">
+          <img
+            src="/beatbrawl.png"
+            alt="BeatBrawl Logo"
+            className="h-24 w-auto"
+          />
+        </div>
+
+        <Card className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-32 h-32 rounded-full mb-6 border-4 border-white shadow-xl"
                  style={{ backgroundColor: existingProfile.avatarColor }}>
               {existingProfile.profileImage ? (
                 <img
@@ -331,18 +345,20 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
                   className="w-full h-full rounded-full object-cover"
                 />
               ) : (
-                <User className="w-10 h-10 text-white" />
+                <User className="w-16 h-16 text-white" />
               )}
             </div>
-            <h1 className="text-3xl font-bold mb-2">Välkommen Tillbaka!</h1>
-            <p className="text-xl">{existingProfile.displayName}</p>
+            <h1 className="text-4xl font-black mb-4 text-white" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
+              VÄLKOMMEN TILLBAKA!
+            </h1>
+            <p className="text-2xl text-white font-bold mb-2">{existingProfile.displayName}</p>
             {existingProfile.artistName && (
-              <p className="text-muted-foreground mt-1">
+              <p className="text-white/70 text-lg italic mb-2">
                 aka "{existingProfile.artistName}"
               </p>
             )}
             {existingProfile.musicStyle && (
-              <p className="text-sm text-muted-foreground mt-2">
+              <p className="text-white/60 text-base">
                 Musikstil: {existingProfile.musicStyle}
               </p>
             )}
@@ -351,7 +367,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
           <div className="space-y-3">
             <Button
               size="lg"
-              className="w-full"
+              className="w-full text-xl py-6 bg-red-500 hover:bg-red-600 text-white font-black border-4 border-white"
               onClick={handleContinueWithExisting}
             >
               Fortsätt med Denna Profil
@@ -359,8 +375,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
 
             <Button
               size="lg"
-              variant="outline"
-              className="w-full"
+              className="w-full text-lg py-4 bg-white/20 hover:bg-white/30 text-white font-bold border-2 border-white"
               onClick={handleRecreateProfile}
             >
               <Sparkles className="w-4 h-4 mr-2" />
@@ -369,8 +384,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
 
             <Button
               size="sm"
-              variant="ghost"
-              className="w-full text-muted-foreground"
+              className="w-full text-white/60 hover:text-white bg-transparent hover:bg-white/10"
               onClick={handleDeleteProfile}
             >
               Radera Profil & Skapa Ny
