@@ -421,16 +421,9 @@ export default function PlayerPage() {
           startYear={myPlayer.startYear}
           highlightPosition={selectedPosition ?? undefined}
           onPlaceCard={confirmedPlacement ? undefined : setSelectedPosition}
+          onConfirmPlacement={confirmedPlacement ? undefined : handleConfirmPlacement}
         />
       </div>
-
-      {gameState?.phase === 'playing' && !confirmedPlacement && (
-        <CardPlacement
-          song={hiddenSong}
-          selectedPosition={selectedPosition}
-          onConfirm={handleConfirmPlacement}
-        />
-      )}
 
       {gameState?.phase === 'playing' && confirmedPlacement && (
         <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-background via-background to-transparent" data-testid="placement-confirmed">

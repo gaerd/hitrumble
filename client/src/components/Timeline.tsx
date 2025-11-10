@@ -1,16 +1,18 @@
 import { Plus } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import type { Song } from '@/types/game.types';
 
 interface TimelineProps {
   timeline: Song[];
   startYear: number;
   onPlaceCard?: (position: number) => void;
+  onConfirmPlacement?: () => void;
   highlightPosition?: number;
 }
 
-export default function Timeline({ timeline, startYear, onPlaceCard, highlightPosition }: TimelineProps) {
+export default function Timeline({ timeline, startYear, onPlaceCard, onConfirmPlacement, highlightPosition }: TimelineProps) {
   return (
     <div className="p-6">
       <div className="mb-6 text-center">
@@ -28,8 +30,23 @@ export default function Timeline({ timeline, startYear, onPlaceCard, highlightPo
               onClick={() => onPlaceCard?.(0)}
               data-testid="slot-before-start"
             >
-              <Plus className="w-12 h-12 text-white mb-2" />
-              <p className="text-sm text-white/70 font-bold">Före {startYear}</p>
+              {highlightPosition === 0 ? (
+                <Button
+                  size="lg"
+                  className="w-full text-lg py-6 bg-red-500 hover:bg-red-600 text-white font-black border-2 border-white mx-4"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onConfirmPlacement?.();
+                  }}
+                >
+                  Bekräfta
+                </Button>
+              ) : (
+                <>
+                  <Plus className="w-12 h-12 text-white mb-2" />
+                  <p className="text-sm text-white/70 font-bold">Före {startYear}</p>
+                </>
+              )}
             </Card>
 
             <Card className="w-48 h-64 flex flex-col items-center justify-center bg-red-500/20 border-4 border-white border-dashed shadow-xl" data-testid="card-start-year">
@@ -46,8 +63,23 @@ export default function Timeline({ timeline, startYear, onPlaceCard, highlightPo
               onClick={() => onPlaceCard?.(1)}
               data-testid="slot-after-start"
             >
-              <Plus className="w-12 h-12 text-white mb-2" />
-              <p className="text-sm text-white/70 font-bold">Efter {startYear}</p>
+              {highlightPosition === 1 ? (
+                <Button
+                  size="lg"
+                  className="w-full text-lg py-6 bg-red-500 hover:bg-red-600 text-white font-black border-2 border-white mx-4"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onConfirmPlacement?.();
+                  }}
+                >
+                  Bekräfta
+                </Button>
+              ) : (
+                <>
+                  <Plus className="w-12 h-12 text-white mb-2" />
+                  <p className="text-sm text-white/70 font-bold">Efter {startYear}</p>
+                </>
+              )}
             </Card>
           </div>
         ) : (
@@ -59,8 +91,23 @@ export default function Timeline({ timeline, startYear, onPlaceCard, highlightPo
               onClick={() => onPlaceCard?.(0)}
               data-testid="slot-0"
             >
-              <Plus className="w-10 h-10 text-white mb-2" />
-              <p className="text-xs text-white/70 font-bold">Före {timeline[0].year}</p>
+              {highlightPosition === 0 ? (
+                <Button
+                  size="lg"
+                  className="w-full text-base py-6 bg-red-500 hover:bg-red-600 text-white font-black border-2 border-white mx-3"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onConfirmPlacement?.();
+                  }}
+                >
+                  Bekräfta
+                </Button>
+              ) : (
+                <>
+                  <Plus className="w-10 h-10 text-white mb-2" />
+                  <p className="text-xs text-white/70 font-bold">Före {timeline[0].year}</p>
+                </>
+              )}
             </Card>
 
             {timeline.map((song, idx) => {
@@ -92,10 +139,25 @@ export default function Timeline({ timeline, startYear, onPlaceCard, highlightPo
                       onClick={() => onPlaceCard?.(idx + 1)}
                       data-testid={`slot-${idx + 1}`}
                     >
-                      <Plus className="w-10 h-10 text-white mb-2" />
-                      <p className="text-xs text-white/70 font-bold text-center px-2">
-                        {nextSong ? `Mellan ${song.year} och ${nextSong.year}` : `Efter ${song.year}`}
-                      </p>
+                      {highlightPosition === idx + 1 ? (
+                        <Button
+                          size="lg"
+                          className="w-full text-base py-6 bg-red-500 hover:bg-red-600 text-white font-black border-2 border-white mx-3"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onConfirmPlacement?.();
+                          }}
+                        >
+                          Bekräfta
+                        </Button>
+                      ) : (
+                        <>
+                          <Plus className="w-10 h-10 text-white mb-2" />
+                          <p className="text-xs text-white/70 font-bold text-center px-2">
+                            {nextSong ? `Mellan ${song.year} och ${nextSong.year}` : `Efter ${song.year}`}
+                          </p>
+                        </>
+                      )}
                     </Card>
                   )}
                 </div>
