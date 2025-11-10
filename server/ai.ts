@@ -31,7 +31,7 @@ export class AIService {
   async generateSongSuggestions(userPreference: string): Promise<{ songs: SongSuggestion[]; startYearRange: { min: number; max: number } }> {
     console.log(`AI: Generating song suggestions for "${userPreference}"`);
 
-    const prompt = `You are a music expert. Based on the user's music preference, suggest 20 popular, well-known songs that match their taste.
+    const prompt = `You are a music expert. Based on the user's music preference, suggest 25 popular, well-known songs that match their taste.
 
 User preference: "${userPreference}"
 
@@ -53,7 +53,7 @@ Return JSON in this exact format:
 
     try {
       console.log('AI: Calling OpenRouter API with Claude Sonnet 4.5...');
-      
+
       const completion = await this.client.chat.completions.create({
         model: 'anthropic/claude-sonnet-4.5',
         messages: [
@@ -63,7 +63,7 @@ Return JSON in this exact format:
           }
         ],
         temperature: 0.7,
-        max_tokens: 2000
+        max_tokens: 3000
       });
 
       const content = completion.choices[0]?.message?.content;
@@ -82,7 +82,7 @@ Return JSON in this exact format:
       }
 
       const parsed: AIResponse = JSON.parse(jsonMatch[0]);
-      
+
       if (!parsed.songs || !Array.isArray(parsed.songs)) {
         console.error('AI: Invalid response format');
         throw new Error('Invalid AI response format');
@@ -90,7 +90,7 @@ Return JSON in this exact format:
 
       const validSongs = parsed.songs
         .filter(s => s.title && s.artist && s.year >= 1950 && s.year <= 2024)
-        .slice(0, 20);
+        .slice(0, 25);
 
       const startYearRange = parsed.startYearRange || { min: 1950, max: 2020 };
 

@@ -194,11 +194,11 @@ export function setupSocketHandlers(io: SocketIOServer) {
           }
         }
 
-        // Search Spotify for the songs
+        // Search Spotify for the songs - get at least 20 to ensure we have enough for a full game
         const { spotifyService } = await import('./spotify');
-        const songs = await spotifyService.searchFromSuggestions(suggestions, 15);
+        const songs = await spotifyService.searchFromSuggestions(suggestions, 20);
 
-        if (songs.length < 10) {
+        if (songs.length < 15) {
           socket.emit('error', `Only found ${songs.length} songs. Try different preferences like "80s rock" or "Swedish pop".`);
           return;
         }

@@ -124,11 +124,7 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
       {/* HÖGER KOLUMN: Spelkort och kontroller */}
       <div className="space-y-6">
         <Card className="p-8 bg-black border-4 border-white shadow-2xl">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-4xl font-black text-white">Runda {Math.min(roundNumber, 10)}/10</h2>
-              <p className="text-white/70 text-xl font-medium">Spelare placerar sina kort</p>
-            </div>
+          <div className="flex items-center justify-end mb-6">
             <Badge className="text-2xl font-mono font-black px-8 py-4 bg-red-500 text-white border-4 border-white">
               {players.filter(p => p.connected && p.isReady).length}/{players.filter(p => p.connected).length} klara
             </Badge>
@@ -177,21 +173,21 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
               <div className="relative overflow-hidden">
                 {spotify.isPlaying && (
                   <>
-                    <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/10 via-purple-500/10 to-yellow-400/10 animate-pulse" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 via-red-500/10 to-red-500/10 animate-pulse" />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-64 h-64 bg-yellow-400/10 rounded-full animate-ping" style={{ animationDuration: '2s' }} />
+                      <div className="w-64 h-64 bg-red-500/10 rounded-full animate-ping" style={{ animationDuration: '2s' }} />
                     </div>
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-48 h-48 bg-purple-500/10 rounded-full animate-ping" style={{ animationDuration: '1.5s', animationDelay: '0.3s' }} />
+                      <div className="w-48 h-48 bg-red-500/10 rounded-full animate-ping" style={{ animationDuration: '1.5s', animationDelay: '0.3s' }} />
                     </div>
                   </>
                 )}
                 <div className="relative flex flex-col items-center justify-center py-12">
-                  <div className={`text-9xl font-bold mb-6 ${spotify.isPlaying ? 'text-purple-500 animate-pulse' : 'text-purple-500/50'}`}>?</div>
+                  <div className={`text-9xl font-bold mb-6 ${spotify.isPlaying ? 'text-red-500 animate-pulse' : 'text-red-500/50'}`}>?</div>
                   {spotify.isConnected && spotify.isReady ? (
                     <>
                       <div className="mb-6 scale-150">
-                        <MusicEqualizer isPlaying={spotify.isPlaying} barCount={7} />
+                        <MusicEqualizer isPlaying={spotify.isPlaying} barCount={7} color="#ef4444" />
                       </div>
                     </>
                   ) : (
@@ -212,16 +208,16 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
             ) : (
               <div className="flex items-center gap-6">
                 {currentSong.albumCover && (
-                  <img 
-                    src={currentSong.albumCover} 
+                  <img
+                    src={currentSong.albumCover}
                     alt={currentSong.title}
-                    className="w-32 h-32 rounded-xl shadow-lg"
+                    className="w-32 h-32 rounded-2xl shadow-lg border-4 border-white"
                   />
                 )}
                 <div className="flex-1">
-                  <h3 className="text-2xl font-bold mb-1">{currentSong.title}</h3>
-                  <p className="text-xl text-muted-foreground mb-2">{currentSong.artist}</p>
-                  <Badge className="text-2xl font-mono font-bold px-4 py-1">
+                  <h3 className="text-2xl font-black text-white mb-2">{currentSong.title}</h3>
+                  <p className="text-xl text-white/70 mb-3">{currentSong.artist}</p>
+                  <Badge className="text-2xl font-mono font-black px-6 py-2 bg-red-500 text-white border-4 border-white">
                     {currentSong.year}
                   </Badge>
                 </div>
