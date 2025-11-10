@@ -405,11 +405,6 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
           <h1 className="text-4xl font-black mb-3 text-white" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
             {showRecreateOptions ? 'UPPDATERA PROFIL' : 'SKAPA PROFIL'}
           </h1>
-          <p className="text-white/70 text-lg">
-            {showRecreateOptions
-              ? 'Ladda upp ett foto för AI-avatar'
-              : 'Din profil sparas för snabbare uppkoppling'}
-          </p>
         </div>
 
         <div className="space-y-6">
@@ -557,9 +552,6 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
             </Button>
           </div>
 
-          <p className="text-sm text-center text-white/60">
-            Med profil sparas ditt namn för snabbare uppkoppling
-          </p>
         </div>
       </Card>
     </div>
