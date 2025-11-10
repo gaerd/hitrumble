@@ -186,7 +186,7 @@ export default function MasterPage() {
 
   return (
     <div className="min-h-screen bg-background p-6">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <div className="mb-6">
           <h1 className="text-4xl font-bold text-center mb-2">HITSTER AI</h1>
           <p className="text-muted-foreground text-center">

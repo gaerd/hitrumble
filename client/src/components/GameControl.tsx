@@ -50,17 +50,89 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
   };
 
   return (
-    <div className="space-y-6">
-      <Card className="p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-2xl font-bold">Runda {Math.min(roundNumber, 10)}/10</h2>
-            <p className="text-muted-foreground">Spelare placerar sina kort</p>
-          </div>
-          <Badge variant="secondary" className="text-xl font-mono px-4 py-2">
-            {players.filter(p => p.connected && p.isReady).length}/{players.filter(p => p.connected).length} klara
-          </Badge>
+    <div className="grid grid-cols-1 lg:grid-cols-[350px_1fr] gap-6">
+      {/* VÄNSTER KOLUMN: Spelare */}
+      <Card className="p-6 h-fit">
+        <h3 className="text-2xl font-bold mb-4 flex items-center gap-2">
+          <Trophy className="w-6 h-6 text-primary" />
+          Anslutna Spelare
+        </h3>
+        <div className="space-y-3">
+          {players
+            .sort((a, b) => b.score - a.score)
+            .map((player, idx) => (
+              <div
+                key={player.id}
+                className={`flex items-center justify-between p-4 rounded-xl border-2 ${
+                  idx === 0 ? 'border-yellow-400 bg-yellow-400/10' : 'border-white/20 bg-white/5'
+                } ${!player.connected ? 'opacity-60' : ''}`}
+                data-testid={`player-score-${idx}`}
+              >
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  {player.profileImage ? (
+                    <div className="relative flex-shrink-0">
+                      <img
+                        src={player.profileImage}
+                        alt={player.name}
+                        className="w-12 h-12 rounded-full object-cover border-2 border-white"
+                        style={{ backgroundColor: player.avatarColor || '#8B5CF6' }}
+                      />
+                      {idx === 0 && (
+                        <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-yellow-400 text-black flex items-center justify-center text-xs font-bold border-2 border-white">
+                          1
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div
+                      className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 ${
+                        idx === 0 ? 'ring-2 ring-yellow-400' : ''
+                      }`}
+                      style={{ backgroundColor: player.avatarColor || '#8B5CF6' }}
+                    >
+                      {player.name.charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <div className="flex flex-col min-w-0 flex-1">
+                    <span className="font-bold text-lg truncate">{player.name}</span>
+                    {player.artistName && (
+                      <span className="text-sm text-muted-foreground italic truncate">
+                        "{player.artistName}"
+                      </span>
+                    )}
+                    <div className="flex gap-2 mt-1">
+                      {!player.connected && (
+                        <Badge variant="destructive" className="text-xs flex items-center gap-1">
+                          <WifiOff className="w-3 h-3" />
+                          Frånkopplad
+                        </Badge>
+                      )}
+                      {player.connected && player.isReady && (
+                        <Badge variant="secondary" className="text-xs bg-green-500 text-white">Klar</Badge>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="text-3xl font-mono font-black flex-shrink-0 ml-2">
+                  {player.score}
+                </div>
+              </div>
+            ))}
         </div>
+      </Card>
+
+      {/* HÖGER KOLUMN: Spelkort och kontroller */}
+      <div className="space-y-6">
+        <Card className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-3xl font-bold">Runda {Math.min(roundNumber, 10)}/10</h2>
+              <p className="text-muted-foreground text-lg">Spelare placerar sina kort</p>
+            </div>
+            <Badge variant="secondary" className="text-2xl font-mono px-6 py-3">
+              {players.filter(p => p.connected && p.isReady).length}/{players.filter(p => p.connected).length} klara
+            </Badge>
+          </div>
 
         {currentSong && (
           <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl p-8 mb-6">
@@ -162,85 +234,19 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
           </div>
         )}
 
-        {phase === 'reveal' && (
-          <Button 
-            size="lg" 
-            className="w-full text-xl"
-            onClick={onNextRound}
-            data-testid="button-next-round"
-          >
-            <SkipForward className="w-6 h-6 mr-2" />
-            Nästa Runda
-          </Button>
-        )}
-      </Card>
-
-      <Card className="p-6">
-        <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-          <Trophy className="w-5 h-5 text-primary" />
-          Poängställning
-        </h3>
-        <div className="space-y-3">
-          {players
-            .sort((a, b) => b.score - a.score)
-            .map((player, idx) => (
-              <div
-                key={player.id}
-                className={`flex items-center justify-between p-3 rounded-xl hover-elevate ${
-                  !player.connected ? 'opacity-60 bg-muted/50' : ''
-                }`}
-                data-testid={`player-score-${idx}`}
-              >
-                <div className="flex items-center gap-3">
-                  {player.profileImage ? (
-                    <div className="relative">
-                      <img
-                        src={player.profileImage}
-                        alt={player.name}
-                        className="w-12 h-12 rounded-full object-cover"
-                        style={{ backgroundColor: player.avatarColor || '#8B5CF6' }}
-                      />
-                      {idx === 0 && (
-                        <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold">
-                          1
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <div
-                      className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-white ${
-                        idx === 0 ? 'ring-2 ring-primary ring-offset-2' : ''
-                      }`}
-                      style={{ backgroundColor: player.avatarColor || '#8B5CF6' }}
-                    >
-                      {idx + 1}
-                    </div>
-                  )}
-                  <div className="flex flex-col">
-                    <span className="font-semibold text-lg">{player.name}</span>
-                    {player.artistName && (
-                      <span className="text-sm text-muted-foreground italic">
-                        "{player.artistName}"
-                      </span>
-                    )}
-                  </div>
-                  {!player.connected && (
-                    <Badge variant="destructive" className="text-xs flex items-center gap-1">
-                      <WifiOff className="w-3 h-3" />
-                      Frånkopplad
-                    </Badge>
-                  )}
-                  {player.connected && player.isReady && (
-                    <Badge variant="secondary" className="text-xs">Klar</Badge>
-                  )}
-                </div>
-                <div className="text-3xl font-mono font-black">
-                  {player.score}
-                </div>
-              </div>
-            ))}
-        </div>
-      </Card>
+          {phase === 'reveal' && (
+            <Button
+              size="lg"
+              className="w-full text-xl"
+              onClick={onNextRound}
+              data-testid="button-next-round"
+            >
+              <SkipForward className="w-6 h-6 mr-2" />
+              Nästa Runda
+            </Button>
+          )}
+        </Card>
+      </div>
     </div>
   );
 }
