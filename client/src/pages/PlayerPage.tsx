@@ -323,10 +323,29 @@ export default function PlayerPage() {
 
   if (phase === 'lobby' || !myPlayer) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-6">
-        <Card className="p-8 text-center">
-          <h1 className="text-2xl font-bold mb-4">Välkommen, {playerName}!</h1>
-          <p className="text-lg text-muted-foreground">Väntar på att spelet ska starta...</p>
+      <div
+        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
+        style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+      >
+        <div className="absolute inset-0 bg-black/40 z-0"></div>
+
+        {/* BeatBrawl Logo - Upper Left */}
+        <div className="absolute top-8 left-8 z-20">
+          <img
+            src="/beatbrawl.png"
+            alt="BeatBrawl Logo"
+            className="h-24 w-auto"
+          />
+        </div>
+
+        <Card className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30 text-center">
+          <div className="mb-6">
+            <div className="text-6xl mb-4">🎮</div>
+            <h1 className="text-4xl font-black mb-4 text-white" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
+              VÄLKOMMEN, {playerName.toUpperCase()}!
+            </h1>
+            <p className="text-xl text-white/70">Väntar på att spelet ska starta...</p>
+          </div>
         </Card>
       </div>
     );
