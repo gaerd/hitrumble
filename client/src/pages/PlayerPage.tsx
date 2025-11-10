@@ -255,44 +255,60 @@ export default function PlayerPage() {
 
   if (phase === 'join') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10 flex items-center justify-center p-6">
-        <Card className="w-full max-w-md p-8">
-          <div className="text-center mb-6">
-            <h1 className="text-3xl font-bold">Gå Med i Spel</h1>
+      <div
+        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
+        style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+      >
+        <div className="absolute inset-0 bg-black/40 z-0"></div>
+
+        {/* BeatBrawl Logo - Upper Left */}
+        <div className="absolute top-8 left-8 z-20">
+          <img
+            src="/beatbrawl.png"
+            alt="BeatBrawl Logo"
+            className="h-24 w-auto"
+          />
+        </div>
+
+        <Card className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-black mb-3 text-white" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
+              GÅ MED I SPEL
+            </h1>
             {!profile && (
-              <p className="text-sm text-muted-foreground mt-2">Gästläge</p>
+              <p className="text-white/70 text-lg">Gästläge</p>
             )}
           </div>
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium mb-2">Ditt Namn</label>
+              <label className="text-lg mb-2 block text-white font-bold">Ditt Namn</label>
               <Input
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
                 placeholder="Ange ditt namn"
-                className="text-lg"
+                className="text-lg bg-white text-black border-2 border-white h-12"
                 data-testid="input-player-name"
                 disabled={!!profile}
               />
               {profile && (
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-sm text-white/60 mt-1">
                   Från din sparade profil
                 </p>
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Spelkod</label>
+              <label className="text-lg mb-2 block text-white font-bold">Spelkod</label>
               <Input
                 value={gameCode}
                 onChange={(e) => setGameCode(e.target.value.toUpperCase())}
                 placeholder="Ange spelkod"
-                className="text-lg font-mono"
+                className="text-lg font-mono bg-white text-black border-2 border-white h-12"
                 data-testid="input-game-code"
               />
             </div>
             <Button
               size="lg"
-              className="w-full"
+              className="w-full text-xl py-6 bg-red-500 hover:bg-red-600 text-white font-black border-4 border-white"
               onClick={handleJoin}
               disabled={!playerName || !gameCode}
               data-testid="button-join"
