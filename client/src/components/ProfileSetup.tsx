@@ -307,10 +307,24 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10 flex items-center justify-center p-6">
-        <Card className="w-full max-w-md p-8 text-center">
-          <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4 text-primary" />
-          <p className="text-lg text-muted-foreground">Laddar din profil...</p>
+      <div
+        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
+        style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+      >
+        <div className="absolute inset-0 bg-black/40 z-0"></div>
+
+        {/* BeatBrawl Logo - Upper Left */}
+        <div className="absolute top-8 left-8 z-20">
+          <img
+            src="/beatbrawl.png"
+            alt="BeatBrawl Logo"
+            className="h-24 w-auto"
+          />
+        </div>
+
+        <Card className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30 text-center">
+          <Loader2 className="w-16 h-16 animate-spin mx-auto mb-4 text-red-500" />
+          <p className="text-xl text-white font-bold">Laddar din profil...</p>
         </Card>
       </div>
     );
