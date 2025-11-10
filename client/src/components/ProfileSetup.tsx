@@ -326,7 +326,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
                  style={{ backgroundColor: existingProfile.avatarColor }}>
               {existingProfile.profileImage ? (
                 <img
-                  src={`data:image/png;base64,${existingProfile.profileImage}`}
+                  src={existingProfile.profileImage}
                   alt="Profil"
                   className="w-full h-full rounded-full object-cover"
                 />
@@ -490,7 +490,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
             <Card className="p-4 bg-gradient-to-r from-primary/10 to-accent/10">
               <div className="flex items-center gap-4">
                 <img
-                  src={`data:image/png;base64,${aiGeneratedProfile.profileImage}`}
+                  src={aiGeneratedProfile.profileImage}
                   alt="AI-genererad avatar"
                   className="w-24 h-24 rounded-full object-cover"
                 />

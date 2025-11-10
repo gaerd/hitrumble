@@ -195,7 +195,7 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
                   {player.profileImage ? (
                     <div className="relative">
                       <img
-                        src={`data:image/png;base64,${player.profileImage}`}
+                        src={player.profileImage}
                         alt={player.name}
                         className="w-12 h-12 rounded-full object-cover"
                         style={{ backgroundColor: player.avatarColor || '#8B5CF6' }}

@@ -19,7 +19,7 @@ export default function WinnerScreen({ winner, allPlayers, onNewGame }: WinnerSc
           {winner.profileImage ? (
             <div className="inline-block mb-6 relative">
               <img
-                src={`data:image/png;base64,${winner.profileImage}`}
+                src={winner.profileImage}
                 alt={winner.name}
                 className="w-32 h-32 rounded-full object-cover ring-4 ring-primary"
                 style={{ backgroundColor: winner.avatarColor || '#8B5CF6' }}
@@ -64,7 +64,7 @@ export default function WinnerScreen({ winner, allPlayers, onNewGame }: WinnerSc
                     {player.profileImage ? (
                       <div className="relative">
                         <img
-                          src={`data:image/png;base64,${player.profileImage}`}
+                          src={player.profileImage}
                           alt={player.name}
                           className="w-14 h-14 rounded-full object-cover"
                           style={{ backgroundColor: player.avatarColor || '#8B5CF6' }}
