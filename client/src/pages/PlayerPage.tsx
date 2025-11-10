@@ -403,9 +403,10 @@ export default function PlayerPage() {
 
       <div className="p-6 relative z-10">
         <ScoreDisplay
-          playerName={myPlayer.name}
           score={myPlayer.score}
-          timelineLength={myPlayer.timeline.length}
+          profileImage={myPlayer.profileImage}
+          artistName={myPlayer.artistName}
+          avatarColor={myPlayer.avatarColor}
         />
       </div>
 
