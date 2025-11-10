@@ -41,13 +41,21 @@ export class AIProfileGenerator {
               text: `Analysera personen på bilden och deras namn "${name}".
 
 Baserat på deras utseende, stil, ålder, och namn - bestäm:
-1. Vilken musikstil som passar dem bäst (t.ex. "Rock", "Pop", "Hip-Hop", "Jazz", "Elektronisk", "Klassisk", etc.)
-2. Ett kreativt artistnamn som passar deras vibe och musikstil
+1. Vilken musikstil som passar dem bäst (t.ex. "Rock", "Hip-Hop", "Elektronisk", "R&B", "Reggae", "Punk", "Metal", etc.)
+2. Ett COOLT och EDGIGT artistnamn som passar deras vibe och musikstil
+
+VIKTIGT för artistnamnet:
+- Gör det HÄFTIGT och STREET - tänk riktiga artistnamn som Notorious B.I.G., Dr. Dre, The Weeknd, Billie Eilish
+- Använd coola prefix: "Lil", "Big", "Young", "MC", "DJ", "The"
+- Eller använd suffixer: "Beats", "Flow", "Wave", "Soul"
+- Eller skapa unika namn med attityd som låter som riktiga artist stage names
+- UNDVIK: generiska namn som "DJ ${name}", vara för formell eller tråkig
+- FOKUSERA: På att skapa något som låter som ett RIKTIGT artistnamn med edge och personlighet
 
 Svara ENDAST med JSON i detta format:
 {
   "musicStyle": "musikstil här",
-  "artistName": "artistnamn här",
+  "artistName": "coolt artistnamn här",
   "reasoning": "kort förklaring på svenska"
 }`
             },
@@ -83,14 +91,15 @@ Svara ENDAST med JSON i detta format:
 
     console.log(`AI Profile: Determined style="${analysis.musicStyle}", artist="${analysis.artistName}"`);
 
-    // Step 2: Generate Pixar-style avatar based on photo and music style
-    const imagePrompt = `Skapa en Pixar-stil avatar baserat på personen på bilden.
-Stil: ${analysis.musicStyle} musik artist
-Känsla: Färgglad, vänlig, karaktäristisk Pixar-animation
-Detaljer: Behåll personens grundläggande drag men gör det i typisk Pixar-stil med stora ögon, uttrycksfull, och musikaliska element som passar ${analysis.musicStyle}-stilen.
-Bakgrund: Enkel gradient eller enfärgad bakgrund.`;
+    // Step 2: Generate graffiti street art portrait based on photo and music style
+    const imagePrompt = `Create a graffiti street art portrait based on the person in the photo.
+Style: ${analysis.musicStyle} music artist
+Aesthetic: Bold, urban, edgy graffiti art style with vibrant colors and street art elements
+Details: Maintain the person's key features but stylize them with spray paint textures, bold outlines, urban graffiti elements, and musical motifs that match the ${analysis.musicStyle} genre.
+Background: Urban wall texture or solid bold color with graffiti tags.
+Mood: Cool, authentic, street culture, hip and edgy.`;
 
-    console.log('AI Profile: Generating Pixar-style image...');
+    console.log('AI Profile: Generating graffiti street art portrait...');
 
     const imageResponse = await this.client.chat.completions.create({
       model: 'google/gemini-2.5-flash-image',
