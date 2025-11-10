@@ -139,6 +139,11 @@ export class Game {
     }
 
     if (this.state.roundNumber >= this.state.songs.length) {
+      // Out of songs - find winner by highest score
+      const sortedPlayers = [...this.state.players].sort((a, b) => b.score - a.score);
+      if (sortedPlayers.length > 0) {
+        this.state.winner = sortedPlayers[0];
+      }
       this.state.phase = 'finished';
       this.state.currentSong = null;
       return null;
@@ -147,7 +152,7 @@ export class Game {
     this.state.currentSong = this.state.songs[this.state.roundNumber];
     this.state.roundNumber++;
     this.state.phase = 'playing';
-    
+
     this.state.players.forEach(player => {
       player.isReady = false;
       player.currentPlacement = undefined;
