@@ -119,9 +119,9 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
         className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
         style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
       >
-        <div className="absolute inset-0 bg-black/40"></div>
-        <div className="absolute top-12 left-12 z-0">
-          <img src="/beatbrawl.png" alt="BeatBrawl Logo" className="h-48 w-auto opacity-30" />
+        <div className="absolute inset-0 bg-black/40 z-0"></div>
+        <div className="absolute top-12 left-12 z-[5]">
+          <img src="/beatbrawl.png" alt="BeatBrawl Logo" className="h-48 w-auto opacity-50" />
         </div>
 
         {/* Large animated loading bubble */}
@@ -142,14 +142,14 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
       className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
       style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
     >
-      <div className="absolute inset-0 bg-black/40"></div>
+      <div className="absolute inset-0 bg-black/40 z-0"></div>
 
       {/* BeatBrawl Logo - Upper Left */}
-      <div className="absolute top-12 left-12 z-0">
+      <div className="absolute top-12 left-12 z-[5]">
         <img
           src="/beatbrawl.png"
           alt="BeatBrawl Logo"
-          className="h-48 w-auto opacity-30"
+          className="h-48 w-auto opacity-50"
         />
       </div>
 
