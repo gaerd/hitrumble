@@ -1,4 +1,4 @@
-import { Plus } from 'lucide-react';
+import { Plus, Lock } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -10,27 +10,30 @@ interface TimelineProps {
   onPlaceCard?: (position: number) => void;
   onConfirmPlacement?: () => void;
   highlightPosition?: number;
+  confirmedPosition?: number;
 }
 
-export default function Timeline({ timeline, startYear, onPlaceCard, onConfirmPlacement, highlightPosition }: TimelineProps) {
+export default function Timeline({ timeline, startYear, onPlaceCard, onConfirmPlacement, highlightPosition, confirmedPosition }: TimelineProps) {
   return (
     <div className="p-6">
-      <div className="mb-6 text-center">
-        <h2 className="text-3xl font-black mb-2 text-white" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>Din Tidslinje</h2>
-        <p className="text-white/70 text-lg">Placera låten på rätt plats</p>
-      </div>
 
       <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory">
         {timeline.length === 0 ? (
           <div className="min-w-full flex items-center justify-center gap-4">
             <Card
-              className={`w-48 h-64 flex flex-col items-center justify-center cursor-pointer hover-elevate active-elevate-2 snap-start bg-black border-4 border-white shadow-xl ${
-                highlightPosition === 0 ? 'ring-4 ring-red-500' : ''
+              className={`w-48 h-64 flex flex-col items-center justify-center snap-start bg-black border-4 border-white shadow-xl ${
+                confirmedPosition === 0 ? 'border-green-500' : highlightPosition === 0 ? 'ring-4 ring-red-500 cursor-pointer hover-elevate active-elevate-2' : 'cursor-pointer hover-elevate active-elevate-2'
               }`}
-              onClick={() => onPlaceCard?.(0)}
+              onClick={() => confirmedPosition === undefined && onPlaceCard?.(0)}
               data-testid="slot-before-start"
             >
-              {highlightPosition === 0 ? (
+              {confirmedPosition === 0 ? (
+                <>
+                  <Lock className="w-12 h-12 text-green-500 mb-2" />
+                  <p className="text-sm text-white font-bold">Före {startYear}</p>
+                  <p className="text-xs text-white/60 mt-2">Låst</p>
+                </>
+              ) : highlightPosition === 0 ? (
                 <Button
                   size="lg"
                   className="w-full text-lg py-6 bg-red-500 hover:bg-red-600 text-white font-black border-2 border-white mx-4"
@@ -57,13 +60,19 @@ export default function Timeline({ timeline, startYear, onPlaceCard, onConfirmPl
             </Card>
 
             <Card
-              className={`w-48 h-64 flex flex-col items-center justify-center cursor-pointer hover-elevate active-elevate-2 snap-start bg-black border-4 border-white shadow-xl ${
-                highlightPosition === 1 ? 'ring-4 ring-red-500' : ''
+              className={`w-48 h-64 flex flex-col items-center justify-center snap-start bg-black border-4 border-white shadow-xl ${
+                confirmedPosition === 1 ? 'border-green-500' : highlightPosition === 1 ? 'ring-4 ring-red-500 cursor-pointer hover-elevate active-elevate-2' : 'cursor-pointer hover-elevate active-elevate-2'
               }`}
-              onClick={() => onPlaceCard?.(1)}
+              onClick={() => confirmedPosition === undefined && onPlaceCard?.(1)}
               data-testid="slot-after-start"
             >
-              {highlightPosition === 1 ? (
+              {confirmedPosition === 1 ? (
+                <>
+                  <Lock className="w-12 h-12 text-green-500 mb-2" />
+                  <p className="text-sm text-white font-bold">Efter {startYear}</p>
+                  <p className="text-xs text-white/60 mt-2">Låst</p>
+                </>
+              ) : highlightPosition === 1 ? (
                 <Button
                   size="lg"
                   className="w-full text-lg py-6 bg-red-500 hover:bg-red-600 text-white font-black border-2 border-white mx-4"
@@ -85,13 +94,19 @@ export default function Timeline({ timeline, startYear, onPlaceCard, onConfirmPl
         ) : (
           <>
             <Card
-              className={`min-w-[160px] h-64 flex flex-col items-center justify-center cursor-pointer hover-elevate active-elevate-2 snap-start bg-black border-4 border-white shadow-xl ${
-                highlightPosition === 0 ? 'ring-4 ring-red-500' : ''
+              className={`min-w-[160px] h-64 flex flex-col items-center justify-center snap-start bg-black border-4 border-white shadow-xl ${
+                confirmedPosition === 0 ? 'border-green-500' : highlightPosition === 0 ? 'ring-4 ring-red-500 cursor-pointer hover-elevate active-elevate-2' : 'cursor-pointer hover-elevate active-elevate-2'
               }`}
-              onClick={() => onPlaceCard?.(0)}
+              onClick={() => confirmedPosition === undefined && onPlaceCard?.(0)}
               data-testid="slot-0"
             >
-              {highlightPosition === 0 ? (
+              {confirmedPosition === 0 ? (
+                <>
+                  <Lock className="w-10 h-10 text-green-500 mb-2" />
+                  <p className="text-xs text-white font-bold">Före {timeline[0].year}</p>
+                  <p className="text-xs text-white/60 mt-1">Låst</p>
+                </>
+              ) : highlightPosition === 0 ? (
                 <Button
                   size="lg"
                   className="w-full text-sm py-6 bg-red-500 hover:bg-red-600 text-white font-black border-2 border-white mx-3"
@@ -133,13 +148,21 @@ export default function Timeline({ timeline, startYear, onPlaceCard, onConfirmPl
 
                   {showPlaceholder && (
                     <Card
-                      className={`min-w-[160px] h-64 flex flex-col items-center justify-center cursor-pointer hover-elevate active-elevate-2 bg-black border-4 border-white shadow-xl ${
-                        highlightPosition === idx + 1 ? 'ring-4 ring-red-500' : ''
+                      className={`min-w-[160px] h-64 flex flex-col items-center justify-center bg-black border-4 border-white shadow-xl ${
+                        confirmedPosition === idx + 1 ? 'border-green-500' : highlightPosition === idx + 1 ? 'ring-4 ring-red-500 cursor-pointer hover-elevate active-elevate-2' : 'cursor-pointer hover-elevate active-elevate-2'
                       }`}
-                      onClick={() => onPlaceCard?.(idx + 1)}
+                      onClick={() => confirmedPosition === undefined && onPlaceCard?.(idx + 1)}
                       data-testid={`slot-${idx + 1}`}
                     >
-                      {highlightPosition === idx + 1 ? (
+                      {confirmedPosition === idx + 1 ? (
+                        <>
+                          <Lock className="w-10 h-10 text-green-500 mb-2" />
+                          <p className="text-xs text-white font-bold text-center px-2">
+                            {nextSong ? `Mellan ${song.year} och ${nextSong.year}` : `Efter ${song.year}`}
+                          </p>
+                          <p className="text-xs text-white/60 mt-1">Låst</p>
+                        </>
+                      ) : highlightPosition === idx + 1 ? (
                         <Button
                           size="lg"
                           className="w-full text-sm py-6 bg-red-500 hover:bg-red-600 text-white font-black border-2 border-white mx-3"

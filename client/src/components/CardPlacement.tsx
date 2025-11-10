@@ -13,7 +13,7 @@ export default function CardPlacement({ song, selectedPosition, onConfirm }: Car
   const isSelected = selectedPosition !== null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-background via-background to-transparent">
+    <div className="fixed bottom-0 left-0 right-0 p-6">
       <div className="max-w-md mx-auto">
         <Button
           size="lg"
