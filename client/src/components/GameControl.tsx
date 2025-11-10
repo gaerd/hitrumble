@@ -104,7 +104,10 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
                         </Badge>
                       )}
                       {player.connected && player.isReady && (
-                        <Badge className="text-xs bg-green-500 text-white border-2 border-white font-bold">Klar</Badge>
+                        <Badge className="text-sm bg-green-500 text-white border-2 border-white font-black px-3 py-1">✓ Klar</Badge>
+                      )}
+                      {player.connected && !player.isReady && (
+                        <Badge className="text-sm bg-yellow-400 text-black border-2 border-white font-black px-3 py-1">Väntar...</Badge>
                       )}
                     </div>
                   </div>
@@ -131,26 +134,26 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
           </div>
 
         {currentSong && (
-          <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl p-8 mb-6">
+          <div className="bg-black/80 border-4 border-white rounded-3xl p-10 mb-6 shadow-2xl">
             {isDJPlaying ? (
               <div className="space-y-6">
                 <div className="flex flex-col items-center justify-center py-6">
-                  <Radio className="w-16 h-16 text-primary mb-3 animate-pulse" />
-                  <p className="text-2xl font-bold text-primary mb-1">DJ ON AIR</p>
-                  <p className="text-lg text-muted-foreground">Din energiska radio-DJ kommenterar...</p>
+                  <Radio className="w-20 h-20 text-yellow-400 mb-4 animate-pulse" />
+                  <p className="text-4xl font-black text-yellow-400 mb-2">DJ ON AIR</p>
+                  <p className="text-xl text-white/80 font-medium">Din energiska radio-DJ kommenterar...</p>
                 </div>
-                <div className="flex items-center gap-6 bg-background/50 rounded-xl p-6">
+                <div className="flex items-center gap-6 bg-white/10 rounded-2xl p-6 border-2 border-white/20">
                   {currentSong.albumCover && (
-                    <img 
-                      src={currentSong.albumCover} 
+                    <img
+                      src={currentSong.albumCover}
                       alt={currentSong.title}
-                      className="w-24 h-24 rounded-xl shadow-lg"
+                      className="w-32 h-32 rounded-2xl shadow-lg border-4 border-white"
                     />
                   )}
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold mb-1">{currentSong.title}</h3>
-                    <p className="text-lg text-muted-foreground mb-2">{currentSong.artist}</p>
-                    <Badge className="text-xl font-mono font-bold px-3 py-1">
+                    <h3 className="text-2xl font-black text-white mb-2">{currentSong.title}</h3>
+                    <p className="text-xl text-white/70 mb-3">{currentSong.artist}</p>
+                    <Badge className="text-2xl font-mono font-black px-6 py-2 bg-yellow-400 text-black border-4 border-white">
                       {currentSong.year}
                     </Badge>
                   </div>
@@ -160,53 +163,36 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
               <div className="relative overflow-hidden">
                 {spotify.isPlaying && (
                   <>
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 animate-pulse" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/10 via-purple-500/10 to-yellow-400/10 animate-pulse" />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-64 h-64 bg-primary/10 rounded-full animate-ping" style={{ animationDuration: '2s' }} />
+                      <div className="w-64 h-64 bg-yellow-400/10 rounded-full animate-ping" style={{ animationDuration: '2s' }} />
                     </div>
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-48 h-48 bg-accent/10 rounded-full animate-ping" style={{ animationDuration: '1.5s', animationDelay: '0.3s' }} />
+                      <div className="w-48 h-48 bg-purple-500/10 rounded-full animate-ping" style={{ animationDuration: '1.5s', animationDelay: '0.3s' }} />
                     </div>
                   </>
                 )}
                 <div className="relative flex flex-col items-center justify-center py-12">
-                  <div className={`text-9xl font-bold mb-4 ${spotify.isPlaying ? 'text-primary animate-pulse' : 'text-primary/30'}`}>?</div>
+                  <div className={`text-9xl font-bold mb-6 ${spotify.isPlaying ? 'text-purple-500 animate-pulse' : 'text-purple-500/50'}`}>?</div>
                   {spotify.isConnected && spotify.isReady ? (
                     <>
-                      <div className="flex items-center gap-4 mb-2">
-                        <Disc3 className={`w-6 h-6 ${spotify.isPlaying ? 'text-primary animate-spin' : 'text-muted-foreground'}`} />
-                        <p className="text-2xl font-semibold text-muted-foreground">
-                          Spelar via Spotify
-                        </p>
-                        <Badge variant="secondary" className="ml-2">Premium</Badge>
-                      </div>
-                      <div className="mb-3">
+                      <div className="mb-6 scale-150">
                         <MusicEqualizer isPlaying={spotify.isPlaying} barCount={7} />
                       </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={togglePlayback}
-                        className="mb-3"
-                        data-testid="button-toggle-audio"
-                      >
-                        {spotify.isPlaying ? 'Pausa' : 'Spela'}
-                      </Button>
                     </>
                   ) : (
                     <>
                       <div className="flex items-center gap-3 mb-4">
-                        <AlertCircle className="w-6 h-6 text-muted-foreground" />
-                        <p className="text-2xl font-semibold text-muted-foreground">
+                        <AlertCircle className="w-8 h-8 text-white/70" />
+                        <p className="text-2xl font-bold text-white">
                           Anslut Spotify för att spela musik
                         </p>
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        Klicka på "Anslut Spotify Premium" längst upp för att aktivera musikuppspelning
+                      <p className="text-lg text-white/60">
+                        Klicka på "Anslut Spotify Premium" längst upp
                       </p>
                     </>
                   )}
-                  <p className="text-lg text-muted-foreground mt-4">Väntar på att alla placerar sina kort...</p>
                 </div>
               </div>
             ) : (

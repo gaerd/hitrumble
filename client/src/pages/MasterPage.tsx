@@ -204,7 +204,6 @@ export default function MasterPage() {
         <div className="mb-6 text-center">
           <p className="text-white text-xl">
             Spelkod: <span className="font-mono font-black text-2xl">{gameState.id}</span>
-            {spotifyConnected && <span className="ml-3 text-green-400 font-bold">● Spotify Ansluten</span>}
           </p>
         </div>
 
