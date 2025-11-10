@@ -382,25 +382,39 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10 flex items-center justify-center p-6">
-      <Card className="w-full max-w-md p-8">
+    <div
+      className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
+      style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+    >
+      <div className="absolute inset-0 bg-black/40 z-0"></div>
+
+      {/* BeatBrawl Logo - Upper Left */}
+      <div className="absolute top-8 left-8 z-20">
+        <img
+          src="/beatbrawl.png"
+          alt="BeatBrawl Logo"
+          className="h-24 w-auto"
+        />
+      </div>
+
+      <Card className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
-            <User className="w-8 h-8 text-primary" />
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-red-500 border-4 border-white mb-4 shadow-xl">
+            <User className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-3xl font-bold mb-2">
-            {showRecreateOptions ? 'Uppdatera Din Profil' : 'Skapa Din Profil'}
+          <h1 className="text-4xl font-black mb-3 text-white" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
+            {showRecreateOptions ? 'UPPDATERA PROFIL' : 'SKAPA PROFIL'}
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-white/70 text-lg">
             {showRecreateOptions
-              ? 'Ladda upp ett foto för att få en AI-genererad tecknad avatar'
-              : 'Din profil sparas på enheten för snabbare uppkoppling'}
+              ? 'Ladda upp ett foto för AI-avatar'
+              : 'Din profil sparas för snabbare uppkoppling'}
           </p>
         </div>
 
         <div className="space-y-6">
           <div>
-            <Label htmlFor="display-name" className="text-base mb-2 block">
+            <Label htmlFor="display-name" className="text-lg mb-2 block text-white font-bold">
               Ditt Namn
             </Label>
             <Input
@@ -408,7 +422,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder="Ange ditt namn"
-              className="text-lg"
+              className="text-lg bg-white text-black border-2 border-white h-12"
               data-testid="input-display-name"
               maxLength={20}
             />
@@ -416,8 +430,8 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
 
           {/* Photo Upload Section */}
           <div>
-            <Label className="text-base mb-3 block">
-              Ladda upp foto (valfritt - för AI-profil)
+            <Label className="text-lg mb-3 block text-white font-bold">
+              Ladda upp foto (valfritt)
             </Label>
             <input
               ref={fileInputRef}
@@ -430,12 +444,12 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
               <Button
                 type="button"
                 variant="outline"
-                className="w-full h-32 border-2 border-dashed"
+                className="w-full h-32 border-2 border-dashed border-white bg-white/10 hover:bg-white/20 text-white"
                 onClick={() => fileInputRef.current?.click()}
               >
                 <div className="text-center">
-                  <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
-                  <p className="text-sm">Klicka för att ladda upp foto</p>
+                  <Upload className="w-8 h-8 mx-auto mb-2 text-white" />
+                  <p className="text-sm font-bold">Klicka för att ladda upp foto</p>
                 </div>
               </Button>
             ) : (
@@ -443,13 +457,12 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
                 <img
                   src={uploadedPhoto}
                   alt="Uppladdad"
-                  className="w-full h-48 object-cover rounded-lg"
+                  className="w-full h-48 object-cover rounded-2xl border-4 border-white"
                 />
                 <Button
                   type="button"
-                  variant="secondary"
                   size="sm"
-                  className="absolute top-2 right-2"
+                  className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white border-2 border-white font-bold"
                   onClick={() => {
                     setUploadedPhoto(null);
                     setAiGeneratedProfile(null);
@@ -466,20 +479,19 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
           {showAIOption && !aiGeneratedProfile && (
             <Button
               type="button"
-              variant="default"
-              className="w-full"
+              className="w-full text-xl py-6 bg-red-500 hover:bg-red-600 text-white font-black border-4 border-white"
               onClick={handleGenerateAIProfile}
               disabled={isGeneratingAI || !displayName.trim()}
             >
               {isGeneratingAI ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Genererar AI-profil...
+                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                  Genererar...
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  Generera AI-profil
+                  <Sparkles className="w-5 h-5 mr-2" />
+                  Generera AI-Profil
                 </>
               )}
             </Button>
@@ -487,73 +499,48 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
 
           {/* AI Generated Profile Display */}
           {aiGeneratedProfile && (
-            <Card className="p-4 bg-gradient-to-r from-primary/10 to-accent/10">
-              <div className="flex items-center gap-4">
+            <Card className="p-6 bg-white/10 border-2 border-white">
+              <div className="flex items-center gap-4 mb-4">
                 <img
                   src={aiGeneratedProfile.profileImage}
                   alt="AI-genererad avatar"
-                  className="w-24 h-24 rounded-full object-cover"
+                  className="w-24 h-24 rounded-full object-cover border-4 border-white"
                 />
                 <div className="flex-1">
-                  <p className="text-sm text-muted-foreground">Artistnamn</p>
-                  <p className="text-xl font-bold">{aiGeneratedProfile.artistName}</p>
-                  <p className="text-sm text-muted-foreground mt-1">Musikstil</p>
-                  <p className="text-base">{aiGeneratedProfile.musicStyle}</p>
+                  <p className="text-sm text-white/70 font-bold">Artistnamn</p>
+                  <p className="text-2xl font-black text-white">{aiGeneratedProfile.artistName}</p>
+                  <p className="text-sm text-white/70 font-bold mt-2">Musikstil</p>
+                  <p className="text-lg text-white">{aiGeneratedProfile.musicStyle}</p>
                 </div>
               </div>
               <Button
                 type="button"
-                variant="outline"
                 size="sm"
-                className="w-full mt-3"
+                className="w-full bg-white/20 hover:bg-white/30 text-white border-2 border-white font-bold"
                 onClick={handleRegenerateAI}
                 disabled={isGeneratingAI}
               >
                 <RefreshCw className="w-4 h-4 mr-2" />
-                Generera ny profil
+                Generera Om
               </Button>
             </Card>
-          )}
-
-          {/* Only show color picker if no AI profile */}
-          {!aiGeneratedProfile && (
-            <div>
-              <Label className="text-base mb-3 flex items-center gap-2">
-                <Palette className="w-4 h-4" />
-                Välj Färg
-              </Label>
-              <div className="grid grid-cols-4 gap-3">
-                {PRESET_COLORS.map((color) => (
-                  <button
-                    key={color}
-                    onClick={() => setSelectedColor(color)}
-                    className={`w-full aspect-square rounded-lg transition-all hover-elevate active-elevate-2 ${
-                      selectedColor === color
-                        ? 'ring-2 ring-primary ring-offset-2 ring-offset-background'
-                        : ''
-                    }`}
-                    style={{ backgroundColor: color }}
-                    data-testid={`color-${color}`}
-                    aria-label={`Select color ${color}`}
-                  />
-                ))}
-              </div>
-            </div>
           )}
 
           <div className="pt-4 space-y-3">
             <Button
               size="lg"
-              className="w-full"
+              className="w-full text-xl py-6 bg-red-500 hover:bg-red-600 text-white font-black border-4 border-white"
               onClick={handleCreateProfile}
               disabled={isSaving || !displayName.trim()}
               data-testid="button-create-profile"
             >
               {isSaving ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Skapar profil...
+                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                  Skapar...
                 </>
+              ) : aiGeneratedProfile ? (
+                'Spara Profil'
               ) : (
                 'Skapa Profil'
               )}
@@ -561,8 +548,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
 
             <Button
               size="lg"
-              variant="outline"
-              className="w-full"
+              className="w-full text-lg py-4 bg-white/20 hover:bg-white/30 text-white font-bold border-2 border-white"
               onClick={handleContinueAsGuest}
               disabled={isSaving}
               data-testid="button-continue-guest"
@@ -571,8 +557,8 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
             </Button>
           </div>
 
-          <p className="text-xs text-center text-muted-foreground">
-            Med profil sparas ditt namn och favoritfärg för snabbare uppkoppling
+          <p className="text-sm text-center text-white/60">
+            Med profil sparas ditt namn för snabbare uppkoppling
           </p>
         </div>
       </Card>
