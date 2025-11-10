@@ -39,7 +39,7 @@ export default function Timeline({ timeline, startYear, onPlaceCard, onConfirmPl
                     onConfirmPlacement?.();
                   }}
                 >
-                  Bekräfta
+                  <span className="text-center">Bekräfta<br/>Före {startYear}</span>
                 </Button>
               ) : (
                 <>
@@ -72,7 +72,7 @@ export default function Timeline({ timeline, startYear, onPlaceCard, onConfirmPl
                     onConfirmPlacement?.();
                   }}
                 >
-                  Bekräfta
+                  <span className="text-center">Bekräfta<br/>Efter {startYear}</span>
                 </Button>
               ) : (
                 <>
@@ -94,13 +94,13 @@ export default function Timeline({ timeline, startYear, onPlaceCard, onConfirmPl
               {highlightPosition === 0 ? (
                 <Button
                   size="lg"
-                  className="w-full text-base py-6 bg-red-500 hover:bg-red-600 text-white font-black border-2 border-white mx-3"
+                  className="w-full text-sm py-6 bg-red-500 hover:bg-red-600 text-white font-black border-2 border-white mx-3"
                   onClick={(e) => {
                     e.stopPropagation();
                     onConfirmPlacement?.();
                   }}
                 >
-                  Bekräfta
+                  <span className="text-center leading-tight">Bekräfta<br/>Före {timeline[0].year}</span>
                 </Button>
               ) : (
                 <>
@@ -142,13 +142,16 @@ export default function Timeline({ timeline, startYear, onPlaceCard, onConfirmPl
                       {highlightPosition === idx + 1 ? (
                         <Button
                           size="lg"
-                          className="w-full text-base py-6 bg-red-500 hover:bg-red-600 text-white font-black border-2 border-white mx-3"
+                          className="w-full text-sm py-6 bg-red-500 hover:bg-red-600 text-white font-black border-2 border-white mx-3"
                           onClick={(e) => {
                             e.stopPropagation();
                             onConfirmPlacement?.();
                           }}
                         >
-                          Bekräfta
+                          <span className="text-center leading-tight">
+                            Bekräfta<br/>
+                            {nextSong ? `Mellan ${song.year} och ${nextSong.year}` : `Efter ${song.year}`}
+                          </span>
                         </Button>
                       ) : (
                         <>
