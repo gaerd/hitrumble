@@ -120,12 +120,12 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
         style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
       >
         <div className="absolute inset-0 bg-black/40 z-0"></div>
-        <div className="absolute top-12 left-12 z-[5]">
-          <img src="/beatbrawl.png" alt="BeatBrawl Logo" className="h-48 w-auto opacity-50" />
+        <div className="absolute top-12 left-12 z-20">
+          <img src="/beatbrawl.png" alt="BeatBrawl Logo" className="h-48 w-auto" />
         </div>
 
         {/* Large animated loading bubble */}
-        <div className="relative z-10 text-center">
+        <div className="relative z-30 text-center">
           <div className="bg-yellow-400 border-4 border-white rounded-3xl p-12 shadow-2xl mb-8 max-w-2xl">
             <p className="text-4xl font-black text-black uppercase tracking-wider" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
               {loadingMessages[loadingMessageIndex]}
@@ -145,16 +145,16 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
       <div className="absolute inset-0 bg-black/40 z-0"></div>
 
       {/* BeatBrawl Logo - Upper Left */}
-      <div className="absolute top-12 left-12 z-[5]">
+      <div className="absolute top-12 left-12 z-20">
         <img
           src="/beatbrawl.png"
           alt="BeatBrawl Logo"
-          className="h-48 w-auto opacity-50"
+          className="h-48 w-auto"
         />
       </div>
 
       {/* Chat Container */}
-      <div className="w-full max-w-4xl relative z-10 flex flex-col h-[80vh]">
+      <div className="w-full max-w-4xl relative z-30 flex flex-col h-[80vh]">
         {/* Messages Area */}
         <div className="flex-1 overflow-auto mb-6 space-y-4 px-4">
           {messages.map((msg, idx) => (
