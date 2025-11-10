@@ -48,7 +48,7 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
     if (isConfirming) {
       const interval = setInterval(() => {
         setLoadingMessageIndex(prev => (prev + 1) % loadingMessages.length);
-      }, 2000);
+      }, 4000);
       return () => clearInterval(interval);
     }
   }, [isConfirming]);
