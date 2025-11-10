@@ -126,7 +126,7 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
 
         {/* Large animated loading bubble */}
         <div className="relative z-10 text-center">
-          <div className="bg-yellow-400 border-4 border-white rounded-3xl p-12 shadow-2xl mb-8 max-w-2xl animate-pulse">
+          <div className="bg-yellow-400 border-4 border-white rounded-3xl p-12 shadow-2xl mb-8 max-w-2xl">
             <p className="text-4xl font-black text-black uppercase tracking-wider" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
               {loadingMessages[loadingMessageIndex]}
             </p>
