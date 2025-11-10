@@ -185,13 +185,26 @@ export default function MasterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-6">
-          <h1 className="text-4xl font-bold text-center mb-2">HITSTER AI</h1>
-          <p className="text-muted-foreground text-center">
-            Spelkod: <span className="font-mono font-bold">{gameState.id}</span>
-            {spotifyConnected && <span className="ml-3 text-green-600">● Spotify Ansluten</span>}
+    <div
+      className="min-h-screen p-8 relative overflow-hidden bg-cover bg-center"
+      style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+    >
+      <div className="absolute inset-0 bg-black/40 z-0"></div>
+
+      {/* BeatBrawl Logo - Upper Left */}
+      <div className="absolute top-8 left-8 z-20">
+        <img
+          src="/beatbrawl.png"
+          alt="BeatBrawl Logo"
+          className="h-24 w-auto"
+        />
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-30">
+        <div className="mb-6 text-center">
+          <p className="text-white text-xl">
+            Spelkod: <span className="font-mono font-black text-2xl">{gameState.id}</span>
+            {spotifyConnected && <span className="ml-3 text-green-400 font-bold">● Spotify Ansluten</span>}
           </p>
         </div>
 

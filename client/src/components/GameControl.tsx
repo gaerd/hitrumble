@@ -52,16 +52,16 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[350px_1fr] gap-6">
       {/* VÄNSTER KOLUMN: Spelare */}
-      <Card className="p-6 h-fit">
-        <div className="space-y-3">
+      <Card className="p-8 h-fit bg-black border-4 border-white shadow-2xl">
+        <div className="space-y-4">
           {players
             .sort((a, b) => b.score - a.score)
             .map((player, idx) => (
               <div
                 key={player.id}
-                className={`flex items-center justify-between p-4 rounded-xl border-2 ${
+                className={`flex items-center justify-between p-4 rounded-2xl border-2 ${
                   idx === 0 ? 'border-yellow-400 bg-yellow-400/10' : 'border-white/20 bg-white/5'
-                } ${!player.connected ? 'opacity-60' : ''}`}
+                } ${!player.connected ? 'opacity-60' : ''} hover:bg-white/10 transition-colors`}
                 data-testid={`player-score-${idx}`}
               >
                 <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -70,18 +70,18 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
                       <img
                         src={player.profileImage}
                         alt={player.name}
-                        className="w-12 h-12 rounded-full object-cover border-2 border-white"
+                        className="w-14 h-14 rounded-full object-cover border-3 border-white shadow-lg"
                         style={{ backgroundColor: player.avatarColor || '#8B5CF6' }}
                       />
                       {idx === 0 && (
-                        <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-yellow-400 text-black flex items-center justify-center text-xs font-bold border-2 border-white">
+                        <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-yellow-400 text-black flex items-center justify-center text-xs font-bold border-2 border-white">
                           1
                         </div>
                       )}
                     </div>
                   ) : (
                     <div
-                      className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 ${
+                      className={`w-14 h-14 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 text-xl border-3 border-white shadow-lg ${
                         idx === 0 ? 'ring-2 ring-yellow-400' : ''
                       }`}
                       style={{ backgroundColor: player.avatarColor || '#8B5CF6' }}
@@ -90,9 +90,9 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
                     </div>
                   )}
                   <div className="flex flex-col min-w-0 flex-1">
-                    <span className="font-bold text-lg truncate">{player.name}</span>
+                    <span className="font-black text-xl truncate text-white">{player.name}</span>
                     {player.artistName && (
-                      <span className="text-sm text-muted-foreground italic truncate">
+                      <span className="text-sm text-white/70 italic truncate">
                         "{player.artistName}"
                       </span>
                     )}
@@ -104,12 +104,12 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
                         </Badge>
                       )}
                       {player.connected && player.isReady && (
-                        <Badge variant="secondary" className="text-xs bg-green-500 text-white">Klar</Badge>
+                        <Badge className="text-xs bg-green-500 text-white border-2 border-white font-bold">Klar</Badge>
                       )}
                     </div>
                   </div>
                 </div>
-                <div className="text-3xl font-mono font-black flex-shrink-0 ml-2">
+                <div className="text-4xl font-mono font-black flex-shrink-0 ml-2 text-white">
                   {player.score}
                 </div>
               </div>
@@ -119,13 +119,13 @@ export default function GameControl({ currentSong, roundNumber, players, onNextR
 
       {/* HÖGER KOLUMN: Spelkort och kontroller */}
       <div className="space-y-6">
-        <Card className="p-6">
+        <Card className="p-8 bg-black border-4 border-white shadow-2xl">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-3xl font-bold">Runda {Math.min(roundNumber, 10)}/10</h2>
-              <p className="text-muted-foreground text-lg">Spelare placerar sina kort</p>
+              <h2 className="text-4xl font-black text-white">Runda {Math.min(roundNumber, 10)}/10</h2>
+              <p className="text-white/70 text-xl font-medium">Spelare placerar sina kort</p>
             </div>
-            <Badge variant="secondary" className="text-2xl font-mono px-6 py-3">
+            <Badge className="text-2xl font-mono font-black px-8 py-4 bg-yellow-400 text-black border-4 border-white">
               {players.filter(p => p.connected && p.isReady).length}/{players.filter(p => p.connected).length} klara
             </Badge>
           </div>
