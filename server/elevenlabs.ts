@@ -7,7 +7,7 @@ interface DJMessage {
 
 export class ElevenLabsService {
   private apiKey: string;
-  private voiceId = '38yEkwjgqOwvn7qykcx3'; // Custom voice
+  private voiceId = 'kdPa5d8D09dd2Se1mJEm'; // Hood DJ voice
   private openRouterKey: string;
   private messageHistory: Map<string, DJMessage[]> = new Map();
 
