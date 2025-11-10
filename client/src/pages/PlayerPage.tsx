@@ -386,27 +386,43 @@ export default function PlayerPage() {
   const isPlayingMusic = gameState?.phase === 'playing';
 
   return (
-    <div className="min-h-screen bg-background pb-80">
-      <div className="p-6">
+    <div
+      className="min-h-screen pb-80 relative overflow-hidden bg-cover bg-center"
+      style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+    >
+      <div className="absolute inset-0 bg-black/40 z-0"></div>
+
+      {/* BeatBrawl Logo - Upper Left */}
+      <div className="absolute top-4 left-4 z-20">
+        <img
+          src="/beatbrawl.png"
+          alt="BeatBrawl Logo"
+          className="h-16 w-auto"
+        />
+      </div>
+
+      <div className="p-6 relative z-10">
         <ScoreDisplay
           playerName={myPlayer.name}
           score={myPlayer.score}
           timelineLength={myPlayer.timeline.length}
         />
-        
+
         {isPlayingMusic && (
           <div className="mt-4 flex justify-center">
-            <MusicEqualizer isPlaying={true} barCount={9} />
+            <MusicEqualizer isPlaying={true} barCount={9} color="#ef4444" />
           </div>
         )}
       </div>
 
-      <Timeline
-        timeline={myPlayer.timeline}
-        startYear={myPlayer.startYear}
-        highlightPosition={selectedPosition ?? undefined}
-        onPlaceCard={confirmedPlacement ? undefined : setSelectedPosition}
-      />
+      <div className="relative z-10">
+        <Timeline
+          timeline={myPlayer.timeline}
+          startYear={myPlayer.startYear}
+          highlightPosition={selectedPosition ?? undefined}
+          onPlaceCard={confirmedPlacement ? undefined : setSelectedPosition}
+        />
+      </div>
 
       {gameState?.phase === 'playing' && !confirmedPlacement && (
         <CardPlacement

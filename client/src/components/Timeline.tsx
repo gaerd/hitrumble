@@ -14,86 +14,86 @@ export default function Timeline({ timeline, startYear, onPlaceCard, highlightPo
   return (
     <div className="p-6">
       <div className="mb-6 text-center">
-        <h2 className="text-2xl font-bold mb-2">Din Tidslinje</h2>
-        <p className="text-muted-foreground">Placera låten på rätt plats</p>
+        <h2 className="text-3xl font-black mb-2 text-white" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>Din Tidslinje</h2>
+        <p className="text-white/70 text-lg">Placera låten på rätt plats</p>
       </div>
 
       <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory">
         {timeline.length === 0 ? (
           <div className="min-w-full flex items-center justify-center gap-4">
             <Card
-              className={`w-48 h-64 flex flex-col items-center justify-center cursor-pointer hover-elevate active-elevate-2 snap-start ${
-                highlightPosition === 0 ? 'ring-4 ring-primary' : ''
+              className={`w-48 h-64 flex flex-col items-center justify-center cursor-pointer hover-elevate active-elevate-2 snap-start bg-black border-4 border-white shadow-xl ${
+                highlightPosition === 0 ? 'ring-4 ring-red-500' : ''
               }`}
               onClick={() => onPlaceCard?.(0)}
               data-testid="slot-before-start"
             >
-              <Plus className="w-12 h-12 text-muted-foreground mb-2" />
-              <p className="text-sm text-muted-foreground font-medium">Före {startYear}</p>
+              <Plus className="w-12 h-12 text-white mb-2" />
+              <p className="text-sm text-white/70 font-bold">Före {startYear}</p>
             </Card>
 
-            <Card className="w-48 h-64 flex flex-col items-center justify-center bg-accent/20 border-2 border-dashed" data-testid="card-start-year">
-              <Badge variant="outline" className="text-2xl font-mono font-bold px-4 py-2">
+            <Card className="w-48 h-64 flex flex-col items-center justify-center bg-red-500/20 border-4 border-white border-dashed shadow-xl" data-testid="card-start-year">
+              <Badge className="text-2xl font-mono font-black px-6 py-3 bg-red-500 text-white border-2 border-white">
                 {startYear}
               </Badge>
-              <p className="text-sm text-muted-foreground mt-2">Startår</p>
+              <p className="text-sm text-white font-bold mt-3">Startår</p>
             </Card>
 
             <Card
-              className={`w-48 h-64 flex flex-col items-center justify-center cursor-pointer hover-elevate active-elevate-2 snap-start ${
-                highlightPosition === 1 ? 'ring-4 ring-primary' : ''
+              className={`w-48 h-64 flex flex-col items-center justify-center cursor-pointer hover-elevate active-elevate-2 snap-start bg-black border-4 border-white shadow-xl ${
+                highlightPosition === 1 ? 'ring-4 ring-red-500' : ''
               }`}
               onClick={() => onPlaceCard?.(1)}
               data-testid="slot-after-start"
             >
-              <Plus className="w-12 h-12 text-muted-foreground mb-2" />
-              <p className="text-sm text-muted-foreground font-medium">Efter {startYear}</p>
+              <Plus className="w-12 h-12 text-white mb-2" />
+              <p className="text-sm text-white/70 font-bold">Efter {startYear}</p>
             </Card>
           </div>
         ) : (
           <>
             <Card
-              className={`min-w-[160px] h-64 flex flex-col items-center justify-center cursor-pointer hover-elevate active-elevate-2 snap-start ${
-                highlightPosition === 0 ? 'ring-4 ring-primary' : ''
+              className={`min-w-[160px] h-64 flex flex-col items-center justify-center cursor-pointer hover-elevate active-elevate-2 snap-start bg-black border-4 border-white shadow-xl ${
+                highlightPosition === 0 ? 'ring-4 ring-red-500' : ''
               }`}
               onClick={() => onPlaceCard?.(0)}
               data-testid="slot-0"
             >
-              <Plus className="w-10 h-10 text-muted-foreground mb-2" />
-              <p className="text-xs text-muted-foreground">Före {timeline[0].year}</p>
+              <Plus className="w-10 h-10 text-white mb-2" />
+              <p className="text-xs text-white/70 font-bold">Före {timeline[0].year}</p>
             </Card>
 
             {timeline.map((song, idx) => {
               const nextSong = timeline[idx + 1];
               const showPlaceholder = !nextSong || song.year !== nextSong.year;
-              
+
               return (
                 <div key={song.id} className="flex gap-4 snap-start">
-                  <Card className="min-w-[160px] h-64 p-3 flex flex-col">
+                  <Card className="min-w-[160px] h-64 p-3 flex flex-col bg-black border-4 border-white shadow-xl">
                     {song.albumCover && (
                       <img
                         src={song.albumCover}
                         alt={song.title}
-                        className="w-full h-32 object-cover rounded-lg mb-2"
+                        className="w-full h-32 object-cover rounded-xl mb-2 border-2 border-white"
                       />
                     )}
-                    <Badge className="text-lg font-mono font-bold mb-2 self-start">
+                    <Badge className="text-lg font-mono font-black mb-2 self-start bg-red-500 text-white border-2 border-white">
                       {song.year}
                     </Badge>
-                    <h4 className="font-semibold text-sm line-clamp-2">{song.title}</h4>
-                    <p className="text-xs text-muted-foreground line-clamp-1">{song.artist}</p>
+                    <h4 className="font-bold text-sm line-clamp-2 text-white">{song.title}</h4>
+                    <p className="text-xs text-white/60 line-clamp-1">{song.artist}</p>
                   </Card>
 
                   {showPlaceholder && (
                     <Card
-                      className={`min-w-[160px] h-64 flex flex-col items-center justify-center cursor-pointer hover-elevate active-elevate-2 ${
-                        highlightPosition === idx + 1 ? 'ring-4 ring-primary' : ''
+                      className={`min-w-[160px] h-64 flex flex-col items-center justify-center cursor-pointer hover-elevate active-elevate-2 bg-black border-4 border-white shadow-xl ${
+                        highlightPosition === idx + 1 ? 'ring-4 ring-red-500' : ''
                       }`}
                       onClick={() => onPlaceCard?.(idx + 1)}
                       data-testid={`slot-${idx + 1}`}
                     >
-                      <Plus className="w-10 h-10 text-muted-foreground mb-2" />
-                      <p className="text-xs text-muted-foreground text-center px-2">
+                      <Plus className="w-10 h-10 text-white mb-2" />
+                      <p className="text-xs text-white/70 font-bold text-center px-2">
                         {nextSong ? `Mellan ${song.year} och ${nextSong.year}` : `Efter ${song.year}`}
                       </p>
                     </Card>
