@@ -398,14 +398,6 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
       </div>
 
       <Card className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-red-500 border-4 border-white mb-4 shadow-xl">
-            <User className="w-10 h-10 text-white" />
-          </div>
-          <h1 className="text-4xl font-black mb-3 text-white" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
-            {showRecreateOptions ? 'UPPDATERA PROFIL' : 'SKAPA PROFIL'}
-          </h1>
-        </div>
 
         <div className="space-y-6">
           <div>
@@ -486,7 +478,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
               ) : (
                 <>
                   <Sparkles className="w-5 h-5 mr-2" />
-                  Generera AI-Profil
+                  Skapa Profil
                 </>
               )}
             </Button>
@@ -522,24 +514,25 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
           )}
 
           <div className="pt-4 space-y-3">
-            <Button
-              size="lg"
-              className="w-full text-xl py-6 bg-red-500 hover:bg-red-600 text-white font-black border-4 border-white"
-              onClick={handleCreateProfile}
-              disabled={isSaving || !displayName.trim()}
-              data-testid="button-create-profile"
-            >
-              {isSaving ? (
-                <>
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Skapar...
-                </>
-              ) : aiGeneratedProfile ? (
-                'Spara Profil'
-              ) : (
-                'Skapa Profil'
-              )}
-            </Button>
+            {/* Only show Save button after AI profile is generated */}
+            {aiGeneratedProfile && (
+              <Button
+                size="lg"
+                className="w-full text-xl py-6 bg-red-500 hover:bg-red-600 text-white font-black border-4 border-white"
+                onClick={handleCreateProfile}
+                disabled={isSaving}
+                data-testid="button-create-profile"
+              >
+                {isSaving ? (
+                  <>
+                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                    Sparar...
+                  </>
+                ) : (
+                  'Spara'
+                )}
+              </Button>
+            )}
 
             <Button
               size="lg"
