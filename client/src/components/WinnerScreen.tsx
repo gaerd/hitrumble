@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Trophy, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -11,6 +12,57 @@ interface WinnerScreenProps {
 }
 
 export default function WinnerScreen({ winner, allPlayers, onNewGame }: WinnerScreenProps) {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    // Check if content overflows
+    const hasOverflow = container.scrollHeight > container.clientHeight;
+    if (!hasOverflow) return;
+
+    let scrollPosition = 0;
+    const scrollSpeed = 0.5; // pixels per frame
+    const pauseAtEdges = 2000; // ms to pause at top/bottom
+    let isPaused = true;
+    let pauseTimeout: NodeJS.Timeout;
+
+    const scroll = () => {
+      if (isPaused) return;
+
+      scrollPosition += scrollSpeed;
+      const maxScroll = container.scrollHeight - container.clientHeight;
+
+      if (scrollPosition >= maxScroll) {
+        // Reached bottom, pause and reset
+        container.scrollTop = maxScroll;
+        isPaused = true;
+        pauseTimeout = setTimeout(() => {
+          scrollPosition = 0;
+          container.scrollTop = 0;
+          isPaused = true;
+          pauseTimeout = setTimeout(() => {
+            isPaused = false;
+          }, pauseAtEdges);
+        }, pauseAtEdges);
+      } else {
+        container.scrollTop = scrollPosition;
+      }
+    };
+
+    // Start after initial pause
+    pauseTimeout = setTimeout(() => {
+      isPaused = false;
+    }, pauseAtEdges);
+
+    const intervalId = setInterval(scroll, 16); // ~60fps
+
+    return () => {
+      clearInterval(intervalId);
+      clearTimeout(pauseTimeout);
+    };
+  }, [allPlayers]);
   return (
     <div
       className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
@@ -64,7 +116,7 @@ export default function WinnerScreen({ winner, allPlayers, onNewGame }: WinnerSc
           {/* HÖGER KOLUMN: Slutställning */}
           <Card className="p-10 bg-black border-4 border-white shadow-2xl">
             <h3 className="text-3xl font-black mb-6 text-white">Slutställning</h3>
-            <div className="space-y-4">
+            <div ref={scrollContainerRef} className="space-y-4 max-h-[500px] overflow-y-auto scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               {allPlayers
                 .sort((a, b) => b.score - a.score)
                 .map((player, idx) => (
