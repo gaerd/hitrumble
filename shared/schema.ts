@@ -60,7 +60,8 @@ export type SpotifyCredentials = typeof spotifyCredentials.$inferSelect;
 
 export const profileImages = pgTable("profile_images", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  imageData: text("image_data").notNull(), // Base64 encoded image
+  imageData: text("image_data").notNull(), // Base64 encoded full-size image
+  thumbnail: text("thumbnail"), // Base64 encoded 128x128px thumbnail
   mimeType: varchar("mime_type", { length: 50 }).notNull().default('image/png'),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });

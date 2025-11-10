@@ -300,10 +300,11 @@ VIKTIGT:
     }
   });
 
-  // Serve profile images from database
+  // Serve profile images (thumbnails) with filesystem cache
   app.get('/api/profiles/images/:imageId', async (req: Request, res: Response) => {
     try {
       const { imageId } = req.params;
+      const size = req.query.size as string; // 'full' or undefined (default: thumbnail)
 
       // Validate imageId format (UUID)
       const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -311,7 +312,11 @@ VIKTIGT:
         return res.status(400).json({ error: 'Invalid image ID' });
       }
 
-      const image = await imageStorage.getImage(imageId);
+      // Get thumbnail (cached) or full image
+      const image = size === 'full'
+        ? await imageStorage.getImage(imageId)
+        : await imageStorage.getThumbnail(imageId);
+
       if (!image) {
         return res.status(404).json({ error: 'Image not found' });
       }
