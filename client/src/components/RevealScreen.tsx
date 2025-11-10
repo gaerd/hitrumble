@@ -63,7 +63,7 @@ export default function RevealScreen({ song, results, onContinue }: RevealScreen
                   <span className="font-semibold text-lg">{result.playerName}</span>
                 </div>
                 <Badge variant={result.correct ? 'default' : 'secondary'} className="text-sm">
-                  {result.correct ? 'Korrekt!' : 'Fel placering'}
+                  {result.correct ? 'Correct!' : 'Wrong placement'}
                 </Badge>
               </div>
             ))}

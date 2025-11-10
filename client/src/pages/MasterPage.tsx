@@ -102,7 +102,7 @@ export default function MasterPage() {
 
     socketService.onError((message) => {
       toast({
-        title: 'Fel',
+        title: 'Error',
         description: message,
         variant: 'destructive'
       });
@@ -149,7 +149,7 @@ export default function MasterPage() {
         <div className="absolute top-12 left-12 z-20">
           <img src="/beatbrawl.png" alt="BeatBrawl Logo" className="h-48 w-auto" />
         </div>
-        <p className="text-3xl text-white font-black relative z-10">Skapar spel...</p>
+        <p className="text-3xl text-white font-black relative z-10">Creating game...</p>
       </div>
     );
   }

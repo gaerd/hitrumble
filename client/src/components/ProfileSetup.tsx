@@ -248,8 +248,8 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
     } catch (error) {
       console.error('Image resize error:', error);
       toast({
-        title: 'Fel vid bildbehandling',
-        description: 'Kunde inte bearbeta bilden. Försök med en annan bild.',
+        title: 'Image Processing Error',
+        description: 'Could not process image. Try another image.',
         variant: 'destructive'
       });
     }

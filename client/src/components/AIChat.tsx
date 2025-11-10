@@ -191,7 +191,7 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              placeholder="T.ex. '80-tals rock' eller 'svensk pop'"
+              placeholder="e.g. '80s rock' or 'Swedish pop'"
               className="flex-1 text-lg py-6 px-4 bg-white border-2 border-white font-medium rounded-lg"
               data-testid="input-music-preference"
             />
