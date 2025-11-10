@@ -120,10 +120,10 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
               className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`max-w-[75%] p-5 rounded-lg shadow-2xl ${
+                className={`max-w-[75%] p-5 rounded-lg shadow-2xl border-2 border-white ${
                   msg.role === 'user'
                     ? 'bg-yellow-400 text-black'
-                    : 'bg-black/90 text-white border-2 border-white'
+                    : 'bg-black/90 text-white'
                 }`}
                 data-testid={`message-${msg.role}-${idx}`}
               >
@@ -148,7 +148,7 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
               placeholder="T.ex. '80-tals rock' eller 'svensk pop'"
-              className="text-lg py-6 bg-white border-2 border-white/50 font-medium"
+              className="text-lg py-6 bg-white border-2 border-white font-medium"
               data-testid="input-music-preference"
             />
             <Button
