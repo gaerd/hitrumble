@@ -42,7 +42,9 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
       className="min-h-screen flex items-start justify-start p-8 relative overflow-hidden bg-cover bg-center"
       style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
     >
-      <div className="absolute inset-0 bg-black/40"></div>
+      {/* HITRUMBLE START: Dark scrim overlay */}
+      <div className="absolute inset-0" style={{ backgroundColor: 'hsl(var(--hr-scrim) / 0.6)' }}></div>
+      {/* HITRUMBLE END */}
 
       {/* BeatBrawl Logo - Upper Left - Extra Large */}
       <div className="absolute top-12 left-12 z-20">
@@ -54,19 +56,19 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
         />
       </div>
 
-      {/* Spotify Button - Upper Right - Much Smaller */}
+      {/* HITRUMBLE START: Spotify Button with new theme */}
       <div className="absolute top-8 right-8 z-20">
         {!isCheckingSpotify && !spotifyConnected && (
           <Button
             onClick={handleConnectSpotify}
             disabled={isConnectingSpotify}
-            className="gap-2 text-xs px-3 py-2 bg-black/80 hover:bg-black text-white font-medium shadow-lg border border-white"
+            className="gap-2 text-xs px-3 py-2 bg-bg-surface/90 hover:bg-bg-surface text-fg font-medium shadow-glow border border-fg/20 rounded-hrmd"
             data-testid="button-connect-spotify-home"
           >
             {isConnectingSpotify ? (
               <Loader2 className="w-3 h-3 animate-spin" />
             ) : (
-              <Music className="w-3 h-3 text-red-500" />
+              <Music className="w-3 h-3 text-accent" />
             )}
             Connect Spotify
           </Button>
@@ -75,24 +77,24 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
         {spotifyConnected && (
           <Button
             disabled
-            className="gap-2 text-xs px-3 py-2 bg-black/80 text-white font-medium shadow-lg border border-white cursor-default"
+            className="gap-2 text-xs px-3 py-2 bg-bg-surface/90 text-fg font-medium shadow-hr border border-success/40 cursor-default rounded-hrmd"
             data-testid="button-spotify-connected"
           >
-            <CheckCircle2 className="w-3 h-3 text-green-400" />
+            <CheckCircle2 className="w-3 h-3 text-success" />
             Connected to Spotify
           </Button>
         )}
       </div>
+      {/* HITRUMBLE END */}
 
-      {/* Two Buttons - Left Side in Red Area */}
+      {/* HITRUMBLE START: CTA Buttons with gradient & neon theme */}
       <div className="absolute left-12 top-1/2 -translate-y-1/2 z-10 flex flex-col gap-6">
         <button
-          className={`text-4xl py-10 px-16 bg-yellow-400 text-black font-black shadow-2xl uppercase tracking-wider transition-all duration-200 ${
+          className={`hr-btn hr-btn--primary text-4xl py-10 px-16 font-black uppercase tracking-wider transition-all duration-200 ${
             spotifyConnected
-              ? 'cursor-pointer hover:scale-110 hover:shadow-[0_20px_50px_rgba(0,0,0,0.8)] hover:-translate-y-2'
+              ? 'cursor-pointer hover:scale-105 animate-pulseGlow'
               : 'opacity-40 cursor-not-allowed'
           }`}
-          style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}
           disabled={!spotifyConnected}
           onClick={handleSelectMaster}
           data-testid="button-start-master"
@@ -101,14 +103,14 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
         </button>
 
         <button
-          className="text-4xl py-10 px-16 bg-orange-500 text-white font-black shadow-2xl uppercase tracking-wider transition-all duration-200 cursor-pointer hover:scale-110 hover:shadow-[0_20px_50px_rgba(0,0,0,0.8)] hover:-translate-y-2"
-          style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}
+          className="hr-btn hr-btn--primary text-4xl py-10 px-16 font-black uppercase tracking-wider transition-all duration-200 cursor-pointer hover:scale-105"
           onClick={onSelectPlayer}
           data-testid="button-join-player"
         >
           Join Game
         </button>
       </div>
+      {/* HITRUMBLE END */}
     </div>
   );
 }
