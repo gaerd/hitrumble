@@ -284,9 +284,6 @@ export default function PlayerPage() {
             <h1 className="text-4xl font-black mb-3 text-white" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
               JOIN GAME
             </h1>
-            {!profile && (
-              <p className="text-white/70 text-lg">Guest Mode</p>
-            )}
           </div>
           <div className="space-y-6">
             <div>
@@ -297,13 +294,7 @@ export default function PlayerPage() {
                 placeholder="Enter your name"
                 className="text-lg bg-white text-black border-2 border-white h-12"
                 data-testid="input-player-name"
-                disabled={!!profile}
               />
-              {profile && (
-                <p className="text-sm text-white/60 mt-1">
-                  From your saved profile
-                </p>
-              )}
             </div>
             <div>
               <label className="text-lg mb-2 block text-white font-bold">Game Code</label>
