@@ -1,7 +1,7 @@
-import type { Song } from '../shared/types';
+import type { Song } from "../shared/types";
 
 interface DJMessage {
-  role: 'system' | 'user' | 'assistant';
+  role: "system" | "user" | "assistant";
   content: string;
 }
 
@@ -12,24 +12,26 @@ export class ElevenLabsService {
   private messageHistory: Map<string, DJMessage[]> = new Map();
 
   constructor() {
-    this.apiKey = process.env.ELEVENLABS_API_KEY || '';
-    this.voiceId = process.env.ELEVENLABS_VOICE_ID || 'pNInz6obpgDQGcFmaJgB'; // Default to Adam voice
-    this.openRouterKey = process.env.OPENROUTER_API_KEY || '';
-    
+    this.apiKey = process.env.ELEVENLABS_API_KEY || "";
+    this.voiceId = process.env.ELEVENLABS_VOICE_ID || "pNInz6obpgDQGcFmaJgB"; // Default to Adam voice
+    this.openRouterKey = process.env.OPENROUTER_API_KEY || "";
+
     if (!this.apiKey) {
-      console.warn('ELEVENLABS_API_KEY is not set - DJ voice will be disabled');
+      console.warn("ELEVENLABS_API_KEY is not set - DJ voice will be disabled");
     }
     if (!this.openRouterKey) {
-      console.warn('OPENROUTER_API_KEY is not set - DJ commentary will use templates');
+      console.warn(
+        "OPENROUTER_API_KEY is not set - DJ commentary will use templates",
+      );
     }
   }
 
   private async generateDJScriptWithLLM(
-    song: Song, 
-    isGameFinished: boolean, 
+    song: Song,
+    isGameFinished: boolean,
     winnerName?: string,
     gameId?: string,
-    musicContext?: string
+    musicContext?: string,
   ): Promise<string> {
     if (!this.openRouterKey) {
       return this.generateFallbackScript(song, isGameFinished, winnerName);
@@ -41,9 +43,9 @@ export class ElevenLabsService {
     }
 
     const history = gameId ? this.messageHistory.get(gameId)! : [];
-    
+
     // Always refresh the system prompt at the start to keep context strong
-    const systemPrompt = `You are a street-smart, hood radio DJ with GTA vibes commentating on a music game where players guess the years of songs.${musicContext ? `\n\nMusic theme for this session: ${musicContext}` : ''}
+    const systemPrompt = `You are a street-smart, hood radio DJ with GTA vibes commentating on a music game where players guess the years of songs.${musicContext ? `\n\nMusic theme for this session: ${musicContext}` : ""}
 
 Your job is to:
 - Drop knowledge on the song that just played with that authentic street energy
@@ -63,10 +65,10 @@ Style Guidelines:
 - Channel that GTA radio DJ personality - edgy, cool, street-credible`;
 
     // Replace the first system message every round to keep context fresh
-    if (history.length > 0 && history[0].role === 'system') {
-      history[0] = { role: 'system', content: systemPrompt };
+    if (history.length > 0 && history[0].role === "system") {
+      history[0] = { role: "system", content: systemPrompt };
     } else {
-      history.unshift({ role: 'system', content: systemPrompt });
+      history.unshift({ role: "system", content: systemPrompt });
     }
 
     // Build song info with all available context
@@ -88,65 +90,77 @@ Style Guidelines:
       }
 
       if (song.movie) {
-        promptParts.push(`IMPORTANT: Mention the movie "${song.movie}" in your comment!`);
+        promptParts.push(
+          `IMPORTANT: Mention the movie "${song.movie}" in your comment!`,
+        );
       }
 
-      promptParts.push('Max 25 words.');
-      userPrompt = promptParts.join(' ');
+      promptParts.push("Max 25 words.");
+      userPrompt = promptParts.join(" ");
     }
 
     try {
-      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.openRouterKey}`,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': 'https://hitster-ai.replit.app',
-          'X-Title': 'HITSTER AI'
+      const response = await fetch(
+        "https://openrouter.ai/api/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${this.openRouterKey}`,
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://hitrumble.com",
+            "X-Title": "HitRumble",
+          },
+          body: JSON.stringify({
+            model: "anthropic/claude-sonnet-4.5",
+            messages: [...history, { role: "user", content: userPrompt }],
+            max_tokens: 150,
+            temperature: 0.8,
+          }),
         },
-        body: JSON.stringify({
-          model: 'anthropic/claude-sonnet-4.5',
-          messages: [...history, { role: 'user', content: userPrompt }],
-          max_tokens: 150,
-          temperature: 0.8
-        })
-      });
+      );
 
       if (!response.ok) {
-        console.error('OpenRouter API error:', response.status);
+        console.error("OpenRouter API error:", response.status);
         return this.generateFallbackScript(song, isGameFinished, winnerName);
       }
 
       const data = await response.json();
-      const script = data.choices[0]?.message?.content || this.generateFallbackScript(song, isGameFinished, winnerName);
+      const script =
+        data.choices[0]?.message?.content ||
+        this.generateFallbackScript(song, isGameFinished, winnerName);
 
       // Update message history
       if (gameId) {
-        history.push({ role: 'user', content: userPrompt });
-        history.push({ role: 'assistant', content: script });
-        
+        history.push({ role: "user", content: userPrompt });
+        history.push({ role: "assistant", content: script });
+
         // Keep only last 6 rounds to keep context focused and LLM memory sharp
-        if (history.length > 13) { // system + 6 rounds * 2 = 13
+        if (history.length > 13) {
+          // system + 6 rounds * 2 = 13
           this.messageHistory.set(gameId, [history[0], ...history.slice(-12)]);
         }
       }
 
       return script;
     } catch (error) {
-      console.error('Error generating DJ script with LLM:', error);
+      console.error("Error generating DJ script with LLM:", error);
       return this.generateFallbackScript(song, isGameFinished, winnerName);
     }
   }
 
-  private generateFallbackScript(song: Song, isGameFinished: boolean, winnerName?: string): string {
+  private generateFallbackScript(
+    song: Song,
+    isGameFinished: boolean,
+    winnerName?: string,
+  ): string {
     if (isGameFinished && winnerName) {
       return `Och där har vi det! "${song.title}" från ${song.year}! Grattis ${winnerName} som vann med 10 poäng! Vilken spelomgång!`;
     }
-    
+
     const templates = [
       `"${song.title}" av ${song.artist} från ${song.year}! Vilken hit!`,
       `${song.artist}s "${song.title}", ${song.year}. Klassiker!`,
-      `Det var "${song.title}" från ${song.year}. Nästa!`
+      `Det var "${song.title}" från ${song.year}. Nästa!`,
     ];
     return templates[Math.floor(Math.random() * templates.length)];
   }
@@ -156,54 +170,65 @@ Style Guidelines:
   }
 
   async generateDJCommentary(
-    song: Song, 
-    isGameFinished: boolean = false, 
+    song: Song,
+    isGameFinished: boolean = false,
     winnerName?: string,
     gameId?: string,
-    musicContext?: string
+    musicContext?: string,
   ): Promise<Buffer | null> {
     if (!this.apiKey) {
-      console.log('ElevenLabs: API key not set, skipping DJ commentary');
+      console.log("ElevenLabs: API key not set, skipping DJ commentary");
       return null;
     }
 
-    const script = await this.generateDJScriptWithLLM(song, isGameFinished, winnerName, gameId, musicContext);
+    const script = await this.generateDJScriptWithLLM(
+      song,
+      isGameFinished,
+      winnerName,
+      gameId,
+      musicContext,
+    );
     console.log(`ElevenLabs: Generating DJ commentary: "${script}"`);
 
     try {
-      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${this.voiceId}`, {
-        method: 'POST',
-        headers: {
-          'Accept': 'audio/mpeg',
-          'Content-Type': 'application/json',
-          'xi-api-key': this.apiKey
+      const response = await fetch(
+        `https://api.elevenlabs.io/v1/text-to-speech/${this.voiceId}`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "audio/mpeg",
+            "Content-Type": "application/json",
+            "xi-api-key": this.apiKey,
+          },
+          body: JSON.stringify({
+            text: script,
+            model_id: "eleven_multilingual_v2",
+            voice_settings: {
+              stability: 0.5,
+              similarity_boost: 0.75,
+              style: 0.5,
+              use_speaker_boost: true,
+            },
+          }),
         },
-        body: JSON.stringify({
-          text: script,
-          model_id: 'eleven_multilingual_v2',
-          voice_settings: {
-            stability: 0.5,
-            similarity_boost: 0.75,
-            style: 0.5,
-            use_speaker_boost: true
-          }
-        })
-      });
+      );
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('ElevenLabs: API error:', response.status, errorText);
+        console.error("ElevenLabs: API error:", response.status, errorText);
         return null;
       }
 
       const arrayBuffer = await response.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
-      
+
       console.log(`ElevenLabs: Generated ${buffer.length} bytes of audio`);
       return buffer;
-
     } catch (error: any) {
-      console.error('ElevenLabs: Error generating commentary:', error.message || error);
+      console.error(
+        "ElevenLabs: Error generating commentary:",
+        error.message || error,
+      );
       return null;
     }
   }
