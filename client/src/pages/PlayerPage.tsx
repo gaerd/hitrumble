@@ -225,7 +225,7 @@ export default function PlayerPage() {
         {/* BeatBrawl Logo - Upper Left */}
         <div className="absolute top-8 left-8 z-20">
           <img
-            src="/beatbrawl.png"
+            src="/logo.png"
             alt="BeatBrawl Logo"
             className="h-24 w-auto"
           />
