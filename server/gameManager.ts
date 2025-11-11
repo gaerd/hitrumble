@@ -42,7 +42,9 @@ class GameManager {
       return { game, wasPlayer: false, wasMaster: true };
     }
 
-    game.removePlayer(socketId);
+    // Don't remove the player from the game - just remove the socket mapping
+    // The disconnect handler will mark them as disconnected
+    // This allows them to reconnect using their persistentId
     return { game, wasPlayer: true, wasMaster: false };
   }
 
