@@ -13,6 +13,24 @@ import ProfileSetup from '@/components/ProfileSetup';
 import { socketService } from '@/lib/socket';
 import type { GameState, Player, Song } from '@/types/game.types';
 
+// Assuming Logo component is defined elsewhere and imported.
+// For demonstration purposes, let's define a placeholder Logo component here.
+// In a real scenario, this would be imported from its actual location.
+const Logo = ({ size }: { size: 'sm' | 'md' | 'lg' }) => {
+  const sizeClasses = {
+    sm: 'h-12 w-auto',
+    md: 'h-16 w-auto',
+    lg: 'h-24 w-auto',
+  };
+  return (
+    <img
+      src="/beatbrawl.png"
+      alt="BeatBrawl Logo"
+      className={sizeClasses[size] || 'h-16 w-auto'}
+    />
+  );
+};
+
 interface PlayerProfile {
   id: string;
   displayName: string;
@@ -224,11 +242,7 @@ export default function PlayerPage() {
 
         {/* BeatBrawl Logo - Upper Left */}
         <div className="absolute top-8 left-8 z-20">
-          <img
-            src="/beatbrawl.png"
-            alt="BeatBrawl Logo"
-            className="h-24 w-auto"
-          />
+          <Logo size="lg" />
         </div>
 
         <Card className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30">
@@ -278,11 +292,7 @@ export default function PlayerPage() {
 
         {/* BeatBrawl Logo - Upper Left */}
         <div className="absolute top-8 left-8 z-20">
-          <img
-            src="/beatbrawl.png"
-            alt="BeatBrawl Logo"
-            className="h-24 w-auto"
-          />
+          <Logo size="lg" />
         </div>
 
         <Card className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30">
@@ -346,11 +356,7 @@ export default function PlayerPage() {
 
         {/* BeatBrawl Logo - Upper Left */}
         <div className="absolute top-8 left-8 z-20">
-          <img
-            src="/beatbrawl.png"
-            alt="BeatBrawl Logo"
-            className="h-24 w-auto"
-          />
+          <Logo size="lg" />
         </div>
 
         <Card className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30 text-center">
@@ -394,11 +400,7 @@ export default function PlayerPage() {
 
       {/* BeatBrawl Logo - Upper Left */}
       <div className="absolute top-4 left-4 z-20">
-        <img
-          src="/beatbrawl.png"
-          alt="BeatBrawl Logo"
-          className="h-16 w-auto"
-        />
+        <Logo size="md" />
       </div>
 
       <div className="pt-24 px-6 pb-6 relative z-10">

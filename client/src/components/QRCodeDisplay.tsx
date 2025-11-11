@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import type { Player } from '@shared/types';
+import Logo from '@/components/Logo';
 
 interface QRCodeDisplayProps {
   gameCode: string;

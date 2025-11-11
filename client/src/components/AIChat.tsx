@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Send, Sparkles, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Logo from '@/components/Logo';
 
 interface Message {
   role: 'user' | 'ai';
@@ -55,14 +56,14 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
 
   const handleSend = async () => {
     if (!input.trim() || isThinking) return;
-    
+
     const userInput = input.trim();
     const userMessage: Message = { role: 'user', content: userInput };
     setMessages(prev => [...prev, userMessage]);
     setLastPreference(userInput);
     setInput('');
     setIsThinking(true);
-    
+
     try {
       const conversationHistory = messages.map(msg => ({
         role: msg.role === 'ai' ? 'assistant' : 'user',
@@ -88,13 +89,13 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
         content: data.response
       };
       setMessages(prev => [...prev, aiMessage]);
-      
+
       // Save songs if AI generated any
       if (data.songs && data.songs.length > 0) {
         setGeneratedSongs(data.songs);
         console.log(`AI generated ${data.songs.length} songs`);
       }
-      
+
       // Save start year range if provided
       if (data.startYearRange) {
         setStartYearRange(data.startYearRange);
@@ -121,7 +122,7 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
       >
         <div className="absolute inset-0 bg-black/40 z-0"></div>
         <div className="absolute top-12 left-12 z-20">
-          <img src="/beatbrawl.png" alt="BeatBrawl Logo" className="h-48 w-auto" />
+          <Logo />
         </div>
 
         {/* Large animated loading bubble */}
@@ -146,11 +147,7 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
 
       {/* BeatBrawl Logo - Upper Left */}
       <div className="absolute top-12 left-12 z-20">
-        <img
-          src="/beatbrawl.png"
-          alt="BeatBrawl Logo"
-          className="h-48 w-auto"
-        />
+        <Logo />
       </div>
 
       {/* Chat Container */}

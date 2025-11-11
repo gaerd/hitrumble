@@ -6,6 +6,8 @@ import GameControl from '@/components/GameControl';
 import WinnerScreen from '@/components/WinnerScreen';
 import { socketService } from '@/lib/socket';
 import type { GameState, RoundResult } from '@/types/game.types';
+// Assuming Logo component is located at '@/components/Logo'
+import Logo from '@/components/Logo';
 
 export default function MasterPage() {
   const [gameState, setGameState] = useState<GameState | null>(null);
@@ -69,19 +71,19 @@ export default function MasterPage() {
     socketService.onDJCommentary((base64Audio) => {
       console.log('DJ commentary received, playing...');
       setIsDJPlaying(true);
-      
+
       const audioBlob = new Blob(
         [Uint8Array.from(atob(base64Audio), c => c.charCodeAt(0))],
         { type: 'audio/mpeg' }
       );
       const audioUrl = URL.createObjectURL(audioBlob);
       const audio = new Audio(audioUrl);
-      
+
       audio.onended = () => {
         console.log('DJ commentary finished, checking if we should continue...');
         setIsDJPlaying(false);
         URL.revokeObjectURL(audioUrl);
-        
+
         // Vänta lite och kolla om spelet är finished innan vi går vidare
         setTimeout(() => {
           const currentState = gameStateRef.current;
@@ -93,13 +95,13 @@ export default function MasterPage() {
           }
         }, 1500);
       };
-      
+
       audio.onerror = (e) => {
         console.error('DJ audio error:', e);
         setIsDJPlaying(false);
         URL.revokeObjectURL(audioUrl);
       };
-      
+
       audio.play().catch(err => {
         console.error('Failed to play DJ audio:', err);
         setIsDJPlaying(false);
@@ -129,7 +131,7 @@ export default function MasterPage() {
     if (!preferences) {
       setPreferences(pref || 'rock music');
     }
-    
+
     socketService.confirmPreferences(pref || preferences, (data) => {
       setGameState(data.gameState);
     });
@@ -155,17 +157,17 @@ export default function MasterPage() {
     if (!savedMasterSession) return;
 
     const socket = socketService.connect();
-    
+
     socketService.reconnectMaster(
       savedMasterSession.gameCode,
       savedMasterSession.masterPersistentId,
       (data) => {
         setGameState(data.gameState);
         setShowReconnectPrompt(false);
-        
+
         // Refresh master session after successful reconnection
         socketService.saveMasterSession(data.gameState.id, data.gameState.masterPersistentId);
-        
+
         toast({
           title: 'Återansluten!',
           description: 'Du är tillbaka i spelet',
@@ -224,19 +226,19 @@ export default function MasterPage() {
     socketService.onDJCommentary((base64Audio) => {
       console.log('DJ commentary received, playing...');
       setIsDJPlaying(true);
-      
+
       const audioBlob = new Blob(
         [Uint8Array.from(atob(base64Audio), c => c.charCodeAt(0))],
         { type: 'audio/mpeg' }
       );
       const audioUrl = URL.createObjectURL(audioBlob);
       const audio = new Audio(audioUrl);
-      
+
       audio.onended = () => {
         console.log('DJ commentary finished, checking if we should continue...');
         setIsDJPlaying(false);
         URL.revokeObjectURL(audioUrl);
-        
+
         setTimeout(() => {
           const currentState = gameStateRef.current;
           if (currentState && currentState.phase !== 'finished') {
@@ -247,13 +249,13 @@ export default function MasterPage() {
           }
         }, 1500);
       };
-      
+
       audio.onerror = (e) => {
         console.error('DJ audio error:', e);
         setIsDJPlaying(false);
         URL.revokeObjectURL(audioUrl);
       };
-      
+
       audio.play().catch(err => {
         console.error('Failed to play DJ audio:', err);
         setIsDJPlaying(false);
@@ -284,8 +286,9 @@ export default function MasterPage() {
       >
         <div className="absolute inset-0 bg-black/40 z-0"></div>
 
+        {/* BeatBrawl Logo - Upper Left */}
         <div className="absolute top-12 left-12 z-20">
-          <img src="/beatbrawl.png" alt="BeatBrawl Logo" className="h-48 w-auto" />
+          <Logo size="xl" />
         </div>
 
         <div className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30 rounded-md">
@@ -328,8 +331,9 @@ export default function MasterPage() {
         style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
       >
         <div className="absolute inset-0 bg-black/40"></div>
+        {/* BeatBrawl Logo - Upper Left */}
         <div className="absolute top-12 left-12 z-20">
-          <img src="/beatbrawl.png" alt="BeatBrawl Logo" className="h-48 w-auto" />
+          <Logo size="xl" />
         </div>
         <p className="text-3xl text-white font-black relative z-10">Creating game...</p>
       </div>
@@ -374,11 +378,7 @@ export default function MasterPage() {
 
       {/* BeatBrawl Logo - Upper Left */}
       <div className="absolute top-8 left-8 z-50">
-        <img
-          src="/beatbrawl.png"
-          alt="BeatBrawl Logo"
-          className="h-24 w-auto"
-        />
+        <Logo size="md" />
       </div>
 
       <div className="max-w-7xl mx-auto relative z-30">
