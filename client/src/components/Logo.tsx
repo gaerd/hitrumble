@@ -13,7 +13,7 @@ const sizeClasses = {
 export default function Logo({ className = "", size = "lg" }: LogoProps) {
   return (
     <img
-      src="/logo.png"
+      src="/logo.svg"
       alt="Logo"
       className={`w-auto ${sizeClasses[size]} ${className}`}
     />

@@ -16,9 +16,9 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
   const [isConnectingSpotify, setIsConnectingSpotify] = useState(false);
 
   useEffect(() => {
-    fetch('/api/spotify/status')
-      .then(res => res.json())
-      .then(data => {
+    fetch("/api/spotify/status")
+      .then((res) => res.json())
+      .then((data) => {
         setSpotifyConnected(data.connected);
         setIsCheckingSpotify(false);
       })
@@ -29,7 +29,7 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
 
   const handleConnectSpotify = () => {
     setIsConnectingSpotify(true);
-    window.location.href = '/auth/spotify';
+    window.location.href = "/auth/spotify";
   };
 
   const handleSelectMaster = () => {
@@ -41,13 +41,16 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
   return (
     <div
       className="min-h-screen flex items-start justify-start p-8 relative overflow-hidden bg-cover bg-center"
-      style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+      style={{
+        backgroundImage:
+          "url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)",
+      }}
     >
       <div className="absolute inset-0 bg-black/40"></div>
 
       {/* BeatBrawl Logo - Upper Left - Extra Large */}
       <div className="absolute top-12 left-12 z-20">
-        <Logo size="xl" />
+        <Logo size="lg" />
       </div>
 
       {/* Spotify Button - Upper Right - Much Smaller */}
@@ -85,8 +88,8 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
         <button
           className={`text-4xl py-10 px-16 bg-yellow-400 text-black font-black shadow-2xl uppercase tracking-wider transition-all duration-200 ${
             spotifyConnected
-              ? 'cursor-pointer hover:scale-110 hover:shadow-[0_20px_50px_rgba(0,0,0,0.8)] hover:-translate-y-2'
-              : 'opacity-40 cursor-not-allowed'
+              ? "cursor-pointer hover:scale-110 hover:shadow-[0_20px_50px_rgba(0,0,0,0.8)] hover:-translate-y-2"
+              : "opacity-40 cursor-not-allowed"
           }`}
           style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}
           disabled={!spotifyConnected}

@@ -1,22 +1,25 @@
-import { useState, useEffect, useRef } from 'react';
-import { useToast } from '@/hooks/use-toast';
-import AIChat from '@/components/AIChat';
-import QRCodeDisplay from '@/components/QRCodeDisplay';
-import GameControl from '@/components/GameControl';
-import WinnerScreen from '@/components/WinnerScreen';
-import { socketService } from '@/lib/socket';
-import type { GameState, RoundResult } from '@/types/game.types';
+import { useState, useEffect, useRef } from "react";
+import { useToast } from "@/hooks/use-toast";
+import AIChat from "@/components/AIChat";
+import QRCodeDisplay from "@/components/QRCodeDisplay";
+import GameControl from "@/components/GameControl";
+import WinnerScreen from "@/components/WinnerScreen";
+import { socketService } from "@/lib/socket";
+import type { GameState, RoundResult } from "@/types/game.types";
 // Assuming Logo component is located at '@/components/Logo'
-import Logo from '@/components/Logo';
+import Logo from "@/components/Logo";
 
 export default function MasterPage() {
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [results, setResults] = useState<RoundResult[]>([]);
-  const [preferences, setPreferences] = useState('');
+  const [preferences, setPreferences] = useState("");
   const [spotifyConnected, setSpotifyConnected] = useState(false);
   const [isDJPlaying, setIsDJPlaying] = useState(false);
   const [showReconnectPrompt, setShowReconnectPrompt] = useState(false);
-  const [savedMasterSession, setSavedMasterSession] = useState<{ gameCode: string; masterPersistentId: string } | null>(null);
+  const [savedMasterSession, setSavedMasterSession] = useState<{
+    gameCode: string;
+    masterPersistentId: string;
+  } | null>(null);
   const { toast } = useToast();
   const gameStateRef = useRef<GameState | null>(null);
 
@@ -26,9 +29,9 @@ export default function MasterPage() {
   }, [gameState]);
 
   useEffect(() => {
-    fetch('/api/spotify/status')
-      .then(res => res.json())
-      .then(data => setSpotifyConnected(data.connected))
+    fetch("/api/spotify/status")
+      .then((res) => res.json())
+      .then((data) => setSpotifyConnected(data.connected))
       .catch(console.error);
 
     // Check for saved master session
@@ -44,7 +47,10 @@ export default function MasterPage() {
     socketService.createGame((data) => {
       setGameState(data.gameState);
       // Save master session for reconnection
-      socketService.saveMasterSession(data.gameState.id, data.gameState.masterPersistentId);
+      socketService.saveMasterSession(
+        data.gameState.id,
+        data.gameState.masterPersistentId,
+      );
     });
 
     socketService.onGameStateUpdate((newState) => {
@@ -62,48 +68,50 @@ export default function MasterPage() {
 
     socketService.onPlayerDisconnected((data) => {
       toast({
-        title: 'Player Disconnected',
+        title: "Player Disconnected",
         description: `${data.playerName} lost connection and can reconnect`,
-        duration: 5000
+        duration: 5000,
       });
     });
 
     socketService.onDJCommentary((base64Audio) => {
-      console.log('DJ commentary received, playing...');
+      console.log("DJ commentary received, playing...");
       setIsDJPlaying(true);
 
       const audioBlob = new Blob(
-        [Uint8Array.from(atob(base64Audio), c => c.charCodeAt(0))],
-        { type: 'audio/mpeg' }
+        [Uint8Array.from(atob(base64Audio), (c) => c.charCodeAt(0))],
+        { type: "audio/mpeg" },
       );
       const audioUrl = URL.createObjectURL(audioBlob);
       const audio = new Audio(audioUrl);
 
       audio.onended = () => {
-        console.log('DJ commentary finished, checking if we should continue...');
+        console.log(
+          "DJ commentary finished, checking if we should continue...",
+        );
         setIsDJPlaying(false);
         URL.revokeObjectURL(audioUrl);
 
         // Vänta lite och kolla om spelet är finished innan vi går vidare
         setTimeout(() => {
           const currentState = gameStateRef.current;
-          if (currentState && currentState.phase !== 'finished') {
-            console.log('Auto-starting next round...');
+          if (currentState && currentState.phase !== "finished") {
+            console.log("Auto-starting next round...");
             socketService.nextRound();
           } else {
-            console.log('Game finished - not starting next round');
+            console.log("Game finished - not starting next round");
           }
         }, 1500);
       };
 
       audio.onerror = (e) => {
-        console.error('DJ audio error:', e);
+        console.error("DJ audio error:", e);
         setIsDJPlaying(false);
         URL.revokeObjectURL(audioUrl);
       };
 
-      audio.play().catch(err => {
-        console.error('Failed to play DJ audio:', err);
+      audio.play().catch((err) => {
+        console.error("Failed to play DJ audio:", err);
         setIsDJPlaying(false);
         URL.revokeObjectURL(audioUrl);
       });
@@ -116,9 +124,9 @@ export default function MasterPage() {
 
     socketService.onError((message) => {
       toast({
-        title: 'Error',
+        title: "Error",
         description: message,
-        variant: 'destructive'
+        variant: "destructive",
       });
     });
 
@@ -129,7 +137,7 @@ export default function MasterPage() {
 
   const handleAIChatConfirm = (pref: string) => {
     if (!preferences) {
-      setPreferences(pref || 'rock music');
+      setPreferences(pref || "rock music");
     }
 
     socketService.confirmPreferences(pref || preferences, (data) => {
@@ -146,9 +154,9 @@ export default function MasterPage() {
   };
 
   const handleNextRound = () => {
-    if (gameState?.phase === 'playing') {
+    if (gameState?.phase === "playing") {
       handleRevealResults();
-    } else if (gameState?.phase === 'reveal') {
+    } else if (gameState?.phase === "reveal") {
       socketService.nextRound();
     }
   };
@@ -166,25 +174,28 @@ export default function MasterPage() {
         setShowReconnectPrompt(false);
 
         // Refresh master session after successful reconnection
-        socketService.saveMasterSession(data.gameState.id, data.gameState.masterPersistentId);
+        socketService.saveMasterSession(
+          data.gameState.id,
+          data.gameState.masterPersistentId,
+        );
 
         toast({
-          title: 'Återansluten!',
-          description: 'Du är tillbaka i spelet',
-          duration: 3000
+          title: "Återansluten!",
+          description: "Du är tillbaka i spelet",
+          duration: 3000,
         });
 
         // Setup socket listeners for reconnected session
         setupSocketListeners();
-      }
+      },
     );
 
     socketService.onError((message) => {
       toast({
-        title: 'Kunde inte återansluta',
+        title: "Kunde inte återansluta",
         description: message,
-        variant: 'destructive',
-        duration: 5000
+        variant: "destructive",
+        duration: 5000,
       });
       handleStartNewGame();
     });
@@ -202,7 +213,10 @@ export default function MasterPage() {
       setGameState(newState);
       // Refresh master session timestamp to keep it alive during gameplay
       if (newState.masterPersistentId) {
-        socketService.saveMasterSession(newState.id, newState.masterPersistentId);
+        socketService.saveMasterSession(
+          newState.id,
+          newState.masterPersistentId,
+        );
       }
     });
 
@@ -217,47 +231,49 @@ export default function MasterPage() {
 
     socketService.onPlayerDisconnected((data) => {
       toast({
-        title: 'Spelare frånkopplad',
+        title: "Spelare frånkopplad",
         description: `${data.playerName} tappade anslutningen och kan återansluta`,
-        duration: 5000
+        duration: 5000,
       });
     });
 
     socketService.onDJCommentary((base64Audio) => {
-      console.log('DJ commentary received, playing...');
+      console.log("DJ commentary received, playing...");
       setIsDJPlaying(true);
 
       const audioBlob = new Blob(
-        [Uint8Array.from(atob(base64Audio), c => c.charCodeAt(0))],
-        { type: 'audio/mpeg' }
+        [Uint8Array.from(atob(base64Audio), (c) => c.charCodeAt(0))],
+        { type: "audio/mpeg" },
       );
       const audioUrl = URL.createObjectURL(audioBlob);
       const audio = new Audio(audioUrl);
 
       audio.onended = () => {
-        console.log('DJ commentary finished, checking if we should continue...');
+        console.log(
+          "DJ commentary finished, checking if we should continue...",
+        );
         setIsDJPlaying(false);
         URL.revokeObjectURL(audioUrl);
 
         setTimeout(() => {
           const currentState = gameStateRef.current;
-          if (currentState && currentState.phase !== 'finished') {
-            console.log('Auto-starting next round...');
+          if (currentState && currentState.phase !== "finished") {
+            console.log("Auto-starting next round...");
             socketService.nextRound();
           } else {
-            console.log('Game finished - not starting next round');
+            console.log("Game finished - not starting next round");
           }
         }, 1500);
       };
 
       audio.onerror = (e) => {
-        console.error('DJ audio error:', e);
+        console.error("DJ audio error:", e);
         setIsDJPlaying(false);
         URL.revokeObjectURL(audioUrl);
       };
 
-      audio.play().catch(err => {
-        console.error('Failed to play DJ audio:', err);
+      audio.play().catch((err) => {
+        console.error("Failed to play DJ audio:", err);
         setIsDJPlaying(false);
         URL.revokeObjectURL(audioUrl);
       });
@@ -270,9 +286,9 @@ export default function MasterPage() {
 
     socketService.onError((message) => {
       toast({
-        title: 'Fel',
+        title: "Fel",
         description: message,
-        variant: 'destructive'
+        variant: "destructive",
       });
     });
   };
@@ -282,27 +298,37 @@ export default function MasterPage() {
     return (
       <div
         className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
-        style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+        style={{
+          backgroundImage:
+            "url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)",
+        }}
       >
         <div className="absolute inset-0 bg-black/40 z-0"></div>
 
         {/* BeatBrawl Logo - Upper Left */}
         <div className="absolute top-12 left-12 z-20">
-          <Logo size="xl" />
+          <Logo size="lg" />
         </div>
 
         <div className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30 rounded-md">
           <div className="text-center mb-8">
             <div className="text-6xl mb-4">🎮</div>
-            <h1 className="text-4xl font-black mb-3 text-white" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
+            <h1
+              className="text-4xl font-black mb-3 text-white"
+              style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}
+            >
               VÄLKOMMEN TILLBAKA!
             </h1>
-            <p className="text-white/70 text-lg">Vi hittade ditt senaste spel</p>
+            <p className="text-white/70 text-lg">
+              Vi hittade ditt senaste spel
+            </p>
           </div>
           <div className="space-y-4">
             <div className="bg-white/10 rounded-md p-6 border-2 border-white/20">
               <p className="text-sm text-white/60 mb-1 font-bold">Spelkod</p>
-              <p className="text-2xl font-mono font-black text-white">{savedMasterSession.gameCode}</p>
+              <p className="text-2xl font-mono font-black text-white">
+                {savedMasterSession.gameCode}
+              </p>
             </div>
             <button
               className="w-full text-xl py-6 bg-red-500 hover:bg-red-600 text-white font-black border-4 border-white rounded-md"
@@ -328,27 +354,32 @@ export default function MasterPage() {
     return (
       <div
         className="min-h-screen flex items-center justify-center relative overflow-hidden bg-cover bg-center"
-        style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+        style={{
+          backgroundImage:
+            "url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)",
+        }}
       >
         <div className="absolute inset-0 bg-black/40"></div>
         {/* BeatBrawl Logo - Upper Left */}
         <div className="absolute top-12 left-12 z-20">
           <Logo size="xl" />
         </div>
-        <p className="text-3xl text-white font-black relative z-10">Creating game...</p>
+        <p className="text-3xl text-white font-black relative z-10">
+          Creating game...
+        </p>
       </div>
     );
   }
 
-  if (gameState.phase === 'setup') {
+  if (gameState.phase === "setup") {
     if (!spotifyConnected) {
-      window.location.href = '/?spotify_required=true';
+      window.location.href = "/?spotify_required=true";
       return null;
     }
     return <AIChat onPreferencesConfirmed={handleAIChatConfirm} />;
   }
 
-  if (gameState.phase === 'lobby') {
+  if (gameState.phase === "lobby") {
     return (
       <QRCodeDisplay
         gameCode={gameState.id}
@@ -359,7 +390,7 @@ export default function MasterPage() {
     );
   }
 
-  if (gameState.phase === 'finished' && gameState.winner) {
+  if (gameState.phase === "finished" && gameState.winner) {
     return (
       <WinnerScreen
         winner={gameState.winner}
@@ -372,7 +403,10 @@ export default function MasterPage() {
   return (
     <div
       className="min-h-screen p-8 relative overflow-hidden bg-cover bg-center"
-      style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+      style={{
+        backgroundImage:
+          "url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)",
+      }}
     >
       <div className="absolute inset-0 bg-black/40 z-0"></div>
 
@@ -384,7 +418,10 @@ export default function MasterPage() {
       <div className="max-w-7xl mx-auto relative z-30">
         <div className="mb-6 text-center">
           <p className="text-white text-xl">
-            Game Code: <span className="font-mono font-black text-2xl">{gameState.id}</span>
+            Game Code:{" "}
+            <span className="font-mono font-black text-2xl">
+              {gameState.id}
+            </span>
           </p>
         </div>
 
@@ -398,7 +435,6 @@ export default function MasterPage() {
           isDJPlaying={isDJPlaying}
           results={results}
         />
-
       </div>
     </div>
   );
