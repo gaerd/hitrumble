@@ -14,7 +14,7 @@ export default function Logo({ className = "", size = "lg" }: LogoProps) {
   return (
     <img
       src="/logo.png"
-      alt="HitRumble Logo"
+      alt="Logo"
       className={`w-auto ${sizeClasses[size]} ${className}`}
     />
   );

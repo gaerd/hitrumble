@@ -25,11 +25,7 @@ export default function QRCodeDisplay({ gameCode, playerCount, players, onStartG
 
       {/* BeatBrawl Logo - Upper Left */}
       <div className="absolute top-8 left-8 z-20">
-        <img
-          src="/beatbrawl.png"
-          alt="BeatBrawl Logo"
-          className="h-24 w-auto"
-        />
+        <Logo size="lg" />
       </div>
 
       <div className="w-full max-w-7xl relative z-10">

@@ -13,23 +13,7 @@ import ProfileSetup from '@/components/ProfileSetup';
 import { socketService } from '@/lib/socket';
 import type { GameState, Player, Song } from '@/types/game.types';
 
-// Assuming Logo component is defined elsewhere and imported.
-// For demonstration purposes, let's define a placeholder Logo component here.
-// In a real scenario, this would be imported from its actual location.
-const Logo = ({ size }: { size: 'sm' | 'md' | 'lg' }) => {
-  const sizeClasses = {
-    sm: 'h-12 w-auto',
-    md: 'h-16 w-auto',
-    lg: 'h-24 w-auto',
-  };
-  return (
-    <img
-      src="/beatbrawl.png"
-      alt="BeatBrawl Logo"
-      className={sizeClasses[size] || 'h-16 w-auto'}
-    />
-  );
-};
+import Logo from '@/components/Logo';
 
 interface PlayerProfile {
   id: string;
