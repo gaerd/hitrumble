@@ -3,6 +3,7 @@ import { Trophy, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import WinnerConfetti from './WinnerConfetti';
+import Logo from '@/components/Logo';
 import type { Player } from '@/types/game.types';
 
 interface WinnerScreenProps {
@@ -73,11 +74,7 @@ export default function WinnerScreen({ winner, allPlayers, onNewGame }: WinnerSc
 
       {/* BeatBrawl Logo - Upper Left */}
       <div className="absolute top-8 left-8 z-50">
-        <img
-          src="/beatbrawl.png"
-          alt="BeatBrawl Logo"
-          className="h-24 w-auto"
-        />
+        <Logo size="lg" />
       </div>
 
       <div className="w-full max-w-7xl relative z-30">

@@ -3,6 +3,7 @@ import { Users, Sparkles, Music, Loader2, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import Logo from "@/components/Logo";
 
 interface HomeProps {
   onSelectMaster?: () => void;
@@ -46,12 +47,7 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
 
       {/* BeatBrawl Logo - Upper Left - Extra Large */}
       <div className="absolute top-12 left-12 z-20">
-        <img
-          src="/beatbrawl.png"
-          alt="BeatBrawl Logo"
-          className="h-48 w-auto"
-          data-testid="img-logo"
-        />
+        <Logo size="xl" />
       </div>
 
       {/* Spotify Button - Upper Right - Much Smaller */}

@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { User, Palette, Loader2, Camera, Upload, Sparkles, RefreshCw } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
+import Logo from '@/components/Logo';
 
 interface PlayerProfile {
   id: string;
@@ -315,11 +316,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
 
         {/* BeatBrawl Logo - Upper Left */}
         <div className="absolute top-8 left-8 z-50">
-          <img
-            src="/beatbrawl.png"
-            alt="BeatBrawl Logo"
-            className="h-24 w-auto"
-          />
+          <Logo size="lg" />
         </div>
 
         <Card className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30 text-center">
@@ -341,11 +338,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
 
         {/* BeatBrawl Logo - Upper Left */}
         <div className="absolute top-8 left-8 z-50">
-          <img
-            src="/beatbrawl.png"
-            alt="BeatBrawl Logo"
-            className="h-24 w-auto"
-          />
+          <Logo size="lg" />
         </div>
 
         <Card className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30">
@@ -409,11 +402,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
 
       {/* BeatBrawl Logo - Upper Left */}
       <div className="absolute top-8 left-8 z-20">
-        <img
-          src="/beatbrawl.png"
-          alt="BeatBrawl Logo"
-          className="h-24 w-auto"
-        />
+        <Logo size="lg" />
       </div>
 
       <Card className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30">
