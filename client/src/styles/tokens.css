@@ -1,0 +1,65 @@
+/* HITRUMBLE START - Design Tokens */
+:root {
+  /* MODE */
+  color-scheme: dark;
+
+  /* Backgrounds - HSL format for Tailwind opacity support */
+  --hr-bg: 240 9% 6%;
+  --hr-surface: 240 9% 10%;
+  --hr-surface-2: 240 11% 13%;
+
+  /* Text - HSL format */
+  --hr-fg: 210 29% 97%;
+  --hr-fg-2: 214 14% 81%;
+  --hr-fg-muted: 214 11% 65%;
+
+  /* Brand & feedback - HSL format for Tailwind opacity support */
+  --hr-accent: 0 100% 65%;         /* Neon coral #FF4F4F */
+  --hr-accent-2: 267 97% 61%;      /* Electric purple #8A3FFC */
+  --hr-highlight: 45 100% 65%;     /* Cyber yellow #FFD54F */
+  --hr-info: 203 100% 65%;         /* Blue #4FB6FF */
+  --hr-success: 148 69% 54%;       /* Green #39D98A */
+  --hr-warning: 38 100% 56%;       /* Orange #FFB020 */
+  --hr-danger: 0 100% 67%;         /* Red #FF5A5A */
+
+  /* Overlays / glow - HSL format */
+  --hr-scrim: 0 0% 0%;
+  --hr-scrim-alpha: 0.6;
+  --hr-glow-alpha: 0.15;
+
+  /* Radii */
+  --hr-r-sm: 8px;
+  --hr-r-md: 16px;
+  --hr-r-lg: 24px;
+  --hr-r-xl: 32px;
+  --hr-r-pill: 999px;
+
+  /* Shadows */
+  --hr-shadow-card: 0 8px 32px 0 hsl(0 0% 0% / 0.4);
+  --hr-shadow-glow: 0 0 24px 2px hsl(var(--hr-accent));
+
+  /* Typography scale */
+  --hr-fs-xs: 12px;
+  --hr-fs-sm: 14px;
+  --hr-fs-md: 16px;
+  --hr-fs-lg: 18px;
+  --hr-fs-xl: 24px;
+  --hr-fs-2xl: 32px;
+  --hr-fs-3xl: 40px;
+
+  /* Line heights */
+  --hr-lh-tight: 1.1;
+  --hr-lh-normal: 1.35;
+  --hr-lh-loose: 1.6;
+
+  /* Gradients */
+  --hr-grad-brand: linear-gradient(90deg, #FF4F4F 0%, #8A3FFC 50%, #4FB6FF 100%);
+  --hr-grad-cta: linear-gradient(90deg, #8A3FFC 0%, #FF4F4F 100%);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* HitRumble is dark-first - ljusläge kan implementeras senare */
+  }
+}
+/* HITRUMBLE END */

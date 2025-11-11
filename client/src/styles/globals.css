@@ -1,0 +1,58 @@
+/* HITRUMBLE START - Global Styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+    background: hsl(var(--hr-bg));
+    color: hsl(var(--hr-fg));
+  }
+
+  /* Rubriker med display-font */
+  h1,h2,h3,h4 { 
+    font-weight: 700;
+  }
+}
+
+@layer components {
+  .hr-card {
+    @apply bg-bg-surface rounded-hrlg shadow-hr text-fg;
+  }
+  
+  .hr-btn {
+    @apply inline-flex items-center justify-center rounded-hrmd px-4 py-2 font-semibold transition;
+  }
+  
+  .hr-btn--primary {
+    @apply text-white;
+    background-image: var(--hr-grad-cta);
+    background-size: 200% 100%;
+    animation: wave 6s linear infinite;
+    box-shadow: var(--hr-shadow-glow);
+  }
+  
+  .hr-btn--ghost {
+    @apply border border-white/10 bg-bg-surface2 text-fg-secondary hover:text-fg;
+  }
+  
+  .hr-chip {
+    @apply inline-flex items-center gap-2 rounded-hrpill px-3 py-1 text-sm bg-white/5 border border-white/10;
+  }
+  
+  .hr-tag {
+    @apply text-xs uppercase tracking-wide rounded-hrpill px-2 py-1 bg-accent/20 text-accent;
+  }
+}
+
+@layer utilities {
+  .glow { 
+    box-shadow: var(--hr-shadow-glow); 
+  }
+  
+  .pulse { 
+    animation: beat 800ms ease-in-out; 
+  }
+}
+/* HITRUMBLE END */
