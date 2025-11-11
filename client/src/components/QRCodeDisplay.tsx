@@ -32,7 +32,7 @@ export default function QRCodeDisplay({ gameCode, playerCount, players, onStartG
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
           {/* LEFT COLUMN: QR code and Start button */}
-          <Card className="p-10 text-center bg-black border-4 border-white shadow-2xl">
+          <Card className="hr-card p-10 text-center shadow-glow">
             <div className="inline-block p-8 bg-white rounded-3xl shadow-2xl mb-8">
               <QRCodeSVG
                 value={joinUrl}
@@ -44,40 +44,39 @@ export default function QRCodeDisplay({ gameCode, playerCount, players, onStartG
 
             <div className="space-y-6">
               <div>
-                <p className="text-xl text-white/80 font-bold mb-3">Game Code</p>
-                <Badge className="text-6xl font-mono font-black px-12 py-4 bg-yellow-400 text-black border-4 border-white shadow-2xl">
+                <p className="text-xl text-fg-2 font-bold mb-3">Game Code</p>
+                <Badge className="text-6xl font-mono font-black px-12 py-4 bg-highlight text-bg-surface border-2 border-fg/20 shadow-glow">
                   {gameCode}
                 </Badge>
               </div>
 
               <div className="pt-4">
-                <Button
-                  size="lg"
-                  className="w-full text-2xl py-8 bg-yellow-400 hover:bg-yellow-300 text-black font-black shadow-xl border-4 border-white"
+                <button
+                  className="hr-btn hr-btn--primary w-full text-2xl py-8 font-black shadow-glow"
                   onClick={onStartGame}
                   disabled={playerCount === 0}
                   data-testid="button-start-game"
                 >
                   Start Game
-                </Button>
+                </button>
               </div>
 
-              <p className="text-base text-white/60 font-medium mt-4">
+              <p className="text-base text-fg-muted font-medium mt-4">
                 Or go to {window.location.origin} and enter the code
               </p>
             </div>
           </Card>
 
           {/* RIGHT COLUMN: Player list */}
-          <Card className="p-10 bg-black border-4 border-white shadow-2xl">
+          <Card className="hr-card p-10 shadow-hr">
             <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
               {players.length === 0 ? (
                 <div className="text-center py-16">
-                  <User className="w-20 h-20 text-white/30 mx-auto mb-4" />
-                  <p className="text-2xl text-white/50 font-bold">
+                  <User className="w-20 h-20 text-fg-muted mx-auto mb-4" />
+                  <p className="text-2xl text-fg-2 font-bold">
                     Waiting for players...
                   </p>
-                  <p className="text-lg text-white/40 mt-2">
+                  <p className="text-lg text-fg-muted mt-2">
                     Scan the QR code to join
                   </p>
                 </div>
@@ -85,7 +84,7 @@ export default function QRCodeDisplay({ gameCode, playerCount, players, onStartG
                 players.map((player, index) => (
                   <div
                     key={player.id}
-                    className="flex items-center gap-4 p-4 bg-white/10 rounded-2xl border-2 border-white/20 hover:bg-white/20 transition-colors"
+                    className="flex items-center gap-4 p-4 bg-bg-surface rounded-hrmd border border-fg/10 hover-elevate"
                   >
                     {/* Profilbild eller avatar */}
                     <div className="relative flex-shrink-0">
@@ -93,37 +92,37 @@ export default function QRCodeDisplay({ gameCode, playerCount, players, onStartG
                         <img
                           src={player.profileImage}
                           alt={player.name}
-                          className="w-16 h-16 rounded-full border-4 border-white shadow-lg object-cover"
+                          className="w-16 h-16 rounded-full border-2 border-accent shadow-hr object-cover"
                         />
                       ) : (
                         <div
-                          className="w-16 h-16 rounded-full border-4 border-white shadow-lg flex items-center justify-center text-2xl font-black text-white"
-                          style={{ backgroundColor: player.avatarColor || '#FFC107' }}
+                          className="w-16 h-16 rounded-full border-2 border-accent shadow-hr flex items-center justify-center text-2xl font-black text-white"
+                          style={{ backgroundColor: player.avatarColor || 'hsl(var(--hr-accent-2))' }}
                         >
                           {player.name.charAt(0).toUpperCase()}
                         </div>
                       )}
                       {!player.connected && (
-                        <div className="absolute inset-0 bg-gray-500/70 rounded-full flex items-center justify-center">
-                          <span className="text-xs font-bold text-white">!</span>
+                        <div className="absolute inset-0 bg-bg/70 rounded-full flex items-center justify-center">
+                          <span className="text-xs font-bold text-warning">!</span>
                         </div>
                       )}
                     </div>
 
                     {/* Player info */}
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-xl font-black text-white truncate">
+                      <h3 className="text-xl font-black text-fg truncate">
                         {player.name}
                       </h3>
                       {player.artistName && (
-                        <p className="text-sm text-white/70 font-medium truncate">
+                        <p className="text-sm text-fg-2 font-medium truncate">
                           {player.artistName}
                         </p>
                       )}
                     </div>
 
                     {/* Position badge */}
-                    <Badge className="text-lg font-mono font-black px-4 py-2 bg-yellow-400 text-black border-4 border-white flex-shrink-0">
+                    <Badge className="text-lg font-mono font-black px-4 py-2 bg-highlight text-bg-surface border border-fg/20 flex-shrink-0">
                       #{index + 1}
                     </Badge>
                   </div>

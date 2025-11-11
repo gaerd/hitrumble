@@ -26,14 +26,13 @@ interface ProfileSetupProps {
 const PROFILE_ID_KEY = 'hitster_profile_id';
 
 const PRESET_COLORS = [
-  '#8B5CF6', // purple (default)
-  '#EC4899', // pink
-  '#10B981', // green
-  '#3B82F6', // blue
-  '#F59E0B', // orange
-  '#EF4444', // red
-  '#14B8A6', // teal
-  '#FBBF24', // yellow
+  'hsl(267 97% 61%)', // purple (--hr-accent-2)
+  'hsl(0 100% 65%)',   // coral (--hr-accent)
+  'hsl(148 69% 54%)',  // green (--hr-success)
+  'hsl(203 100% 65%)', // blue (--hr-info)
+  'hsl(38 100% 56%)',  // orange (--hr-warning)
+  'hsl(0 100% 67%)',   // red (--hr-danger)
+  'hsl(45 100% 65%)',  // yellow (--hr-highlight)
 ];
 
 export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
@@ -319,9 +318,9 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
           />
         </div>
 
-        <Card className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30 text-center">
-          <Loader2 className="w-16 h-16 animate-spin mx-auto mb-4 text-red-500" />
-          <p className="text-xl text-white font-bold">Loading your profile...</p>
+        <Card className="hr-card w-full max-w-md p-10 shadow-glow relative z-30 text-center">
+          <Loader2 className="w-16 h-16 animate-spin mx-auto mb-4 text-accent" />
+          <p className="text-xl text-fg font-bold">Loading your profile...</p>
         </Card>
       </div>
     );
@@ -342,9 +341,9 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
           />
         </div>
 
-        <Card className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30">
+        <Card className="hr-card w-full max-w-md p-10 shadow-glow relative z-30">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-32 h-32 rounded-full mb-6 border-4 border-white shadow-xl"
+            <div className="inline-flex items-center justify-center w-32 h-32 rounded-full mb-6 border-2 border-accent shadow-hr"
                  style={{ backgroundColor: existingProfile.avatarColor }}>
               {existingProfile.profileImage ? (
                 <img
@@ -353,37 +352,36 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
                   className="w-full h-full rounded-full object-cover"
                 />
               ) : (
-                <User className="w-16 h-16 text-white" />
+                <User className="w-16 h-16 text-fg" />
               )}
             </div>
-            <h1 className="text-4xl font-black mb-4 text-white" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
+            <h1 className="text-4xl font-black mb-4 text-fg font-display">
               WELCOME BACK!
             </h1>
-            <p className="text-2xl text-white font-bold mb-2">{existingProfile.displayName}</p>
+            <p className="text-2xl text-fg font-bold mb-2">{existingProfile.displayName}</p>
             {existingProfile.artistName && (
-              <p className="text-white/70 text-lg italic mb-2">
+              <p className="text-fg-2 text-lg italic mb-2">
                 aka "{existingProfile.artistName}"
               </p>
             )}
             {existingProfile.musicStyle && (
-              <p className="text-white/60 text-base">
+              <p className="text-fg-muted text-base">
                 Music Style: {existingProfile.musicStyle}
               </p>
             )}
           </div>
 
           <div className="space-y-3">
-            <Button
-              size="lg"
-              className="w-full text-xl py-6 bg-red-500 hover:bg-red-600 text-white font-black border-4 border-white"
+            <button
+              className="hr-btn hr-btn--primary w-full text-xl py-6 font-black"
               onClick={handleContinueWithExisting}
             >
               Continue with This Profile
-            </Button>
+            </button>
 
             <Button
               size="sm"
-              className="w-full text-white/60 hover:text-white bg-transparent hover:bg-white/10"
+              className="w-full text-fg-muted hover:text-fg bg-transparent hover-elevate"
               onClick={handleDeleteProfile}
             >
               Delete Profile & Create New
@@ -407,11 +405,11 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
         />
       </div>
 
-      <Card className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30">
+      <Card className="hr-card w-full max-w-md p-10 shadow-glow relative z-30">
 
         <div className="space-y-6">
           <div>
-            <Label htmlFor="display-name" className="text-lg mb-2 block text-white font-bold">
+            <Label htmlFor="display-name" className="text-lg mb-2 block text-fg font-bold">
               Your Name
             </Label>
             <Input
@@ -419,7 +417,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder="Enter your name"
-              className="text-lg bg-white text-black border-2 border-white h-12"
+              className="text-lg bg-bg-surface text-fg border border-fg/20 h-12"
               data-testid="input-display-name"
               maxLength={20}
             />
@@ -427,7 +425,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
 
           {/* Photo Upload Section */}
           <div>
-            <Label className="text-lg mb-3 block text-white font-bold">
+            <Label className="text-lg mb-3 block text-fg font-bold">
               Upload Photo (Optional)
             </Label>
             <input
@@ -441,11 +439,11 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
               <Button
                 type="button"
                 variant="outline"
-                className="w-full h-32 border-2 border-dashed border-white bg-white/10 hover:bg-white/20 text-white"
+                className="w-full h-32 border-2 border-dashed border-fg/20 bg-bg-surface hover-elevate text-fg"
                 onClick={() => fileInputRef.current?.click()}
               >
                 <div className="text-center">
-                  <Upload className="w-8 h-8 mx-auto mb-2 text-white" />
+                  <Upload className="w-8 h-8 mx-auto mb-2 text-fg" />
                   <p className="text-sm font-bold">Click to upload photo</p>
                 </div>
               </Button>
@@ -454,12 +452,12 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
                 <img
                   src={uploadedPhoto}
                   alt="Uploaded"
-                  className="w-full h-48 object-cover rounded-2xl border-4 border-white"
+                  className="w-full h-48 object-cover rounded-hrmd border-2 border-accent shadow-hr"
                 />
                 <Button
                   type="button"
                   size="sm"
-                  className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white border-2 border-white font-bold"
+                  className="absolute top-2 right-2 bg-accent hover-elevate text-bg border border-fg/20 font-bold"
                   onClick={() => {
                     setUploadedPhoto(null);
                     setAiGeneratedProfile(null);
@@ -474,9 +472,9 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
 
           {/* AI Generation Button */}
           {showAIOption && !aiGeneratedProfile && (
-            <Button
+            <button
               type="button"
-              className="w-full text-xl py-6 bg-red-500 hover:bg-red-600 text-white font-black border-4 border-white"
+              className="hr-btn hr-btn--primary w-full text-xl py-6 font-black"
               onClick={handleGenerateAIProfile}
               disabled={isGeneratingAI || !displayName.trim()}
             >
@@ -491,29 +489,29 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
                   Create Profile
                 </>
               )}
-            </Button>
+            </button>
           )}
 
           {/* AI Generated Profile Display */}
           {aiGeneratedProfile && (
-            <Card className="p-6 bg-white/10 border-2 border-white">
+            <Card className="p-6 bg-bg-surface border border-fg/20 shadow-hr">
               <div className="flex items-center gap-4 mb-4">
                 <img
                   src={aiGeneratedProfile.profileImage}
                   alt="AI-generated avatar"
-                  className="w-24 h-24 rounded-full object-cover border-4 border-white"
+                  className="w-24 h-24 rounded-full object-cover border-2 border-accent shadow-hr"
                 />
                 <div className="flex-1">
-                  <p className="text-sm text-white/70 font-bold">Artist Name</p>
-                  <p className="text-2xl font-black text-white">{aiGeneratedProfile.artistName}</p>
-                  <p className="text-sm text-white/70 font-bold mt-2">Music Style</p>
-                  <p className="text-lg text-white">{aiGeneratedProfile.musicStyle}</p>
+                  <p className="text-sm text-fg-2 font-bold">Artist Name</p>
+                  <p className="text-2xl font-black text-fg">{aiGeneratedProfile.artistName}</p>
+                  <p className="text-sm text-fg-2 font-bold mt-2">Music Style</p>
+                  <p className="text-lg text-fg">{aiGeneratedProfile.musicStyle}</p>
                 </div>
               </div>
               <Button
                 type="button"
                 size="sm"
-                className="w-full bg-white/20 hover:bg-white/30 text-white border-2 border-white font-bold"
+                className="w-full bg-bg-surface hover-elevate text-fg border border-fg/20 font-bold"
                 onClick={handleRegenerateAI}
                 disabled={isGeneratingAI}
               >
@@ -526,9 +524,8 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
           <div className="pt-4 space-y-3">
             {/* Only show Save button after AI profile is generated */}
             {aiGeneratedProfile && (
-              <Button
-                size="lg"
-                className="w-full text-xl py-6 bg-red-500 hover:bg-red-600 text-white font-black border-4 border-white"
+              <button
+                className="hr-btn hr-btn--primary w-full text-xl py-6 font-black"
                 onClick={handleCreateProfile}
                 disabled={isSaving}
                 data-testid="button-create-profile"
@@ -541,12 +538,12 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
                 ) : (
                   'Save'
                 )}
-              </Button>
+              </button>
             )}
 
             <Button
               size="lg"
-              className="w-full text-lg py-4 bg-white/20 hover:bg-white/30 text-white font-bold border-2 border-white"
+              className="w-full text-lg py-4 bg-bg-surface hover-elevate text-fg font-bold border border-fg/20"
               onClick={handleContinueAsGuest}
               disabled={isSaving}
               data-testid="button-continue-guest"
