@@ -2,15 +2,19 @@ import { Song, Player, GameState, RoundResult } from '../shared/types';
 
 export class Game {
   private state: GameState;
+  private static readonly MASTER_GRACE_PERIOD_MS = 10 * 60 * 1000; // 10 minutes
 
   constructor(masterSocketId: string) {
     this.state = {
       id: this.generateGameId(),
       masterSocketId,
+      masterPersistentId: this.generatePersistentId(),
       players: [],
       currentSong: null,
       songs: [],
       phase: 'setup',
+      lifecycleState: 'active',
+      lastMasterActivity: Date.now(),
       musicPreferences: '',
       searchQuery: '',
       roundNumber: 0,
@@ -245,5 +249,54 @@ export class Game {
 
   getPlayers(): Player[] {
     return [...this.state.players];
+  }
+
+  getMasterPersistentId(): string {
+    return this.state.masterPersistentId;
+  }
+
+  updateMasterActivity(): void {
+    this.state.lastMasterActivity = Date.now();
+    if (this.state.lifecycleState === 'waiting_for_master') {
+      this.state.lifecycleState = 'active';
+    }
+  }
+
+  markMasterDisconnected(): void {
+    if (this.state.lifecycleState === 'active') {
+      this.state.lifecycleState = 'waiting_for_master';
+    }
+  }
+
+  reconnectMaster(newSocketId: string): boolean {
+    if (this.state.lifecycleState === 'abandoned' || this.state.lifecycleState === 'finished') {
+      return false;
+    }
+
+    this.state.masterSocketId = newSocketId;
+    this.state.lifecycleState = 'active';
+    this.state.lastMasterActivity = Date.now();
+    return true;
+  }
+
+  isExpired(): boolean {
+    if (this.state.lifecycleState !== 'waiting_for_master') {
+      return false;
+    }
+
+    const elapsed = Date.now() - this.state.lastMasterActivity;
+    return elapsed > Game.MASTER_GRACE_PERIOD_MS;
+  }
+
+  markAsAbandoned(): void {
+    this.state.lifecycleState = 'abandoned';
+  }
+
+  isWaitingForMaster(): boolean {
+    return this.state.lifecycleState === 'waiting_for_master';
+  }
+
+  canAcceptPlayers(): boolean {
+    return this.state.lifecycleState !== 'abandoned' && this.state.lifecycleState !== 'finished';
   }
 }

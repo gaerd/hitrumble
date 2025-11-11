@@ -90,7 +90,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
       }
     });
 
-    socket.on('reconnectPlayer', ({ gameCode, persistentId }: { gameCode: string; persistentId: string }) => {
+    socket.on('reconnectPlayer', ({ gameCode, persistentId, profileId }: { gameCode: string; persistentId: string; profileId?: string }) => {
       try {
         const game = gameManager.getGame(gameCode);
         if (!game) {
@@ -119,6 +119,30 @@ export function setupSocketHandlers(io: SocketIOServer) {
       } catch (error) {
         console.error('Error reconnecting player:', error);
         socket.emit('error', 'Could not reconnect to game');
+      }
+    });
+
+    socket.on('reconnectMaster', ({ gameCode, masterPersistentId }: { gameCode: string; masterPersistentId: string }) => {
+      try {
+        const game = gameManager.reconnectMaster(gameCode, masterPersistentId, socket.id);
+        if (!game) {
+          socket.emit('error', 'Could not reconnect as master - game not found or invalid credentials');
+          return;
+        }
+
+        socket.join(gameCode);
+
+        socket.emit('masterReconnected', {
+          gameId: game.getId(),
+          gameState: game.getState()
+        });
+
+        io.to(gameCode).emit('gameStateUpdate', game.getState());
+
+        console.log(`Master reconnected to game ${gameCode}`);
+      } catch (error) {
+        console.error('Error reconnecting master:', error);
+        socket.emit('error', 'Could not reconnect as master');
       }
     });
 
