@@ -107,6 +107,44 @@ class SocketService {
     localStorage.removeItem('hitster_session');
   }
 
+  saveMasterSession(gameCode: string, masterPersistentId: string) {
+    const session = {
+      gameCode,
+      masterPersistentId,
+      timestamp: Date.now()
+    };
+    localStorage.setItem('hitster_master_session', JSON.stringify(session));
+  }
+
+  getMasterSession(): { gameCode: string; masterPersistentId: string; timestamp: number } | null {
+    const session = localStorage.getItem('hitster_master_session');
+    if (!session) return null;
+
+    try {
+      const parsed = JSON.parse(session);
+      // Session expires after 15 minutes (longer than grace period)
+      if (Date.now() - parsed.timestamp > 15 * 60 * 1000) {
+        this.clearMasterSession();
+        return null;
+      }
+      return parsed;
+    } catch {
+      return null;
+    }
+  }
+
+  clearMasterSession() {
+    localStorage.removeItem('hitster_master_session');
+  }
+
+  reconnectMaster(gameCode: string, masterPersistentId: string, callback?: (data: { gameId: string; gameState: GameState }) => void) {
+    if (!this.socket) return;
+    this.socket.emit('reconnectMaster', { gameCode, masterPersistentId });
+    if (callback) {
+      this.socket.once('masterReconnected', callback);
+    }
+  }
+
   aiChat(message: string, callback: (response: AIResponse) => void) {
     if (!this.socket) return;
     this.socket.emit('aiChat', message);

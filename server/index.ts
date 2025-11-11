@@ -93,6 +93,19 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
+  // Setup cleanup job for expired games
+  const { gameManager } = await import('./gameManager');
+  const CLEANUP_INTERVAL_MS = 2 * 60 * 1000; // Run cleanup every 2 minutes
+  
+  setInterval(() => {
+    const cleanedCount = gameManager.cleanupExpiredGames();
+    if (cleanedCount > 0) {
+      log(`Cleaned up ${cleanedCount} expired game(s)`);
+    }
+  }, CLEANUP_INTERVAL_MS);
+
+  log('Game cleanup job started (runs every 2 minutes)');
+
   // ALWAYS serve the app on the port specified in the environment variable PORT
   // Other ports are firewalled. Default to 5000 if not specified.
   // this serves both the API and the client.

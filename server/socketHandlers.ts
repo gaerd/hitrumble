@@ -434,23 +434,27 @@ export function setupSocketHandlers(io: SocketIOServer) {
 
     socket.on('disconnect', () => {
       try {
-        const game = gameManager.getGameBySocket(socket.id);
-        if (game) {
-          const player = game.markPlayerDisconnected(socket.id);
+        const result = gameManager.removePlayer(socket.id);
+        
+        if (result) {
+          const { game, wasPlayer, wasMaster } = result;
 
-          if (player) {
-            // Player disconnected - notify others but keep player in game
-            io.to(game.getId()).emit('playerDisconnected', {
-              playerId: socket.id,
-              playerName: player.name
-            });
+          if (wasPlayer) {
+            // Regular player disconnected - mark as disconnected but keep in game
+            const player = game.markPlayerDisconnected(socket.id);
+            if (player) {
+              io.to(game.getId()).emit('playerDisconnected', {
+                playerId: socket.id,
+                playerName: player.name
+              });
+              io.to(game.getId()).emit('gameStateUpdate', game.getState());
+              console.log(`Player ${player.name} disconnected from game ${game.getId()}, can reconnect`);
+            }
+          } else if (wasMaster) {
+            // Master disconnected - enter grace period
             io.to(game.getId()).emit('gameStateUpdate', game.getState());
-            console.log(`Player ${player.name} disconnected from game ${game.getId()}, can reconnect`);
-          } else if (game.getMasterSocketId() === socket.id) {
-            // Master disconnected - end game
-            io.to(game.getId()).emit('error', 'Game master has disconnected');
-            gameManager.removePlayer(socket.id);
-            console.log(`Game master ${socket.id} disconnected, game ${game.getId()} ended`);
+            io.to(game.getId()).emit('error', 'Game master disconnected - waiting for reconnection...');
+            console.log(`Game master disconnected from game ${game.getId()}, entering grace period (10 min)`);
           }
         }
       } catch (error) {

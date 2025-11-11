@@ -28,10 +28,13 @@ export interface Player {
 export interface GameState {
   id: string;
   masterSocketId: string;
+  masterPersistentId: string;
   players: Player[];
   currentSong: Song | null;
   songs: Song[];
   phase: 'setup' | 'lobby' | 'playing' | 'reveal' | 'finished';
+  lifecycleState: 'active' | 'waiting_for_master' | 'finished' | 'abandoned';
+  lastMasterActivity: number;
   musicPreferences: string;
   searchQuery: string;
   roundNumber: number;

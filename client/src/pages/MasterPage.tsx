@@ -13,6 +13,8 @@ export default function MasterPage() {
   const [preferences, setPreferences] = useState('');
   const [spotifyConnected, setSpotifyConnected] = useState(false);
   const [isDJPlaying, setIsDJPlaying] = useState(false);
+  const [showReconnectPrompt, setShowReconnectPrompt] = useState(false);
+  const [savedMasterSession, setSavedMasterSession] = useState<{ gameCode: string; masterPersistentId: string } | null>(null);
   const { toast } = useToast();
   const gameStateRef = useRef<GameState | null>(null);
 
@@ -27,10 +29,20 @@ export default function MasterPage() {
       .then(data => setSpotifyConnected(data.connected))
       .catch(console.error);
 
+    // Check for saved master session
+    const session = socketService.getMasterSession();
+    if (session) {
+      setSavedMasterSession(session);
+      setShowReconnectPrompt(true);
+      return;
+    }
+
     const socket = socketService.connect();
 
     socketService.createGame((data) => {
       setGameState(data.gameState);
+      // Save master session for reconnection
+      socketService.saveMasterSession(data.gameState.id, data.gameState.masterPersistentId);
     });
 
     socketService.onGameStateUpdate((newState) => {
@@ -138,6 +150,176 @@ export default function MasterPage() {
       socketService.nextRound();
     }
   };
+
+  const handleReconnect = () => {
+    if (!savedMasterSession) return;
+
+    const socket = socketService.connect();
+    
+    socketService.reconnectMaster(
+      savedMasterSession.gameCode,
+      savedMasterSession.masterPersistentId,
+      (data) => {
+        setGameState(data.gameState);
+        setShowReconnectPrompt(false);
+        
+        // Refresh master session after successful reconnection
+        socketService.saveMasterSession(data.gameState.id, data.gameState.masterPersistentId);
+        
+        toast({
+          title: 'Återansluten!',
+          description: 'Du är tillbaka i spelet',
+          duration: 3000
+        });
+
+        // Setup socket listeners for reconnected session
+        setupSocketListeners();
+      }
+    );
+
+    socketService.onError((message) => {
+      toast({
+        title: 'Kunde inte återansluta',
+        description: message,
+        variant: 'destructive',
+        duration: 5000
+      });
+      handleStartNewGame();
+    });
+  };
+
+  const handleStartNewGame = () => {
+    socketService.clearMasterSession();
+    setShowReconnectPrompt(false);
+    setSavedMasterSession(null);
+    window.location.reload();
+  };
+
+  const setupSocketListeners = () => {
+    socketService.onGameStateUpdate((newState) => {
+      setGameState(newState);
+      // Refresh master session timestamp to keep it alive during gameplay
+      if (newState.masterPersistentId) {
+        socketService.saveMasterSession(newState.id, newState.masterPersistentId);
+      }
+    });
+
+    socketService.onGameStarted((newState) => {
+      setGameState(newState);
+    });
+
+    socketService.onResultsRevealed((data) => {
+      setResults(data.results);
+      setGameState(data.gameState);
+    });
+
+    socketService.onPlayerDisconnected((data) => {
+      toast({
+        title: 'Spelare frånkopplad',
+        description: `${data.playerName} tappade anslutningen och kan återansluta`,
+        duration: 5000
+      });
+    });
+
+    socketService.onDJCommentary((base64Audio) => {
+      console.log('DJ commentary received, playing...');
+      setIsDJPlaying(true);
+      
+      const audioBlob = new Blob(
+        [Uint8Array.from(atob(base64Audio), c => c.charCodeAt(0))],
+        { type: 'audio/mpeg' }
+      );
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+      
+      audio.onended = () => {
+        console.log('DJ commentary finished, checking if we should continue...');
+        setIsDJPlaying(false);
+        URL.revokeObjectURL(audioUrl);
+        
+        setTimeout(() => {
+          const currentState = gameStateRef.current;
+          if (currentState && currentState.phase !== 'finished') {
+            console.log('Auto-starting next round...');
+            socketService.nextRound();
+          } else {
+            console.log('Game finished - not starting next round');
+          }
+        }, 1500);
+      };
+      
+      audio.onerror = (e) => {
+        console.error('DJ audio error:', e);
+        setIsDJPlaying(false);
+        URL.revokeObjectURL(audioUrl);
+      };
+      
+      audio.play().catch(err => {
+        console.error('Failed to play DJ audio:', err);
+        setIsDJPlaying(false);
+        URL.revokeObjectURL(audioUrl);
+      });
+    });
+
+    socketService.onRoundStarted((newState) => {
+      setGameState(newState);
+      setResults([]);
+    });
+
+    socketService.onError((message) => {
+      toast({
+        title: 'Fel',
+        description: message,
+        variant: 'destructive'
+      });
+    });
+  };
+
+  // Show reconnect prompt
+  if (showReconnectPrompt && savedMasterSession) {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
+        style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+      >
+        <div className="absolute inset-0 bg-black/40 z-0"></div>
+
+        <div className="absolute top-12 left-12 z-20">
+          <img src="/beatbrawl.png" alt="BeatBrawl Logo" className="h-48 w-auto" />
+        </div>
+
+        <div className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30 rounded-md">
+          <div className="text-center mb-8">
+            <div className="text-6xl mb-4">🎮</div>
+            <h1 className="text-4xl font-black mb-3 text-white" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
+              VÄLKOMMEN TILLBAKA!
+            </h1>
+            <p className="text-white/70 text-lg">Vi hittade ditt senaste spel</p>
+          </div>
+          <div className="space-y-4">
+            <div className="bg-white/10 rounded-md p-6 border-2 border-white/20">
+              <p className="text-sm text-white/60 mb-1 font-bold">Spelkod</p>
+              <p className="text-2xl font-mono font-black text-white">{savedMasterSession.gameCode}</p>
+            </div>
+            <button
+              className="w-full text-xl py-6 bg-red-500 hover:bg-red-600 text-white font-black border-4 border-white rounded-md"
+              onClick={handleReconnect}
+              data-testid="button-reconnect-master"
+            >
+              Återanslut till spel
+            </button>
+            <button
+              className="w-full text-lg py-4 bg-white/20 hover:bg-white/30 text-white font-bold border-2 border-white rounded-md"
+              onClick={handleStartNewGame}
+              data-testid="button-start-new-master"
+            >
+              Starta nytt spel
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!gameState) {
     return (
