@@ -66,10 +66,8 @@ export default function WinnerScreen({ winner, allPlayers, onNewGame }: WinnerSc
   /* HITRUMBLE START: Winner screen with neon theme */
   return (
     <div
-      className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
-      style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+      className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-bg"
     >
-      <div className="absolute inset-0" style={{ backgroundColor: 'hsl(var(--hr-scrim) / 0.6)' }}></div>
       <WinnerConfetti trigger={true} />
 
       <div className="absolute top-8 left-8 z-50">

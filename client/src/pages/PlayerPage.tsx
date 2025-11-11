@@ -227,15 +227,9 @@ export default function PlayerPage() {
   if (phase === "reconnect") {
     return (
       <div
-        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)",
-        }}
+        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-bg"
       >
-        <div className="absolute inset-0 bg-black/40 z-0"></div>
-
-        {/* BeatBrawl Logo - Upper Left */}
+        {/* HitRumble Logo - Upper Left */}
         <div className="absolute top-8 left-8 z-20">
           <img src="/logo.png" alt="HitRumble Logo" className="h-24 w-auto" />
         </div>
@@ -287,15 +281,9 @@ export default function PlayerPage() {
   if (phase === "join") {
     return (
       <div
-        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)",
-        }}
+        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-bg"
       >
-        <div className="absolute inset-0 bg-black/40 z-0"></div>
-
-        {/* BeatBrawl Logo - Upper Left */}
+        {/* HitRumble Logo - Upper Left */}
         <div className="absolute top-8 left-8 z-20">
           <img src="/logo.png" alt="HitRumble Logo" className="h-24 w-auto" />
         </div>
@@ -359,19 +347,13 @@ export default function PlayerPage() {
   if (phase === "lobby" || !myPlayer) {
     return (
       <div
-        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)",
-        }}
+        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-bg"
       >
-        <div className="absolute inset-0 bg-black/40 z-0"></div>
-
-        {/* BeatBrawl Logo - Upper Left */}
+        {/* HitRumble Logo - Upper Left */}
         <div className="absolute top-8 left-8 z-20">
           <img
-            src="/beatbrawl.png"
-            alt="BeatBrawl Logo"
+            src="/logo.png"
+            alt="HitRumble Logo"
             className="h-24 w-auto"
           />
         </div>
@@ -415,19 +397,13 @@ export default function PlayerPage() {
 
   return (
     <div
-      className="min-h-screen pb-80 relative overflow-hidden bg-cover bg-center"
-      style={{
-        backgroundImage:
-          "url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)",
-      }}
+      className="min-h-screen pb-80 relative overflow-hidden bg-bg"
     >
-      <div className="absolute inset-0 bg-black/40 z-0"></div>
-
-      {/* BeatBrawl Logo - Upper Left */}
+      {/* HitRumble Logo - Upper Left */}
       <div className="absolute top-4 left-4 z-20">
         <img
-          src="/beatbrawl.png"
-          alt="BeatBrawl Logo"
+          src="/logo.png"
+          alt="HitRumble Logo"
           className="h-16 w-auto"
         />
       </div>

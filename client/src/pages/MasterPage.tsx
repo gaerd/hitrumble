@@ -279,13 +279,10 @@ export default function MasterPage() {
   if (showReconnectPrompt && savedMasterSession) {
     return (
       <div
-        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
-        style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-bg"
       >
-        <div className="absolute inset-0 bg-black/40 z-0"></div>
-
         <div className="absolute top-12 left-12 z-20">
-          <img src="/beatbrawl.png" alt="BeatBrawl Logo" className="h-48 w-auto" />
+          <img src="/logo.png" alt="HitRumble Logo" className="h-48 w-auto" />
         </div>
 
         <div className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30 rounded-md">
@@ -324,14 +321,12 @@ export default function MasterPage() {
   if (!gameState) {
     return (
       <div
-        className="min-h-screen flex items-center justify-center relative overflow-hidden bg-cover bg-center"
-        style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+        className="min-h-screen flex items-center justify-center relative overflow-hidden bg-bg"
       >
-        <div className="absolute inset-0 bg-black/40"></div>
         <div className="absolute top-12 left-12 z-20">
-          <img src="/beatbrawl.png" alt="BeatBrawl Logo" className="h-48 w-auto" />
+          <img src="/logo.png" alt="HitRumble Logo" className="h-48 w-auto" />
         </div>
-        <p className="text-3xl text-white font-black relative z-10">Creating game...</p>
+        <p className="text-3xl text-fg font-black relative z-10">Creating game...</p>
       </div>
     );
   }
@@ -367,16 +362,13 @@ export default function MasterPage() {
 
   return (
     <div
-      className="min-h-screen p-8 relative overflow-hidden bg-cover bg-center"
-      style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+      className="min-h-screen p-8 relative overflow-hidden bg-bg"
     >
-      <div className="absolute inset-0 bg-black/40 z-0"></div>
-
-      {/* BeatBrawl Logo - Upper Left */}
+      {/* HitRumble Logo - Upper Left */}
       <div className="absolute top-8 left-8 z-50">
         <img
-          src="/beatbrawl.png"
-          alt="BeatBrawl Logo"
+          src="/logo.png"
+          alt="HitRumble Logo"
           className="h-24 w-auto"
         />
       </div>

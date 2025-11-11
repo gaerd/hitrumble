@@ -116,10 +116,8 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
   if (isConfirming) {
     return (
       <div
-        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
-        style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-bg"
       >
-        <div className="absolute inset-0" style={{ backgroundColor: 'hsl(var(--hr-scrim) / 0.6)' }}></div>
         <div className="absolute top-12 left-12 z-20">
           <img src="/logo.png" alt="HitRumble Logo" className="h-48 w-auto" />
         </div>
@@ -140,11 +138,8 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
   /* HITRUMBLE START: Chat interface with neon theme */
   return (
     <div
-      className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
-      style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
+      className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-bg"
     >
-      <div className="absolute inset-0" style={{ backgroundColor: 'hsl(var(--hr-scrim) / 0.6)' }}></div>
-
       <div className="absolute top-12 left-12 z-20">
         <img
           src="/logo.png"
