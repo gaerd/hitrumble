@@ -121,7 +121,7 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
       >
         <div className="absolute inset-0" style={{ backgroundColor: 'hsl(var(--hr-scrim) / 0.6)' }}></div>
         <div className="absolute top-12 left-12 z-20">
-          <img src="/beatbrawl.png" alt="BeatBrawl Logo" className="h-48 w-auto" />
+          <img src="/logo.png" alt="HitRumble Logo" className="h-48 w-auto" />
         </div>
 
         <div className="relative z-30 text-center">
@@ -147,8 +147,8 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
 
       <div className="absolute top-12 left-12 z-20">
         <img
-          src="/beatbrawl.png"
-          alt="BeatBrawl Logo"
+          src="/logo.png"
+          alt="HitRumble Logo"
           className="h-48 w-auto"
         />
       </div>

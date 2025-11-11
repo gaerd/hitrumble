@@ -46,11 +46,11 @@ export default function Home({ onSelectMaster, onSelectPlayer }: HomeProps) {
       <div className="absolute inset-0" style={{ backgroundColor: 'hsl(var(--hr-scrim) / 0.6)' }}></div>
       {/* HITRUMBLE END */}
 
-      {/* BeatBrawl Logo - Upper Left - Extra Large */}
+      {/* HitRumble Logo - Upper Left - Extra Large */}
       <div className="absolute top-12 left-12 z-20">
         <img
-          src="/beatbrawl.png"
-          alt="BeatBrawl Logo"
+          src="/logo.png"
+          alt="HitRumble Logo"
           className="h-48 w-auto"
           data-testid="img-logo"
         />

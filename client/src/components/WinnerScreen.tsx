@@ -74,8 +74,8 @@ export default function WinnerScreen({ winner, allPlayers, onNewGame }: WinnerSc
 
       <div className="absolute top-8 left-8 z-50">
         <img
-          src="/beatbrawl.png"
-          alt="BeatBrawl Logo"
+          src="/logo.png"
+          alt="HitRumble Logo"
           className="h-24 w-auto"
         />
       </div>
