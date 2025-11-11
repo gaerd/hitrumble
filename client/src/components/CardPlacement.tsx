@@ -15,18 +15,19 @@ export default function CardPlacement({ song, selectedPosition, onConfirm }: Car
   return (
     <div className="fixed bottom-0 left-0 right-0 p-6">
       <div className="max-w-md mx-auto">
-        <button
-          className={`hr-btn w-full text-xl py-8 font-black shadow-glow transition-all ${
+        <Button
+          size="lg"
+          className={`w-full text-xl py-8 font-black border-4 border-white shadow-2xl transition-all ${
             isSelected
-              ? 'hr-btn--primary'
-              : 'bg-bg-surface/50 text-fg-muted cursor-not-allowed opacity-50'
+              ? 'bg-red-500 hover:bg-red-600 text-white'
+              : 'bg-gray-500 text-gray-300 cursor-not-allowed'
           }`}
           disabled={!isSelected}
           onClick={onConfirm}
           data-testid="button-confirm-placement"
         >
           {isSelected ? 'Confirm Placement' : 'Choose a Position'}
-        </button>
+        </Button>
       </div>
     </div>
   );

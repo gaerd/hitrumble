@@ -13,36 +13,36 @@ export default function ScoreDisplay({ score, targetScore = 10, profileImage, ar
   const progress = (score / targetScore) * 100;
 
   return (
-    <Card className="hr-card p-6 shadow-glow">
+    <Card className="p-6 bg-black border-4 border-white shadow-2xl">
       <div className="flex items-center gap-4 mb-6">
         {profileImage ? (
           <img
             src={profileImage}
             alt="Profile"
-            className="w-20 h-20 rounded-full border-2 border-accent object-cover shadow-hr"
+            className="w-20 h-20 rounded-full border-4 border-white object-cover"
           />
         ) : (
           <div
-            className="w-20 h-20 rounded-full border-2 border-accent flex items-center justify-center text-3xl font-black text-white shadow-hr"
-            style={{ backgroundColor: avatarColor || 'hsl(var(--hr-accent))' }}
+            className="w-20 h-20 rounded-full border-4 border-white flex items-center justify-center text-3xl font-black"
+            style={{ backgroundColor: avatarColor || '#ef4444' }}
           >
             {artistName?.[0] || '?'}
           </div>
         )}
         <div className="flex-1">
-          <h3 className="text-2xl font-black text-fg font-display">
+          <h3 className="text-2xl font-black text-white" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
             {artistName || 'Spelare'}
           </h3>
-          <p className="text-sm text-fg-2 font-bold">Artist</p>
+          <p className="text-sm text-white/60 font-bold">Artist</p>
         </div>
       </div>
 
       <div>
         <div className="flex items-baseline justify-center gap-2 mb-2">
-          <span className="text-6xl font-mono font-black text-fg" data-testid="text-score">{score}</span>
-          <span className="text-3xl text-fg-muted font-mono">/ {targetScore}</span>
+          <span className="text-6xl font-mono font-black text-white" data-testid="text-score">{score}</span>
+          <span className="text-3xl text-white/60 font-mono">/ {targetScore}</span>
         </div>
-        <Progress value={progress} className="h-3 bg-bg-surface" />
+        <Progress value={progress} className="h-3 bg-white/20" />
       </div>
     </Card>
   );

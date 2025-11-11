@@ -279,34 +279,37 @@ export default function MasterPage() {
   if (showReconnectPrompt && savedMasterSession) {
     return (
       <div
-        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-bg"
+        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
+        style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
       >
+        <div className="absolute inset-0 bg-black/40 z-0"></div>
+
         <div className="absolute top-12 left-12 z-20">
-          <img src="/logo.png" alt="HitRumble Logo" className="h-48 w-auto" />
+          <img src="/beatbrawl.png" alt="BeatBrawl Logo" className="h-48 w-auto" />
         </div>
 
-        <div className="w-full max-w-md p-10 hr-card shadow-glow relative z-30">
+        <div className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30 rounded-md">
           <div className="text-center mb-8">
             <div className="text-6xl mb-4">🎮</div>
-            <h1 className="text-4xl font-black mb-3 text-fg font-display">
+            <h1 className="text-4xl font-black mb-3 text-white" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
               VÄLKOMMEN TILLBAKA!
             </h1>
-            <p className="text-fg-2 text-lg">Vi hittade ditt senaste spel</p>
+            <p className="text-white/70 text-lg">Vi hittade ditt senaste spel</p>
           </div>
           <div className="space-y-4">
-            <div className="bg-bg-surface rounded-hrmd p-6 border border-fg/10">
-              <p className="text-sm text-fg-muted mb-1 font-bold">Spelkod</p>
-              <p className="text-2xl font-mono font-black text-fg">{savedMasterSession.gameCode}</p>
+            <div className="bg-white/10 rounded-md p-6 border-2 border-white/20">
+              <p className="text-sm text-white/60 mb-1 font-bold">Spelkod</p>
+              <p className="text-2xl font-mono font-black text-white">{savedMasterSession.gameCode}</p>
             </div>
             <button
-              className="hr-btn hr-btn--primary w-full text-xl py-6 font-black"
+              className="w-full text-xl py-6 bg-red-500 hover:bg-red-600 text-white font-black border-4 border-white rounded-md"
               onClick={handleReconnect}
               data-testid="button-reconnect-master"
             >
               Återanslut till spel
             </button>
             <button
-              className="w-full text-lg py-4 bg-bg-surface hover-elevate text-fg font-bold border border-fg/20 rounded-hrmd"
+              className="w-full text-lg py-4 bg-white/20 hover:bg-white/30 text-white font-bold border-2 border-white rounded-md"
               onClick={handleStartNewGame}
               data-testid="button-start-new-master"
             >
@@ -321,12 +324,14 @@ export default function MasterPage() {
   if (!gameState) {
     return (
       <div
-        className="min-h-screen flex items-center justify-center relative overflow-hidden bg-bg"
+        className="min-h-screen flex items-center justify-center relative overflow-hidden bg-cover bg-center"
+        style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
       >
+        <div className="absolute inset-0 bg-black/40"></div>
         <div className="absolute top-12 left-12 z-20">
-          <img src="/logo.png" alt="HitRumble Logo" className="h-48 w-auto" />
+          <img src="/beatbrawl.png" alt="BeatBrawl Logo" className="h-48 w-auto" />
         </div>
-        <p className="text-3xl text-fg font-black relative z-10">Creating game...</p>
+        <p className="text-3xl text-white font-black relative z-10">Creating game...</p>
       </div>
     );
   }
@@ -362,20 +367,23 @@ export default function MasterPage() {
 
   return (
     <div
-      className="min-h-screen p-8 relative overflow-hidden bg-bg"
+      className="min-h-screen p-8 relative overflow-hidden bg-cover bg-center"
+      style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
     >
-      {/* HitRumble Logo - Upper Left */}
+      <div className="absolute inset-0 bg-black/40 z-0"></div>
+
+      {/* BeatBrawl Logo - Upper Left */}
       <div className="absolute top-8 left-8 z-50">
         <img
-          src="/logo.png"
-          alt="HitRumble Logo"
+          src="/beatbrawl.png"
+          alt="BeatBrawl Logo"
           className="h-24 w-auto"
         />
       </div>
 
       <div className="max-w-7xl mx-auto relative z-30">
         <div className="mb-6 text-center">
-          <p className="text-fg text-xl">
+          <p className="text-white text-xl">
             Game Code: <span className="font-mono font-black text-2xl">{gameState.id}</span>
           </p>
         </div>

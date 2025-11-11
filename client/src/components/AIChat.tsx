@@ -112,43 +112,50 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
     }
   };
 
-  // HITRUMBLE START: Loading overlay with gradient theme
+  // Loading overlay when confirming
   if (isConfirming) {
     return (
       <div
-        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-bg"
+        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
+        style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
       >
+        <div className="absolute inset-0 bg-black/40 z-0"></div>
         <div className="absolute top-12 left-12 z-20">
-          <img src="/logo.png" alt="HitRumble Logo" className="h-48 w-auto" />
+          <img src="/beatbrawl.png" alt="BeatBrawl Logo" className="h-48 w-auto" />
         </div>
 
+        {/* Large animated loading bubble */}
         <div className="relative z-30 text-center">
-          <div className="hr-card p-12 shadow-glow mb-8 max-w-2xl bg-hr-cta">
-            <p className="text-4xl font-black text-white uppercase tracking-wider font-display">
+          <div className="bg-yellow-400 border-4 border-white rounded-3xl p-12 shadow-2xl mb-8 max-w-2xl">
+            <p className="text-4xl font-black text-black uppercase tracking-wider" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
               {loadingMessages[loadingMessageIndex]}
             </p>
           </div>
-          <Loader2 className="w-16 h-16 animate-spin text-accent mx-auto" />
+          <Loader2 className="w-16 h-16 animate-spin text-yellow-400 mx-auto" />
         </div>
       </div>
     );
   }
-  // HITRUMBLE END
 
-  /* HITRUMBLE START: Chat interface with neon theme */
   return (
     <div
-      className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-bg"
+      className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
+      style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
     >
+      <div className="absolute inset-0 bg-black/40 z-0"></div>
+
+      {/* BeatBrawl Logo - Upper Left */}
       <div className="absolute top-12 left-12 z-20">
         <img
-          src="/logo.png"
-          alt="HitRumble Logo"
+          src="/beatbrawl.png"
+          alt="BeatBrawl Logo"
           className="h-48 w-auto"
         />
       </div>
 
+      {/* Chat Container */}
       <div className="w-full max-w-4xl relative z-30 flex flex-col h-[80vh]">
+        {/* Messages Area */}
         <div className="flex-1 overflow-auto mb-6 space-y-4 px-4">
           {messages.map((msg, idx) => (
             <div
@@ -156,10 +163,10 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
               className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`max-w-[75%] p-5 rounded-hrlg shadow-hr border-2 ${
+                className={`max-w-[75%] p-5 rounded-lg shadow-2xl border-2 border-white ${
                   msg.role === 'user'
-                    ? 'bg-accent-highlight text-bg font-black border-accent-highlight'
-                    : 'bg-bg-surface/95 text-fg border-fg/20'
+                    ? 'bg-yellow-400 text-black'
+                    : 'bg-black/90 text-white'
                 }`}
                 data-testid={`message-${msg.role}-${idx}`}
               >
@@ -169,14 +176,15 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
           ))}
           {isThinking && (
             <div className="flex justify-start">
-              <div className="max-w-[75%] p-5 rounded-hrlg bg-bg-surface/95 border-2 border-fg/20 shadow-hr">
-                <Loader2 className="w-5 h-5 animate-spin text-accent" />
+              <div className="max-w-[75%] p-5 rounded-lg bg-black/90 border-2 border-white shadow-2xl">
+                <Loader2 className="w-5 h-5 animate-spin text-white" />
               </div>
             </div>
           )}
         </div>
 
-        <div className="bg-bg-surface/95 p-6 border-2 border-fg/20 shadow-glow rounded-hrlg">
+        {/* Input Area */}
+        <div className="bg-black/90 p-6 border-4 border-white shadow-2xl">
           <div className="flex gap-3 mb-4">
             <input
               type="text"
@@ -184,14 +192,14 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
               placeholder="e.g. '80s rock' or 'Swedish pop'"
-              className="flex-1 text-lg py-6 px-4 bg-bg-surface2 border-2 border-accent/30 font-medium rounded-hrmd text-fg placeholder:text-fg-muted focus:outline-none focus:border-accent"
+              className="flex-1 text-lg py-6 px-4 bg-white border-2 border-white font-medium rounded-lg"
               data-testid="input-music-preference"
             />
             <Button
               size="lg"
               onClick={handleSend}
               disabled={isThinking}
-              className="px-7 bg-accent hover:bg-accent/90 text-white font-black shadow-glow rounded-hrmd"
+              className="px-7 bg-yellow-400 hover:bg-yellow-300 text-black font-black shadow-xl"
               data-testid="button-send"
             >
               {isThinking ? (
@@ -202,11 +210,12 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
             </Button>
           </div>
           <button
-            className={`hr-btn hr-btn--primary w-full text-2xl py-7 px-12 font-black uppercase tracking-wider transition-all duration-200 ${
+            className={`w-full text-2xl py-7 px-12 bg-yellow-400 text-black font-black shadow-2xl uppercase tracking-wider transition-all duration-200 ${
               lastPreference && !isConfirming
-                ? 'cursor-pointer hover:scale-105'
+                ? 'cursor-pointer hover:scale-105 hover:shadow-[0_20px_50px_rgba(0,0,0,0.8)] hover:-translate-y-1'
                 : 'opacity-40 cursor-not-allowed'
             }`}
+            style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}
             onClick={() => {
               setIsConfirming(true);
               const dataToSend = generatedSongs.length > 0
@@ -234,5 +243,4 @@ export default function AIChat({ onPreferencesConfirmed }: AIChatProps) {
       </div>
     </div>
   );
-  /* HITRUMBLE END */
 }

@@ -26,13 +26,14 @@ interface ProfileSetupProps {
 const PROFILE_ID_KEY = 'hitster_profile_id';
 
 const PRESET_COLORS = [
-  'hsl(267 97% 61%)', // purple (--hr-accent-2)
-  'hsl(0 100% 65%)',   // coral (--hr-accent)
-  'hsl(148 69% 54%)',  // green (--hr-success)
-  'hsl(203 100% 65%)', // blue (--hr-info)
-  'hsl(38 100% 56%)',  // orange (--hr-warning)
-  'hsl(0 100% 67%)',   // red (--hr-danger)
-  'hsl(45 100% 65%)',  // yellow (--hr-highlight)
+  '#8B5CF6', // purple (default)
+  '#EC4899', // pink
+  '#10B981', // green
+  '#3B82F6', // blue
+  '#F59E0B', // orange
+  '#EF4444', // red
+  '#14B8A6', // teal
+  '#FBBF24', // yellow
 ];
 
 export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
@@ -307,20 +308,23 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
   if (isLoading) {
     return (
       <div
-        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-bg"
+        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
+        style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
       >
-        {/* HitRumble Logo - Upper Left */}
+        <div className="absolute inset-0 bg-black/40 z-0"></div>
+
+        {/* BeatBrawl Logo - Upper Left */}
         <div className="absolute top-8 left-8 z-50">
           <img
-            src="/logo.png"
-            alt="HitRumble Logo"
+            src="/beatbrawl.png"
+            alt="BeatBrawl Logo"
             className="h-24 w-auto"
           />
         </div>
 
-        <Card className="hr-card w-full max-w-md p-10 shadow-glow relative z-30 text-center">
-          <Loader2 className="w-16 h-16 animate-spin mx-auto mb-4 text-accent" />
-          <p className="text-xl text-fg font-bold">Loading your profile...</p>
+        <Card className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30 text-center">
+          <Loader2 className="w-16 h-16 animate-spin mx-auto mb-4 text-red-500" />
+          <p className="text-xl text-white font-bold">Loading your profile...</p>
         </Card>
       </div>
     );
@@ -330,20 +334,23 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
   if (existingProfile && !showRecreateOptions) {
     return (
       <div
-        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-bg"
+        className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
+        style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
       >
-        {/* HitRumble Logo - Upper Left */}
+        <div className="absolute inset-0 bg-black/40 z-0"></div>
+
+        {/* BeatBrawl Logo - Upper Left */}
         <div className="absolute top-8 left-8 z-50">
           <img
-            src="/logo.png"
-            alt="HitRumble Logo"
+            src="/beatbrawl.png"
+            alt="BeatBrawl Logo"
             className="h-24 w-auto"
           />
         </div>
 
-        <Card className="hr-card w-full max-w-md p-10 shadow-glow relative z-30">
+        <Card className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-32 h-32 rounded-full mb-6 border-2 border-accent shadow-hr"
+            <div className="inline-flex items-center justify-center w-32 h-32 rounded-full mb-6 border-4 border-white shadow-xl"
                  style={{ backgroundColor: existingProfile.avatarColor }}>
               {existingProfile.profileImage ? (
                 <img
@@ -352,36 +359,37 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
                   className="w-full h-full rounded-full object-cover"
                 />
               ) : (
-                <User className="w-16 h-16 text-fg" />
+                <User className="w-16 h-16 text-white" />
               )}
             </div>
-            <h1 className="text-4xl font-black mb-4 text-fg font-display">
+            <h1 className="text-4xl font-black mb-4 text-white" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
               WELCOME BACK!
             </h1>
-            <p className="text-2xl text-fg font-bold mb-2">{existingProfile.displayName}</p>
+            <p className="text-2xl text-white font-bold mb-2">{existingProfile.displayName}</p>
             {existingProfile.artistName && (
-              <p className="text-fg-2 text-lg italic mb-2">
+              <p className="text-white/70 text-lg italic mb-2">
                 aka "{existingProfile.artistName}"
               </p>
             )}
             {existingProfile.musicStyle && (
-              <p className="text-fg-muted text-base">
+              <p className="text-white/60 text-base">
                 Music Style: {existingProfile.musicStyle}
               </p>
             )}
           </div>
 
           <div className="space-y-3">
-            <button
-              className="hr-btn hr-btn--primary w-full text-xl py-6 font-black"
+            <Button
+              size="lg"
+              className="w-full text-xl py-6 bg-red-500 hover:bg-red-600 text-white font-black border-4 border-white"
               onClick={handleContinueWithExisting}
             >
               Continue with This Profile
-            </button>
+            </Button>
 
             <Button
               size="sm"
-              className="w-full text-fg-muted hover:text-fg bg-transparent hover-elevate"
+              className="w-full text-white/60 hover:text-white bg-transparent hover:bg-white/10"
               onClick={handleDeleteProfile}
             >
               Delete Profile & Create New
@@ -394,22 +402,25 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-bg"
+      className="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-cover bg-center"
+      style={{ backgroundImage: 'url(/fltman_red_abackground_black_illustrated_speakers_low_angle_pe_3c6fccde-fd77-41bb-a28a-528037b87b37_0.png)' }}
     >
-      {/* HitRumble Logo - Upper Left */}
+      <div className="absolute inset-0 bg-black/40 z-0"></div>
+
+      {/* BeatBrawl Logo - Upper Left */}
       <div className="absolute top-8 left-8 z-20">
         <img
-          src="/logo.png"
-          alt="HitRumble Logo"
+          src="/beatbrawl.png"
+          alt="BeatBrawl Logo"
           className="h-24 w-auto"
         />
       </div>
 
-      <Card className="hr-card w-full max-w-md p-10 shadow-glow relative z-30">
+      <Card className="w-full max-w-md p-10 bg-black border-4 border-white shadow-2xl relative z-30">
 
         <div className="space-y-6">
           <div>
-            <Label htmlFor="display-name" className="text-lg mb-2 block text-fg font-bold">
+            <Label htmlFor="display-name" className="text-lg mb-2 block text-white font-bold">
               Your Name
             </Label>
             <Input
@@ -417,7 +428,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder="Enter your name"
-              className="text-lg bg-bg-surface text-fg border border-fg/20 h-12"
+              className="text-lg bg-white text-black border-2 border-white h-12"
               data-testid="input-display-name"
               maxLength={20}
             />
@@ -425,7 +436,7 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
 
           {/* Photo Upload Section */}
           <div>
-            <Label className="text-lg mb-3 block text-fg font-bold">
+            <Label className="text-lg mb-3 block text-white font-bold">
               Upload Photo (Optional)
             </Label>
             <input
@@ -439,11 +450,11 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
               <Button
                 type="button"
                 variant="outline"
-                className="w-full h-32 border-2 border-dashed border-fg/20 bg-bg-surface hover-elevate text-fg"
+                className="w-full h-32 border-2 border-dashed border-white bg-white/10 hover:bg-white/20 text-white"
                 onClick={() => fileInputRef.current?.click()}
               >
                 <div className="text-center">
-                  <Upload className="w-8 h-8 mx-auto mb-2 text-fg" />
+                  <Upload className="w-8 h-8 mx-auto mb-2 text-white" />
                   <p className="text-sm font-bold">Click to upload photo</p>
                 </div>
               </Button>
@@ -452,12 +463,12 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
                 <img
                   src={uploadedPhoto}
                   alt="Uploaded"
-                  className="w-full h-48 object-cover rounded-hrmd border-2 border-accent shadow-hr"
+                  className="w-full h-48 object-cover rounded-2xl border-4 border-white"
                 />
                 <Button
                   type="button"
                   size="sm"
-                  className="absolute top-2 right-2 bg-accent hover-elevate text-bg border border-fg/20 font-bold"
+                  className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white border-2 border-white font-bold"
                   onClick={() => {
                     setUploadedPhoto(null);
                     setAiGeneratedProfile(null);
@@ -472,9 +483,9 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
 
           {/* AI Generation Button */}
           {showAIOption && !aiGeneratedProfile && (
-            <button
+            <Button
               type="button"
-              className="hr-btn hr-btn--primary w-full text-xl py-6 font-black"
+              className="w-full text-xl py-6 bg-red-500 hover:bg-red-600 text-white font-black border-4 border-white"
               onClick={handleGenerateAIProfile}
               disabled={isGeneratingAI || !displayName.trim()}
             >
@@ -489,29 +500,29 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
                   Create Profile
                 </>
               )}
-            </button>
+            </Button>
           )}
 
           {/* AI Generated Profile Display */}
           {aiGeneratedProfile && (
-            <Card className="p-6 bg-bg-surface border border-fg/20 shadow-hr">
+            <Card className="p-6 bg-white/10 border-2 border-white">
               <div className="flex items-center gap-4 mb-4">
                 <img
                   src={aiGeneratedProfile.profileImage}
                   alt="AI-generated avatar"
-                  className="w-24 h-24 rounded-full object-cover border-2 border-accent shadow-hr"
+                  className="w-24 h-24 rounded-full object-cover border-4 border-white"
                 />
                 <div className="flex-1">
-                  <p className="text-sm text-fg-2 font-bold">Artist Name</p>
-                  <p className="text-2xl font-black text-fg">{aiGeneratedProfile.artistName}</p>
-                  <p className="text-sm text-fg-2 font-bold mt-2">Music Style</p>
-                  <p className="text-lg text-fg">{aiGeneratedProfile.musicStyle}</p>
+                  <p className="text-sm text-white/70 font-bold">Artist Name</p>
+                  <p className="text-2xl font-black text-white">{aiGeneratedProfile.artistName}</p>
+                  <p className="text-sm text-white/70 font-bold mt-2">Music Style</p>
+                  <p className="text-lg text-white">{aiGeneratedProfile.musicStyle}</p>
                 </div>
               </div>
               <Button
                 type="button"
                 size="sm"
-                className="w-full bg-bg-surface hover-elevate text-fg border border-fg/20 font-bold"
+                className="w-full bg-white/20 hover:bg-white/30 text-white border-2 border-white font-bold"
                 onClick={handleRegenerateAI}
                 disabled={isGeneratingAI}
               >
@@ -524,8 +535,9 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
           <div className="pt-4 space-y-3">
             {/* Only show Save button after AI profile is generated */}
             {aiGeneratedProfile && (
-              <button
-                className="hr-btn hr-btn--primary w-full text-xl py-6 font-black"
+              <Button
+                size="lg"
+                className="w-full text-xl py-6 bg-red-500 hover:bg-red-600 text-white font-black border-4 border-white"
                 onClick={handleCreateProfile}
                 disabled={isSaving}
                 data-testid="button-create-profile"
@@ -538,12 +550,12 @@ export default function ProfileSetup({ onProfileReady }: ProfileSetupProps) {
                 ) : (
                   'Save'
                 )}
-              </button>
+              </Button>
             )}
 
             <Button
               size="lg"
-              className="w-full text-lg py-4 bg-bg-surface hover-elevate text-fg font-bold border border-fg/20"
+              className="w-full text-lg py-4 bg-white/20 hover:bg-white/30 text-white font-bold border-2 border-white"
               onClick={handleContinueAsGuest}
               disabled={isSaving}
               data-testid="button-continue-guest"
