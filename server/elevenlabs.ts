@@ -7,12 +7,13 @@ interface DJMessage {
 
 export class ElevenLabsService {
   private apiKey: string;
-  private voiceId = 'kdPa5d8D09dd2Se1mJEm'; // Hood DJ voice
+  private voiceId: string;
   private openRouterKey: string;
   private messageHistory: Map<string, DJMessage[]> = new Map();
 
   constructor() {
     this.apiKey = process.env.ELEVENLABS_API_KEY || '';
+    this.voiceId = process.env.ELEVENLABS_VOICE_ID || 'pNInz6obpgDQGcFmaJgB'; // Default to Adam voice
     this.openRouterKey = process.env.OPENROUTER_API_KEY || '';
     
     if (!this.apiKey) {
