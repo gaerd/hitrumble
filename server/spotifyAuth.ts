@@ -1,4 +1,4 @@
-import SpotifyWebApi from 'spotify-web-api-node';
+import SpotifyWebApi from "spotify-web-api-node";
 
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID!;
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET!;
@@ -7,17 +7,22 @@ function getRedirectUri(): string {
   if (process.env.REPLIT_DEV_DOMAIN) {
     return `https://${process.env.REPLIT_DEV_DOMAIN}/auth/spotify/callback`;
   }
-  return 'https://hitster-ai.replit.app/auth/spotify/callback';
+  const domains = process.env.REPLIT_DOMAINS
+    ? process.env.REPLIT_DOMAINS.split(",")
+    : [];
+  return domains.length > 0
+    ? `https://${domains[0]}/auth/spotify/callback`
+    : "https://hitrumble.replit.app/auth/spotify/callback";
 }
 
 const REDIRECT_URI = getRedirectUri();
 
 const SCOPES = [
-  'streaming',
-  'user-read-email',
-  'user-read-private',
-  'user-modify-playback-state',
-  'user-read-playback-state'
+  "streaming",
+  "user-read-email",
+  "user-read-private",
+  "user-modify-playback-state",
+  "user-read-playback-state",
 ];
 
 export class SpotifyAuthService {
@@ -27,7 +32,7 @@ export class SpotifyAuthService {
     this.spotifyApi = new SpotifyWebApi({
       clientId: CLIENT_ID,
       clientSecret: CLIENT_SECRET,
-      redirectUri: REDIRECT_URI
+      redirectUri: REDIRECT_URI,
     });
   }
 
@@ -35,32 +40,40 @@ export class SpotifyAuthService {
     return this.spotifyApi.createAuthorizeURL(SCOPES, state);
   }
 
-  async handleCallback(code: string): Promise<{ accessToken: string; refreshToken: string; expiresIn: number }> {
+  async handleCallback(
+    code: string,
+  ): Promise<{ accessToken: string; refreshToken: string; expiresIn: number }> {
     const data = await this.spotifyApi.authorizationCodeGrant(code);
-    
+
     return {
       accessToken: data.body.access_token,
       refreshToken: data.body.refresh_token,
-      expiresIn: data.body.expires_in
+      expiresIn: data.body.expires_in,
     };
   }
 
-  async refreshAccessToken(refreshToken: string): Promise<{ accessToken: string; expiresIn: number }> {
+  async refreshAccessToken(
+    refreshToken: string,
+  ): Promise<{ accessToken: string; expiresIn: number }> {
     this.spotifyApi.setRefreshToken(refreshToken);
     const data = await this.spotifyApi.refreshAccessToken();
-    
+
     return {
       accessToken: data.body.access_token,
-      expiresIn: data.body.expires_in
+      expiresIn: data.body.expires_in,
     };
   }
 
-  async playTrack(accessToken: string, trackUri: string, deviceId?: string): Promise<void> {
+  async playTrack(
+    accessToken: string,
+    trackUri: string,
+    deviceId?: string,
+  ): Promise<void> {
     this.spotifyApi.setAccessToken(accessToken);
-    
+
     await this.spotifyApi.play({
       uris: [trackUri],
-      device_id: deviceId
+      device_id: deviceId,
     });
   }
 

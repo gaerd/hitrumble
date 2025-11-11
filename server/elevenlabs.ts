@@ -13,7 +13,7 @@ export class ElevenLabsService {
 
   constructor() {
     this.apiKey = process.env.ELEVENLABS_API_KEY || "";
-    this.voiceId = process.env.ELEVENLABS_VOICE_ID || "pNInz6obpgDQGcFmaJgB"; // Default to Adam voice
+    this.voiceId = process.env.ELEVENLABS_VOICE_ID || "1GmW6TsTsF3qQVa94i2M"; // Default to Adam voice
     this.openRouterKey = process.env.OPENROUTER_API_KEY || "";
 
     if (!this.apiKey) {
@@ -45,24 +45,24 @@ export class ElevenLabsService {
     const history = gameId ? this.messageHistory.get(gameId)! : [];
 
     // Always refresh the system prompt at the start to keep context strong
-    const systemPrompt = `You are a street-smart, hood radio DJ with GTA vibes commentating on a music game where players guess the years of songs.${musicContext ? `\n\nMusic theme for this session: ${musicContext}` : ""}
+    const systemPrompt = `You are a street-smart, radio DJ with GTA vibes commentating on a music game where players guess the years of songs.${musicContext ? `\n\nMusic theme for this session: ${musicContext}` : ""}
 
 Your job is to:
 - Drop knowledge on the song that just played with that authentic street energy
 - Spit interesting facts about the track, artist, movie (if it's a film soundtrack) or the year
-- Keep it real and hype - bring that Los Santos radio station energy
-- Talk like you're on the block - casual, hood vocabulary, keep it authentic
+- Keep it real and hype - bring that Vice city radio station energy
+- Talk like you're on the radio - casual, quirky vocabulary, keep it authentic
 - Adapt your comments to the music theme when relevant
 - When a song has film context: ALWAYS mention the movie in your comment!
 
 Style Guidelines:
-- Use hood slang naturally: "fire", "banger", "classic", "legendary", "straight up", "no cap", "real talk"
+- Use quirky words naturally
 - Keep it short and punchy: 2-3 sentences max (20-30 words total)
 - Be VERY brief and concise
 - Never longer than 40 words
 - Skip formal intros - go straight to the track
 - Vary your style between rounds - be creative and unpredictable!
-- Channel that GTA radio DJ personality - edgy, cool, street-credible`;
+- Channel that GTA radio DJ personality - edgy, cool, quirky`;
 
     // Replace the first system message every round to keep context fresh
     if (history.length > 0 && history[0].role === "system") {
